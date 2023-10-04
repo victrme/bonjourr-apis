@@ -1,0 +1,11 @@
+{
+	"name": "bonjourr-apis",
+	"version": "0.0.0",
+	"author": "Victor Azevedo",
+	"description": "This regroups all APIs used by Bonjourr as a single cloudflare worker",
+	"license": "ISC",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/victrme/bonjourr-apis"
+	}
+}
