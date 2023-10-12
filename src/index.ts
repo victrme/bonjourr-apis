@@ -9,11 +9,56 @@ const headers = {
 	'cache-control': 'public, maxage=3600',
 }
 
-export default {
-	async fetch(request: Request) {
-		const path = new URL(request.url).pathname
+export interface Env {
+	UNSPLASH: string
+}
 
-		console.log(path)
+export default {
+	async fetch(request: Request, env: Env) {
+		const url = new URL(request.url)
+		const path = url.pathname
+
+		if (path.startsWith('/unsplash') && request.url.includes('?')) {
+			try {
+				const params = request.url.split('?')[1]
+				const fetchURL = `https://api.unsplash.com/photos/random?${params}`
+				const fetchHeaders = { 'Accept-Version': 'v1', Authorization: `Client-ID ${env.UNSPLASH}` }
+
+				const resp = await fetch(fetchURL, { headers: fetchHeaders })
+				const json = await resp.json()
+
+				return new Response(JSON.stringify(json), {
+					status: resp.status,
+					headers: {
+						...headers,
+						'Content-Type': 'application/json',
+					},
+				})
+			} catch (error) {
+				console.log(error)
+			}
+		}
+
+		if (path.startsWith('/weather/') && path.match(/current|forecast/) && request.url.includes('?')) {
+			const params = url.searchParams
+			const pathname = path.replace('/weather/', '')
+			const key = ''
+			const fetchURL = `https://api.openweathermap.org/data/2.5/${pathname}?appid=${key}&${params}`
+
+			try {
+				const resp = await fetch(fetchURL)
+				const json = await resp.json()
+				return new Response(JSON.stringify(json), {
+					status: resp.status,
+					headers: {
+						...headers,
+						'Content-Type': 'application/json',
+					},
+				})
+			} catch (error) {
+				console.log(error)
+			}
+		}
 
 		if (path.startsWith('/favicon')) {
 			const url = path.replace('/favicon/', '')
