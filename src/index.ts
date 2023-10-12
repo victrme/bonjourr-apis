@@ -11,6 +11,7 @@ const headers = {
 
 export interface Env {
 	UNSPLASH: string
+	WEATHER: string
 }
 
 export default {
@@ -40,9 +41,9 @@ export default {
 		}
 
 		if (path.startsWith('/weather/') && path.match(/current|forecast/) && request.url.includes('?')) {
-			const params = url.searchParams
-			const pathname = path.replace('/weather/', '')
-			const key = ''
+			const key = env.WEATHER
+			const params = request.url.split('?')[1]
+			const pathname = path.includes('forecast') ? 'forecast' : 'weather'
 			const fetchURL = `https://api.openweathermap.org/data/2.5/${pathname}?appid=${key}&${params}`
 
 			try {
