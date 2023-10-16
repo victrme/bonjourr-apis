@@ -14,99 +14,111 @@ export interface Env {
 	WEATHER: string
 }
 
+type ApiResponse = {
+	status: number
+	data?: JSON | any[] | string
+}
+
 export default {
 	async fetch(request: Request, env: Env) {
 		const url = new URL(request.url)
 		const path = url.pathname
 
-		if (path.startsWith('/unsplash') && request.url.includes('?')) {
-			try {
-				const params = request.url.split('?')[1]
-				const fetchURL = `https://api.unsplash.com/photos/random?${params}`
-				const fetchHeaders = { 'Accept-Version': 'v1', Authorization: `Client-ID ${env.UNSPLASH}` }
-
-				const resp = await fetch(fetchURL, { headers: fetchHeaders })
-				const json = await resp.json()
-
-				return new Response(JSON.stringify(json), {
-					status: resp.status,
-					headers: {
-						...headers,
-						'Content-Type': 'application/json',
-					},
-				})
-			} catch (error) {
-				console.log(error)
-			}
+		let response: ApiResponse = {
+			data: 'Not a correct path',
+			status: 404,
 		}
 
-		if (path.startsWith('/weather/') && path.match(/current|forecast/) && request.url.includes('?')) {
-			const key = env.WEATHER
-			const params = request.url.split('?')[1]
-			const pathname = path.includes('forecast') ? 'forecast' : 'weather'
-			const fetchURL = `https://api.openweathermap.org/data/2.5/${pathname}?appid=${key}&${params}`
+		//
+		// Apply different apis
 
-			try {
-				const resp = await fetch(fetchURL)
-				const json = await resp.json()
-				return new Response(JSON.stringify(json), {
-					status: resp.status,
-					headers: {
-						...headers,
-						'Content-Type': 'application/json',
-					},
-				})
-			} catch (error) {
-				console.log(error)
-			}
+		if (path.startsWith('/unsplash') && request.url.includes('?')) {
+			response = await unsplash(request, env)
+		}
+
+		if (path.startsWith('/weather') && path.match(/current|forecast/) && request.url.includes('?')) {
+			response = await weather(request, env)
+		}
+
+		if (path.startsWith('/quotes')) {
+			response = await quotes(request)
 		}
 
 		if (path.startsWith('/favicon')) {
-			const url = path.replace('/favicon/', '')
-			const icon = await faviconFetcher(url)
-			return new Response(icon, { status: 200, headers })
-		}
-
-		if (path.startsWith('/quotes/classic')) {
-			const lang = path.replace('/quotes/classic/', '')
-			const quotes = await classicQuotes(lang)
-
-			return new Response(JSON.stringify(quotes), {
-				status: 200,
-				headers: { ...headers, 'Content-Type': 'application/json' },
-			})
-		}
-
-		if (path.startsWith('/quotes/kaamelott')) {
-			const quotes = await kaamelottQuotes()
-
-			return new Response(JSON.stringify(quotes), {
-				status: 200,
-				headers: { ...headers, 'Content-Type': 'application/json' },
-			})
-		}
-
-		if (path.startsWith('/quotes/inspirobot')) {
-			const quotes = await inspirobotQuotes()
-
-			return new Response(JSON.stringify(quotes), {
-				status: 200,
-				headers: { ...headers, 'Content-Type': 'application/json' },
-			})
+			response = { status: 200, data: await faviconFetcher(path.replace('/favicon/', '')) }
 		}
 
 		if (path.startsWith('/suggestions')) {
-			const result = await suggestions(request.url)
-
-			return new Response(JSON.stringify(result), {
-				status: 200,
-				headers: { ...headers, 'Content-Type': 'application/json' },
-			})
+			response = { status: 200, data: await suggestions(request.url) }
 		}
 
-		return new Response('Not a correct path', {
-			status: 404,
-			headers: headers,
+		//
+		// Create Response
+
+		if (typeof response?.data === 'object') {
+			headers['Content-Type'] = 'application/json'
+			response.data = JSON.stringify(response.data)
+		}
+
+		return new Response(response.data, {
+			status: response.status,
+			headers,
 		})
 	},
+}
+
+async function weather(request: Request, env: Env): Promise<ApiResponse> {
+	const url = new URL(request.url)
+	const key = env.WEATHER
+	const path = url.pathname
+	const params = request.url.split('?')[1]
+	const pathname = path.includes('forecast') ? 'forecast' : 'weather'
+	const fetchURL = `https://api.openweathermap.org/data/2.5/${pathname}?appid=${key}&${params}`
+	const resp = await fetch(fetchURL)
+
+	try {
+		const json = await resp.json()
+		return { status: resp.status, data: json }
+		//
+	} catch (error) {
+		console.log(error)
+		return { status: resp.status }
+	}
+}
+
+async function unsplash(request: Request, env: Env): Promise<ApiResponse> {
+	const params = request.url.split('?')[1]
+	const fetchURL = `https://api.unsplash.com/photos/random?${params}`
+	const fetchHeaders = { 'Accept-Version': 'v1', Authorization: `Client-ID ${env.UNSPLASH}` }
+	const resp = await fetch(fetchURL, { headers: fetchHeaders })
+
+	try {
+		const json = (await resp.json()) as JSON
+		return { status: resp.status, data: json }
+		//
+	} catch (error) {
+		console.log(error)
+		return { status: resp.status, data: [] }
+	}
+}
+
+async function quotes(request: Request): Promise<ApiResponse> {
+	const url = new URL(request.url)
+	const path = url.pathname
+	let response: ApiResponse = { status: 404 }
+
+	if (path.startsWith('/quotes/classic')) {
+		const lang = path.replace('/quotes/classic/', '')
+		response.data = await classicQuotes(lang)
+	}
+
+	if (path.startsWith('/quotes/kaamelott')) {
+		response.data = await kaamelottQuotes()
+	}
+
+	if (path.startsWith('/quotes/inspirobot')) {
+		response.data = await inspirobotQuotes()
+	}
+
+	return response
 }
