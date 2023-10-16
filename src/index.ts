@@ -30,7 +30,7 @@ export default {
 		}
 
 		//
-		// Apply different apis
+		// Get data
 
 		if (path.startsWith('/unsplash') && request.url.includes('?')) {
 			response = await unsplash(request, env)
@@ -109,15 +109,15 @@ async function quotes(request: Request): Promise<ApiResponse> {
 
 	if (path.startsWith('/quotes/classic')) {
 		const lang = path.replace('/quotes/classic/', '')
-		response.data = await classicQuotes(lang)
+		response = { status: 200, data: await classicQuotes(lang) }
 	}
 
 	if (path.startsWith('/quotes/kaamelott')) {
-		response.data = await kaamelottQuotes()
+		response = { status: 200, data: await kaamelottQuotes() }
 	}
 
 	if (path.startsWith('/quotes/inspirobot')) {
-		response.data = await inspirobotQuotes()
+		response = { status: 200, data: await inspirobotQuotes() }
 	}
 
 	return response
