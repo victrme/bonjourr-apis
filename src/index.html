@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Bonjourr APIs Portal Page</title>
+
+		<style>
+			body {
+				max-width: 800px;
+				margin: auto;
+				padding: 10vh;
+			}
+
+			button,
+			body,
+			a {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			}
+
+			h2 {
+				margin-top: 3em;
+			}
+
+			h3 {
+				font-size: 1rem;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Bonjourr APIs</h1>
+		<div>
+			<h2>Unsplash</h2>
+			<p>
+				This is a proxy of the unsplash endpoints. Read their docs to learn more:
+				<a href="https://unsplash.com/documentation#get-a-photo">unsplash.com/documentation</a>
+			</p>
+
+			<h3>Example</h3>
+			<p><a href="/unsplash/photos/random">/unsplash</a></p>
+
+			<h2>Weather</h2>
+			<p>
+				This is a mostly a proxy of openweathermap that combines their current & forecast endpoints. Use their docs
+				here:
+				<a href="https://openweathermap.org/current">openweathermap.org/current</a>. Go to
+				<code>GET /weather/current</code> for current weather, and <code>GET /weather/forecast</code> for the forecast.
+			</p>
+
+			<h3>Example</h3>
+			<p><a href="/weather/current?q=Paris,FR">/weather/current?q=Paris,FR</a></p>
+			<p><a href="/weather/forecast?q=Paris,FR">/weather/forecast?q=Paris,FR</a></p>
+
+			<h2>Favicon</h2>
+			<p>
+				Fetches the URL of a website's favicon. Add the URL of the website you want (with the protocol!) to the API
+				path.
+			</p>
+
+			<h3>Example</h3>
+			<p><a href="/favicon/https://victr.me">/favicon/https://victr.me</a></p>
+
+			<h2>Quotes</h2>
+			<p>
+				Serves quotes in different languages, but also inspirobot and kaamelott quotes. Go to
+				<code>GET /quotes/classic/[lang]</code> to get classic quotes. If the language is not available, it defaults to
+				english. <code>GET /quotes/inspirobot</code> for inspirobot, <code>GET /quotes/kaamelott</code> for kaamelott
+				quotes
+			</p>
+
+			<h3>Example</h3>
+			<p><a href="/quotes/classic/fr">/quotes/classic/fr</a></p>
+			<p><a href="/quotes/inspirobot">/quotes/inspirobot</a></p>
+			<p><a href="/quotes/kaamelott">/quotes/kaamelott</a></p>
+
+			<h2>Suggestions</h2>
+			<p>
+				This is a scraping tool that returns search suggestions from different providers. It uses websockets for cost
+				reasons. Docs is TODO
+			</p>
+
+			<h3>Example</h3>
+			<p><a href="/suggestions?with=google&q=minecraft">/suggestions?with=google&q=minecraft</a></p>
+		</div>
+	</body>
+</html>

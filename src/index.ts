@@ -1,4 +1,5 @@
 import { Fetcher, ExportedHandler } from '@cloudflare/workers-types'
+import html from './index.html'
 
 const headers = {
 	'access-control-allow-origin': '*',
@@ -17,6 +18,10 @@ export default <ExportedHandler<Env>>{
 	async fetch(req, env) {
 		const url = new URL(req.url)
 		const path = url.pathname
+
+		if (path === '/') {
+			return new Response(html, { headers: { 'Content-Type': 'text/html' } })
+		}
 
 		if (path.startsWith('/unsplash') && req.url.includes('?')) {
 			return await unsplash(req.url, env)
@@ -38,7 +43,7 @@ export default <ExportedHandler<Env>>{
 			return await env.suggestions.fetch(req)
 		}
 
-		return new Response('Not a valide path', { status: 404 })
+		return new Response('Invalid path', { status: 404 })
 	},
 }
 
