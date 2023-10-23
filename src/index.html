@@ -6,10 +6,16 @@
 		<title>Bonjourr APIs Portal Page</title>
 
 		<style>
+			html {
+				background-color: #292d35;
+				color: #eee;
+			}
+
 			body {
+				min-width: 200px;
 				max-width: 800px;
 				margin: auto;
-				padding: 10vh;
+				padding: 5vh;
 			}
 
 			button,
@@ -18,17 +24,48 @@
 				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 			}
 
-			h2 {
-				margin-top: 3em;
+			a {
+				color: #8aa7ff;
+				word-break: break-all;
+			}
+
+			h1 {
+				font-size: 5em;
+				font-weight: 900;
+				letter-spacing: -2px;
+				text-align: center;
+				color: white;
+				margin-bottom: 2em;
+				text-shadow: -0.2em 0.1em #76d8ff, 0.2em 0.2em #6fff82, 0.3em -0.1em #d374ff, -0.3em -0.05em #ff678d;
 			}
 
 			h3 {
-				font-size: 1rem;
+				margin-bottom: 0em;
+			}
+
+			pre,
+			code {
+				background: #393f4a;
+				border-radius: 4px;
+				padding: 0.3em;
+			}
+
+			pre {
+				display: inline-block;
+				font-size: 1em;
+				padding: 1em;
+			}
+
+			body > div {
+				padding: 1em 2em;
+				background: #323540;
+				margin: 3em 0;
 			}
 		</style>
 	</head>
 	<body>
 		<h1>Bonjourr APIs</h1>
+
 		<div>
 			<h2>Unsplash</h2>
 			<p>
@@ -36,9 +73,16 @@
 				<a href="https://unsplash.com/documentation#get-a-photo">unsplash.com/documentation</a>
 			</p>
 
-			<h3>Example</h3>
-			<p><a href="/unsplash/photos/random">/unsplash</a></p>
+			<h3>Path</h3>
+			<pre>/unsplash</pre>
 
+			<h3>Example</h3>
+			<ul>
+				<li><a href="/unsplash/photos/random">/unsplash/photos/random</a></li>
+			</ul>
+		</div>
+
+		<div>
 			<h2>Weather</h2>
 			<p>
 				This is a mostly a proxy of openweathermap that combines their current & forecast endpoints. Use their docs
@@ -47,19 +91,38 @@
 				<code>GET /weather/current</code> for current weather, and <code>GET /weather/forecast</code> for the forecast.
 			</p>
 
-			<h3>Example</h3>
-			<p><a href="/weather/current?q=Paris,FR">/weather/current?q=Paris,FR</a></p>
-			<p><a href="/weather/forecast?q=Paris,FR">/weather/forecast?q=Paris,FR</a></p>
+			<h3>Paths</h3>
+			<pre>
+/weather
+    /current
+    /forecast</pre
+			>
 
+			<h3>Examples</h3>
+			<ul>
+				<li><a href="/weather/current?q=Paris,FR">/weather/current?q=Paris,FR</a></li>
+				<li><a href="/weather/forecast?q=Paris,FR">/weather/forecast?q=Paris,FR</a></li>
+			</ul>
+		</div>
+
+		<div>
 			<h2>Favicon</h2>
 			<p>
 				Fetches the URL of a website's favicon. Add the URL of the website you want (with the protocol!) to the API
 				path.
 			</p>
 
+			<h3>Paths</h3>
+			<pre>
+/favicon
+    /:your-website</pre
+			>
+
 			<h3>Example</h3>
 			<p><a href="/favicon/https://victr.me">/favicon/https://victr.me</a></p>
+		</div>
 
+		<div>
 			<h2>Quotes</h2>
 			<p>
 				Serves quotes in different languages, but also inspirobot and kaamelott quotes. Go to
@@ -68,16 +131,32 @@
 				quotes
 			</p>
 
-			<h3>Example</h3>
+			<h3>Paths</h3>
+
+			<pre>
+/quotes
+    /classic
+        /:lang
+    /inspirobot
+    /kaamelott</pre
+			>
+
+			<h3>Examples</h3>
 			<p><a href="/quotes/classic/fr">/quotes/classic/fr</a></p>
 			<p><a href="/quotes/inspirobot">/quotes/inspirobot</a></p>
 			<p><a href="/quotes/kaamelott">/quotes/kaamelott</a></p>
+		</div>
 
+		<div>
 			<h2>Suggestions</h2>
 			<p>
 				This is a scraping tool that returns search suggestions from different providers. It uses websockets for cost
-				reasons. Docs is TODO
+				reasons. Use <code>ws://</code>. Docs is TODO
 			</p>
+
+			<h3>Path</h3>
+
+			<pre>/suggestions</pre>
 
 			<h3>Example</h3>
 			<p><a href="/suggestions?with=google&q=minecraft">/suggestions?with=google&q=minecraft</a></p>
