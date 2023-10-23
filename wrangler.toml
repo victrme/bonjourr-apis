@@ -1,3 +1,9 @@
 name = "bonjourr-apis"
 main = "src/index.ts"
 compatibility_date = "2023-05-18"
+
+services = [
+  { binding = "favicon", service = "favicon-fetcher" },
+  { binding = "suggestions", service = "search-suggestions" },
+  { binding = "quotes", service = "i18n-quotes" }
+]
