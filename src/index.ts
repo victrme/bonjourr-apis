@@ -1,5 +1,6 @@
-import { Fetcher, ExportedHandler } from '@cloudflare/workers-types'
+//@ts-ignore
 import html from './index.html'
+import { Fetcher, ExportedHandler } from '@cloudflare/workers-types'
 
 const headers = {
 	'access-control-allow-origin': '*',
