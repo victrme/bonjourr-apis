@@ -24,11 +24,11 @@ export default <ExportedHandler<Env>>{
 		}
 
 		if (path.startsWith('/unsplash')) {
-			return await unsplash(req.url, env)
+			return await unsplash(req.url, env.UNSPLASH ?? '')
 		}
 
 		if (path.startsWith('/weather') && path.match(/current|forecast/) && req.url.includes('?')) {
-			return await weather(req.url, env)
+			return await weather(req.url, env.WEATHER ?? '')
 		}
 
 		if (path.startsWith('/favicon')) {
@@ -47,8 +47,7 @@ export default <ExportedHandler<Env>>{
 	},
 }
 
-async function weather(requrl: string, env: Env): Promise<Response> {
-	const key = env.WEATHER
+async function weather(requrl: string, key: string): Promise<Response> {
 	const url = new URL(requrl)
 	const path = url.pathname
 	const params = requrl.split('?')[1]
@@ -68,11 +67,15 @@ async function weather(requrl: string, env: Env): Promise<Response> {
 	}
 }
 
-async function unsplash(url: string, env: Env): Promise<Response> {
-	const params = url.split('?')[1]
-	const fetchURL = `https://api.unsplash.com/photos/random?${params}`
-	const fetchHeaders = { 'Accept-Version': 'v1', Authorization: `Client-ID ${env.UNSPLASH}` }
-	const resp = await fetch(fetchURL, { headers: fetchHeaders })
+async function unsplash(requrl: string, key: string): Promise<Response> {
+	const endpoint = requrl.slice(requrl.indexOf('/unsplash') + 9)
+
+	const resp = await fetch(`https://api.unsplash.com${endpoint}`, {
+		headers: {
+			'Accept-Version': 'v1',
+			Authorization: `Client-ID ${key}`,
+		},
+	})
 
 	headers['Content-Type'] = 'application/json'
 
