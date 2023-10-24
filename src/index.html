@@ -13,7 +13,7 @@
 
 			body {
 				min-width: 200px;
-				max-width: 800px;
+				max-width: 700px;
 				margin: auto;
 				padding: 5vh;
 			}
@@ -26,21 +26,33 @@
 
 			a {
 				color: #8aa7ff;
-				word-break: break-all;
+			}
+
+			h1, h2, h3 {
+				font-weight: 600;
 			}
 
 			h1 {
-				font-size: 5em;
-				font-weight: 900;
-				letter-spacing: -2px;
-				text-align: center;
-				color: white;
 				margin-bottom: 2em;
-				text-shadow: -0.2em 0.1em #76d8ff, 0.2em 0.2em #6fff82, 0.3em -0.1em #d374ff, -0.3em -0.05em #ff678d;
+				padding: .4em;
+				font-size: 3em;
+				letter-spacing: 1px;
+				text-align: center;
+				color: #eee;
+				background-color: #6d898c;
 			}
 
+			h2 {
+				font-size: 2em;
+			}
+			
 			h3 {
-				margin-bottom: 0em;
+				margin: 2em 0 .5em 0;
+			}
+
+			hr {
+				margin: 5em 0;
+				border-color: #fff3;
 			}
 
 			pre,
@@ -54,36 +66,33 @@
 				display: inline-block;
 				font-size: 1em;
 				padding: 1em;
-			}
-
-			body > div {
-				padding: 1em 2em;
-				background: #323540;
-				margin: 3em 0;
+				margin: .2em 0;
 			}
 		</style>
 	</head>
 	<body>
 		<h1>Bonjourr APIs</h1>
 
-		<div>
-			<h2>Unsplash</h2>
+	
+			<h2 id="unsplash">Unsplash</h2>
+
 			<p>
 				This is a proxy of the unsplash endpoints. Read their docs to learn more:
-				<a href="https://unsplash.com/documentation#get-a-photo">unsplash.com/documentation</a>
+				<a href="https://unsplash.com/documentation#get-a-photo">unsplash.com/documentation</a>. When cloning this API,
+				add your key with "UNSPLASH" as an environnement variable.
 			</p>
 
-			<h3>Path</h3>
-			<pre>/unsplash</pre>
+			<h3>Endpoint</h3>
+			<pre>GET /unsplash/[unsplash-endpoints]</pre>
 
 			<h3>Example</h3>
 			<ul>
 				<li><a href="/unsplash/photos/random">/unsplash/photos/random</a></li>
 			</ul>
-		</div>
 
-		<div>
-			<h2>Weather</h2>
+			<hr>
+	
+			<h2 id="weather">Weather</h2>
 			<p>
 				This is a mostly a proxy of openweathermap that combines their current & forecast endpoints. Use their docs
 				here:
@@ -91,12 +100,9 @@
 				<code>GET /weather/current</code> for current weather, and <code>GET /weather/forecast</code> for the forecast.
 			</p>
 
-			<h3>Paths</h3>
-			<pre>
-/weather
-    /current
-    /forecast</pre
-			>
+			<h3>Endpoints</h3>
+			<pre>GET /weather/current?[openweathermap-parameters]</pre>
+			<pre>GET /weather/forecast[openweathermap-parameters]</pre>
 
 			<h3>Examples</h3>
 			<ul>
@@ -105,58 +111,60 @@
 			</ul>
 		</div>
 
+		<hr>
+
 		<div>
-			<h2>Favicon</h2>
+			<h2 id="favicon">Favicon</h2>
 			<p>
 				Fetches the URL of a website's favicon. Add the URL of the website you want (with the protocol!) to the API
-				path.
+				path. <br>
+				Source code: <a href="https://github.com/victrme/favicon-fetcher">favicon-fetcher</a>
 			</p>
 
-			<h3>Paths</h3>
-			<pre>
-/favicon
-    /:your-website</pre
-			>
+			<h3>Endpoint</h3>
+			<pre>GET /favicon/:your-website</pre>
 
 			<h3>Example</h3>
-			<p><a href="/favicon/https://victr.me">/favicon/https://victr.me</a></p>
+			<ul>
+				<li><a href="/favicon/https://victr.me">/favicon/https://victr.me</a></li>
+			</ul>
 		</div>
 
+		<hr>
+
 		<div>
-			<h2>Quotes</h2>
+			<h2 id="quotes">Quotes</h2>
 			<p>
-				Serves quotes in different languages, but also inspirobot and kaamelott quotes. Go to
-				<code>GET /quotes/classic/[lang]</code> to get classic quotes. If the language is not available, it defaults to
-				english. <code>GET /quotes/inspirobot</code> for inspirobot, <code>GET /quotes/kaamelott</code> for kaamelott
-				quotes
+				Serves quotes in different languages, but also inspirobot and kaamelott quotes. For classic quotes, if the language is not available, it defaults to
+				english.
+				<br>Source code: <a href="https://github.com/victrme/i18n-quotes">i18n-quotes</a>
 			</p>
 
-			<h3>Paths</h3>
-
-			<pre>
-/quotes
-    /classic
-        /:lang
-    /inspirobot
-    /kaamelott</pre
-			>
+			<h3>Endpoints</h3>
+			<pre>GET /quotes/classic/:lang</pre><br>
+			<pre>GET /quotes/inspirobot</pre><br>
+			<pre>GET /quotes/kaamelott</pre>
 
 			<h3>Examples</h3>
-			<p><a href="/quotes/classic/fr">/quotes/classic/fr</a></p>
-			<p><a href="/quotes/inspirobot">/quotes/inspirobot</a></p>
-			<p><a href="/quotes/kaamelott">/quotes/kaamelott</a></p>
+			<ul>
+				<li><a href="/quotes/classic/fr">/quotes/classic/fr</a></li>
+				<li><a href="/quotes/inspirobot">/quotes/inspirobot</a></li>
+				<li><a href="/quotes/kaamelott">/quotes/kaamelott</a></li>
+			</ul>
 		</div>
 
+		<hr>
+
 		<div>
-			<h2>Suggestions</h2>
+			<h2 id="suggestions">Suggestions</h2>
 			<p>
 				This is a scraping tool that returns search suggestions from different providers. It uses websockets for cost
-				reasons. Use <code>ws://</code>. Docs is TODO
+				reasons. Use <code>ws://</code>. Docs is TODO.
+				<br>Source code: <a href="https://github.com/victrme/search-suggestions">search-suggestions</a>
 			</p>
 
-			<h3>Path</h3>
-
-			<pre>/suggestions</pre>
+			<h3>Endpoint</h3>
+			<pre>WS /suggestions</pre>
 
 			<h3>Example</h3>
 			<p><a href="/suggestions?with=google&q=minecraft">/suggestions?with=google&q=minecraft</a></p>

@@ -23,7 +23,7 @@ export default <ExportedHandler<Env>>{
 			return new Response(html, { headers: { 'Content-Type': 'text/html' } })
 		}
 
-		if (path.startsWith('/unsplash') && req.url.includes('?')) {
+		if (path.startsWith('/unsplash')) {
 			return await unsplash(req.url, env)
 		}
 
