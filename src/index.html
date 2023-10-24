@@ -3,7 +3,9 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Bonjourr application programming interface </title>
+		<link rel="shortcut icon" href="https://bonjourr.fr/favicon.ico" type="image/x-icon">
+
+		<title>Bonjourr API - Homepage</title>
 
 		<style>
 
@@ -24,17 +26,21 @@
 				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 			}
 
+			header {
+				text-align: center;
+				margin-bottom: 8em;
+			}
+
 
 			h1, h2, h3 {
 				font-weight: 600;
 			}
 
 			h1 {
-				margin-bottom: 2em;
+				margin-bottom: 0;
 				padding: .4em;
 				font-size: 3em;
 				letter-spacing: 1px;
-				text-align: center;
 			}
 
 			h2 {
@@ -64,13 +70,15 @@
 		</style>
 	</head>
 	<body>
-		<h1>Hello world !</h1>
-
+		<header>
+			<h1>Hello world !</h1>
+			<p>This is Bonjourr API system. More information in <a href="https://github.com/victrme/bonjourr-apis">the source code</a>.</p>
+		</header>
 	
 			<h2 id="unsplash">Unsplash</h2>
 
 			<p>
-				This is a proxy of the unsplash endpoints. Read their docs to learn more:
+				This is a proxy of the unsplash endpoints. Read their documentation to learn more:
 				<a href="https://unsplash.com/documentation#get-a-photo">unsplash.com/documentation</a>. When cloning this API,
 				add your key with "UNSPLASH" as an environnement variable.
 			</p>
@@ -87,14 +95,14 @@
 	
 			<h2 id="weather">Weather</h2>
 			<p>
-				This is a mostly a proxy of openweathermap that combines their current & forecast endpoints. Use their docs
+				This is a mostly a proxy of openweathermap that combines their current & forecast endpoints. Use their documentation
 				here:
 				<a href="https://openweathermap.org/current">openweathermap.org/current</a>.
 			</p>
 
 			<h3>Endpoints</h3>
 			<code>GET /weather/current?[openweathermap-parameters]</code>
-			<code>GET /weather/forecast[openweathermap-parameters]</code>
+			<code>GET /weather/forecast?[openweathermap-parameters]</code>
 
 			<h3>Examples</h3>
 			<ul>
