@@ -1,4 +1,4 @@
-# bonjourr-apis
+# Bonjourr APIs
 This is Bonjourr API system. It is only usable as a cloudflare worker since it leverages service bindings.
 
 ## Install
