@@ -3,19 +3,19 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Bonjourr APIs Portal Page</title>
+		<title>Bonjourr application programming interface </title>
 
 		<style>
-			html {
-				background-color: #292d35;
-				color: #eee;
-			}
+
 
 			body {
 				min-width: 200px;
 				max-width: 700px;
 				margin: auto;
 				padding: 5vh;
+				color: #3a3b3c;
+				letter-spacing: .1px;
+				line-height: 1.5em;
 			}
 
 			button,
@@ -24,9 +24,6 @@
 				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 			}
 
-			a {
-				color: #8aa7ff;
-			}
 
 			h1, h2, h3 {
 				font-weight: 600;
@@ -38,8 +35,6 @@
 				font-size: 3em;
 				letter-spacing: 1px;
 				text-align: center;
-				color: #eee;
-				background-color: #6d898c;
 			}
 
 			h2 {
@@ -52,26 +47,24 @@
 
 			hr {
 				margin: 5em 0;
-				border-color: #fff3;
+				border-color: #fff5;
 			}
 
-			pre,
+			
 			code {
-				background: #393f4a;
-				border-radius: 4px;
-				padding: 0.3em;
-			}
-
-			pre {
 				display: inline-block;
 				font-size: 1em;
 				padding: 1em;
 				margin: .2em 0;
+				background: #f5f5f5;
+				border-radius: 4px;
 			}
+
+		
 		</style>
 	</head>
 	<body>
-		<h1>Bonjourr APIs</h1>
+		<h1>Hello world !</h1>
 
 	
 			<h2 id="unsplash">Unsplash</h2>
@@ -83,7 +76,7 @@
 			</p>
 
 			<h3>Endpoint</h3>
-			<pre>GET /unsplash/[unsplash-endpoints]</pre>
+			<code>GET /unsplash/[unsplash-endpoints]</code>
 
 			<h3>Example</h3>
 			<ul>
@@ -96,13 +89,12 @@
 			<p>
 				This is a mostly a proxy of openweathermap that combines their current & forecast endpoints. Use their docs
 				here:
-				<a href="https://openweathermap.org/current">openweathermap.org/current</a>. Go to
-				<code>GET /weather/current</code> for current weather, and <code>GET /weather/forecast</code> for the forecast.
+				<a href="https://openweathermap.org/current">openweathermap.org/current</a>.
 			</p>
 
 			<h3>Endpoints</h3>
-			<pre>GET /weather/current?[openweathermap-parameters]</pre>
-			<pre>GET /weather/forecast[openweathermap-parameters]</pre>
+			<code>GET /weather/current?[openweathermap-parameters]</code>
+			<code>GET /weather/forecast[openweathermap-parameters]</code>
 
 			<h3>Examples</h3>
 			<ul>
@@ -122,7 +114,7 @@
 			</p>
 
 			<h3>Endpoint</h3>
-			<pre>GET /favicon/:your-website</pre>
+			<code>GET /favicon/:your-website</code>
 
 			<h3>Example</h3>
 			<ul>
@@ -141,9 +133,9 @@
 			</p>
 
 			<h3>Endpoints</h3>
-			<pre>GET /quotes/classic/:lang</pre><br>
-			<pre>GET /quotes/inspirobot</pre><br>
-			<pre>GET /quotes/kaamelott</pre>
+			<code>GET /quotes/classic/:lang</code><br>
+			<code>GET /quotes/inspirobot</code><br>
+			<code>GET /quotes/kaamelott</code>
 
 			<h3>Examples</h3>
 			<ul>
@@ -159,12 +151,12 @@
 			<h2 id="suggestions">Suggestions</h2>
 			<p>
 				This is a scraping tool that returns search suggestions from different providers. It uses websockets for cost
-				reasons. Use <code>ws://</code>. Docs is TODO.
+				reasons. Docs is TODO.
 				<br>Source code: <a href="https://github.com/victrme/search-suggestions">search-suggestions</a>
 			</p>
 
 			<h3>Endpoint</h3>
-			<pre>WS /suggestions</pre>
+			<code>WS /suggestions</code>
 
 			<h3>Example</h3>
 			<p><a href="/suggestions?with=google&q=minecraft">/suggestions?with=google&q=minecraft</a></p>
