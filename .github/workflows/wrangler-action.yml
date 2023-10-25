@@ -11,6 +11,8 @@ jobs:
     name: Deploy
     steps:
       - uses: actions/checkout@v3
+      - name: Install pnpm
+        run: npm i -g pnpm
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
