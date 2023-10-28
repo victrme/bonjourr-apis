@@ -1,9 +1,0 @@
-[submodule "apis/suggestions"]
-	path = apis/suggestions
-	url = https://github.com/victrme/search-suggestions
-[submodule "apis/favicon"]
-	path = apis/favicon
-	url = https://github.com/victrme/favicon-fetcher
-[submodule "apis/quotes"]
-	path = apis/quotes
-	url = https://github.com/victrme/i18n-quotes
