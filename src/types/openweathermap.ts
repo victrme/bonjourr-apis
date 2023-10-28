@@ -9,23 +9,13 @@ type Onecall = {
 		sunset: number
 		temp: number
 		feels_like: number
-		weather: {
-			id: number
-			main: string
-			description: string
-			icon: string
-		}[]
+		weather: WeatherInfos[]
 	}
 	hourly: {
 		dt: number
 		temp: number
 		feels_like: number
-		weather: {
-			id: number
-			main: string
-			description: string
-			icon: string
-		}[]
+		weather: WeatherInfos[]
 	}[]
 }
 
@@ -36,12 +26,7 @@ type Current = {
 		lon: number
 		lat: number
 	}
-	weather: {
-		id: number
-		main: string
-		description: string
-		icon: string
-	}[]
+	weather: WeatherInfos[]
 	main: {
 		temp: number
 		feels_like: number
@@ -62,11 +47,13 @@ type Forecast = {
 			temp: number
 			feels_like: number
 		}
-		weather: {
-			id: number
-			main: string
-			description: string
-			icon: string
-		}[]
+		weather: WeatherInfos[]
 	}[]
+}
+
+type WeatherInfos = {
+	id: number
+	main: string
+	description: string
+	icon: string
 }
