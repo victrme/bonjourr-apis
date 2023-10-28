@@ -1,6 +1,8 @@
 export { Forecast, Current, Onecall }
 
 type Onecall = {
+	city?: string
+	ccode?: string
 	lat: number
 	lon: number
 	current: {

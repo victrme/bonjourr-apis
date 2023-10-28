@@ -1,6 +1,6 @@
 //@ts-ignore
 import html from './index.html'
-import { Fetcher, ExportedHandler } from '@cloudflare/workers-types'
+import { Fetcher, Request } from '@cloudflare/workers-types'
 import type * as Openweathermap from './types/openweathermap'
 
 const headers = {
@@ -9,15 +9,15 @@ const headers = {
 }
 
 interface Env {
-	UNSPLASH: string
-	WEATHER: string
+	UNSPLASH?: string
+	WEATHER?: string
 	quotes: Fetcher
 	favicon: Fetcher
 	suggestions: Fetcher
 }
 
-export default <ExportedHandler<Env>>{
-	async fetch(req, env) {
+export default {
+	async fetch(req: Request, env: Env) {
 		const url = new URL(req.url)
 		const path = url.pathname
 
@@ -50,38 +50,46 @@ export default <ExportedHandler<Env>>{
 }
 
 async function weather(req: Request, key: string): Promise<Response> {
+	const hasLocation = req.url.includes('lat=') && req.url.includes('lon=')
 	const base = 'https://api.openweathermap.org/data/2.5/'
 	let params = req.url.split('?')[1] ?? ''
+	let city = ''
+	let ccode = ''
 
-	// Get location
-	if (!params.match(/lat|lon/)) {
+	if (!hasLocation) {
 		const geo = { lat: 0, lon: 0 }
 
 		// City,Country is available
 		if (params.includes('q')) {
-			const q = new URLSearchParams(req.url).get('q')
+			const q = (params.split('&').filter((p) => p.includes('q='))[0] ?? '').replace('q=', '')
 			const resp = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=1&appid=${key}`)
 			const json = await resp.json()
 
 			geo.lat = json.lat
 			geo.lon = json.lon
+			city = q?.split(',')[0] ?? ''
+			ccode = q?.split(',')[1] ?? ''
 		}
 
 		// Approximate location from ip
-		else if (req.cf) {
-			geo.lat = req.cf.latitude
-			geo.lon = req.cf.longitude
+		else if (req?.cf) {
+			geo.lat = parseFloat(req.cf?.latitude as string)
+			geo.lon = parseFloat(req.cf?.longitude as string)
+			ccode = req.cf?.country as string
+			city = req.cf?.city as string
 		}
 
 		params += `&lat=${geo.lat}&lon=${geo.lon}`
 	}
 
 	const current = (await (await fetch(`${base}weather?appid=${key}&${params}`)).json()) as Openweathermap.Current
-	const forecast = (await (await fetch(`${base}forecast?appid=${key}&${params}`)).json()) as Openweathermap.Forecast
+	const forecast = (await (await fetch(`${base}forecast?appid=${key}&${params}&cnt=14`)).json()) as Openweathermap.Forecast
 
 	headers['Content-Type'] = 'application/json'
 
 	const onecall: Openweathermap.Onecall = {
+		city: hasLocation ? undefined : city,
+		ccode: hasLocation ? undefined : ccode,
 		lat: current.coord.lat,
 		lon: current.coord.lon,
 		current: {
