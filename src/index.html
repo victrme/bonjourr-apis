@@ -91,19 +91,18 @@
 	
 			<h2 id="weather">Weather</h2>
 			<p>
-				This is a mostly a proxy of openweathermap that combines their current & forecast endpoints. Use their documentation
+				This is a mostly a proxy of openweathermap that combines their current & forecast endpoints to return data in a One Call format. Use their documentation
 				here:
-				<a href="https://openweathermap.org/current">openweathermap.org/current</a>.
+				<a href="https://openweathermap.org/api/one-call-3">openweathermap.org/one-call-3</a>. You can also specify a city using the 'q=' parameter. Approximate IP location is used when no locations are specified. It also returns the city and country code in this case.
 			</p>
 
-			<h3>Endpoints</h3>
-			<code>GET /weather/current?[openweathermap-parameters]</code>
-			<code>GET /weather/forecast?[openweathermap-parameters]</code>
+			<h3>Endpoint</h3>
+			<code>GET /weather?[openweathermap-parameters]</code>
 
 			<h3>Examples</h3>
 			<ul>
-				<li><a href="/weather/current?q=Paris,FR">/weather/current?q=Paris,FR</a></li>
-				<li><a href="/weather/forecast?q=Paris,FR">/weather/forecast?q=Paris,FR</a></li>
+				<li><a href="/weather">/weather</a></li>
+				<li><a href="/weather/?q=Paris,FR">/weather?q=Paris,FR</a></li>
 			</ul>
 		</div>
 
