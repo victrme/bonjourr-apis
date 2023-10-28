@@ -29,8 +29,8 @@ export default <ExportedHandler<Env>>{
 			return await unsplash(req.url, env.UNSPLASH ?? '')
 		}
 
-		if (path.startsWith('/weather') && req.url.includes('?')) {
-			return await weather(req.url, env.WEATHER ?? '')
+		if (path.startsWith('/weather')) {
+			return await weather(req, env.WEATHER ?? '')
 		}
 
 		if (path.startsWith('/favicon')) {
@@ -49,9 +49,32 @@ export default <ExportedHandler<Env>>{
 	},
 }
 
-async function weather(requrl: string, key: string): Promise<Response> {
-	const params = requrl.split('?')[1]
+async function weather(req: Request, key: string): Promise<Response> {
 	const base = 'https://api.openweathermap.org/data/2.5/'
+	let params = req.url.split('?')[1] ?? ''
+
+	// Get location
+	if (!params.match(/lat|lon/)) {
+		const geo = { lat: 0, lon: 0 }
+
+		// City,Country is available
+		if (params.includes('q')) {
+			const q = new URLSearchParams(req.url).get('q')
+			const resp = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=1&appid=${key}`)
+			const json = await resp.json()
+
+			geo.lat = json.lat
+			geo.lon = json.lon
+		}
+
+		// Approximate location from ip
+		else if (req.cf) {
+			geo.lat = req.cf.latitude
+			geo.lon = req.cf.longitude
+		}
+
+		params += `&lat=${geo.lat}&lon=${geo.lon}`
+	}
 
 	const current = (await (await fetch(`${base}weather?appid=${key}&${params}`)).json()) as Openweathermap.Current
 	const forecast = (await (await fetch(`${base}forecast?appid=${key}&${params}`)).json()) as Openweathermap.Forecast
