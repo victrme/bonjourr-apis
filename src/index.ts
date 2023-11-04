@@ -5,6 +5,8 @@ import type * as Openweathermap from './types/openweathermap'
 
 const headers = {
 	'access-control-allow-origin': '*',
+	'access-control-allow-methods': '*',
+	'access-control-max-age': '3600',
 	'cache-control': 'public, maxage=3600',
 }
 
@@ -22,7 +24,7 @@ export default {
 		const path = url.pathname
 
 		if (path === '/') {
-			return new Response(html, { headers: { 'Content-Type': 'text/html' } })
+			return new Response(html, { headers: { ...headers, 'content-type': 'text/html' } })
 		}
 
 		if (path.startsWith('/unsplash')) {
@@ -45,7 +47,7 @@ export default {
 			return await env.suggestions.fetch(req)
 		}
 
-		return new Response('404 Not found', { status: 404 })
+		return new Response('404 Not found', { status: 404, headers })
 	},
 }
 
@@ -85,7 +87,7 @@ async function weather(req: Request, key: string): Promise<Response> {
 	const current = (await (await fetch(`${base}weather?appid=${key}&${params}`)).json()) as Openweathermap.Current
 	const forecast = (await (await fetch(`${base}forecast?appid=${key}&${params}&cnt=14`)).json()) as Openweathermap.Forecast
 
-	headers['Content-Type'] = 'application/json'
+	headers['content-type'] = 'application/json'
 
 	const onecall: Openweathermap.Onecall = {
 		city: hasLocation ? undefined : city,
@@ -121,7 +123,7 @@ async function unsplash(requrl: string, key: string): Promise<Response> {
 		},
 	})
 
-	headers['Content-Type'] = 'application/json'
+	headers['content-type'] = 'application/json'
 
 	let result: unknown[] = []
 
