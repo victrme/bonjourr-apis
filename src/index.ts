@@ -5,7 +5,8 @@ import type * as Openweathermap from './types/openweathermap'
 
 const headers = {
 	'access-control-allow-origin': '*',
-	'access-control-allow-methods': '*',
+	'access-control-allow-headers': '*',
+	'access-control-allow-methods': 'GET, OPTIONS',
 	'access-control-max-age': '3600',
 	'cache-control': 'public, maxage=3600',
 }
