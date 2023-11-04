@@ -117,6 +117,14 @@ async function weather(req: Request, key: string): Promise<Response> {
 async function unsplash(requrl: string, key: string): Promise<Response> {
 	const endpoint = requrl.slice(requrl.indexOf('/unsplash') + 9)
 
+	// Narrow endpoint to /photos/random
+	if (!endpoint.startsWith('/photos/random?')) {
+		return new Response('Forbidden', {
+			status: 403,
+			headers,
+		})
+	}
+
 	const resp = await fetch(`https://api.unsplash.com${endpoint}`, {
 		headers: {
 			'Accept-Version': 'v1',
