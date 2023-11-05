@@ -18,7 +18,7 @@ interface Env {
 	WEATHER?: string
 	quotes: Fetcher
 	favicon: Fetcher
-	suggestions: Fetcher
+	// suggestions: Fetcher
 }
 
 export default {
@@ -46,9 +46,9 @@ export default {
 			return await env.quotes.fetch(req)
 		}
 
-		if (path.startsWith('/suggestions')) {
-			return await env.suggestions.fetch(req)
-		}
+		// if (path.startsWith('/suggestions')) {
+		// 	return await env.suggestions.fetch(req)
+		// }
 
 		return new Response('404 Not found', { status: 404, headers })
 	},
