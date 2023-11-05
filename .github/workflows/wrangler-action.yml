@@ -6,22 +6,34 @@ on:
       - main
 
 jobs:
-  deploy:
+  deploy-main-account:
     runs-on: ubuntu-latest
-    name: Deploy
+    name: Deploy to main account
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy to main account
+      - name: Deploy
         uses: cloudflare/wrangler-action@v3.1.0     
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
-      - name: Deploy to first fallback
+
+  deploy-first-fallback-account:
+    runs-on: ubuntu-latest
+    name: Deploy to first fallback
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy
         uses: cloudflare/wrangler-action@v3.1.0     
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_FALLBACK_1_ACCOUNT_ID }}
-      - name: Deploy to second fallback
+
+  deploy-third-account:
+    runs-on: ubuntu-latest
+    name: Deploy to second fallback
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy
         uses: cloudflare/wrangler-action@v3.1.0     
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
