@@ -14,15 +14,15 @@ jobs:
       - name: Deploy to main account
         uses: cloudflare/wrangler-action@v3.1.0     
         with:
-          apiToken: ${{ secrets.CF_MAIN_API_TOKEN }}
+          apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
       - name: Deploy to first fallback
         uses: cloudflare/wrangler-action@v3.1.0     
         with:
-          apiToken: ${{ secrets.CF_FALLBACK_1_API_TOKEN }}
+          apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_FALLBACK_1_ACCOUNT_ID }}
       - name: Deploy to second fallback
         uses: cloudflare/wrangler-action@v3.1.0     
         with:
-          apiToken: ${{ secrets.CF_FALLBACK_API_TOKEN }}
+          apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_FALLBACK_2_ACCOUNT_ID }}
