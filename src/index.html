@@ -148,21 +148,28 @@
 			</ul>
 		</div>
 
-		<!-- <hr>
+		<hr>
 
 		<div>
 			<h2 id="suggestions">Suggestions</h2>
 			<p>
-				This is a scraping tool that returns search suggestions from different providers. It uses websockets for cost
-				reasons. Docs is TODO.
+				This is a scraping tool that returns search suggestions from different providers. It uses websockets, so no live examples.
 				<br>Source code: <a href="https://github.com/victrme/search-suggestions">search-suggestions</a>
 			</p>
 
 			<h3>Endpoint</h3>
 			<code>WS /suggestions</code>
 
-			<h3>Example</h3>
-			<p><a href="/suggestions?with=google&q=minecraft">/suggestions?with=google&q=minecraft</a></p>
-		</div> -->
+			<h3>Code example</h3>
+			<code>
+				<pre>const socket = new WebSocket('wss://api.bonjourr.lol/suggestions')
+
+socket.onmessage = function (event: MessageEvent) {
+  console.log(JSON.parse(event.data))
+}
+
+socket.send(JSON.stringify({ q, with, lang }))</pre>
+			</code>
+		</div>
 	</body>
 </html>

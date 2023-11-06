@@ -1,8 +1,8 @@
-export default async function unsplash(requrl: string, key: string, headers: HeadersInit): Promise<Response> {
+export default async function unsplash(requrl: string, key: string, headers: Headers): Promise<Response> {
 	const endpoint = requrl.slice(requrl.indexOf('/unsplash') + 9)
 
 	// Narrow endpoint to /photos/random
-	if (!endpoint.startsWith('/photos/random?')) {
+	if (!endpoint.startsWith('/photos/random')) {
 		return new Response('Forbidden', {
 			status: 403,
 			headers,
@@ -16,8 +16,6 @@ export default async function unsplash(requrl: string, key: string, headers: Hea
 		},
 	})
 
-	headers['content-type'] = 'application/json'
-
 	let result: unknown[] = []
 
 	try {
@@ -25,6 +23,8 @@ export default async function unsplash(requrl: string, key: string, headers: Hea
 	} catch (error) {
 		console.log(error)
 	}
+
+	headers.set('content-type', 'application/json')
 
 	return new Response(JSON.stringify(result), {
 		status: resp.status,

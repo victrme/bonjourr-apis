@@ -1,6 +1,6 @@
 import type { Request } from '@cloudflare/workers-types'
 
-export default async function weather(req: Request, keys: string, headers: HeadersInit) {
+export default async function weather(req: Request, keys: string, headers: Headers) {
 	const hasLocation = req.url.includes('lat=') && req.url.includes('lon=')
 	const base = 'https://api.openweathermap.org/data/2.5/'
 	const key = keys.split(',')[0]
@@ -16,7 +16,7 @@ export default async function weather(req: Request, keys: string, headers: Heade
 		if (params.includes('q')) {
 			const q = (params.split('&').filter((p) => p.includes('q='))[0] ?? '').replace('q=', '')
 			const resp = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=1&appid=${key}`)
-			const json = await resp.json()
+			const json = await resp.json<Onecall>()
 
 			geo.lat = json.lat
 			geo.lon = json.lon
@@ -38,8 +38,6 @@ export default async function weather(req: Request, keys: string, headers: Heade
 	const current = (await (await fetch(`${base}weather?appid=${key}&${params}`)).json()) as Current
 	const forecast = (await (await fetch(`${base}forecast?appid=${key}&${params}&cnt=14`)).json()) as Forecast
 
-	headers['content-type'] = 'application/json'
-
 	const onecall: WeatherResponse = {
 		city: hasLocation ? undefined : city,
 		ccode: hasLocation ? undefined : ccode,
@@ -60,6 +58,8 @@ export default async function weather(req: Request, keys: string, headers: Heade
 			feels_like: item.main.feels_like,
 		})),
 	}
+
+	headers.set('content-type', 'application/json')
 
 	return new Response(JSON.stringify(onecall), { status: 200, headers })
 }
