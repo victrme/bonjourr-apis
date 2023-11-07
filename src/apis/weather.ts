@@ -3,7 +3,11 @@ import type { Request } from '@cloudflare/workers-types'
 export default async function weather(req: Request, keys: string, headers: Headers) {
 	const hasLocation = req.url.includes('lat=') && req.url.includes('lon=')
 	const base = 'https://api.openweathermap.org/data/2.5/'
-	const key = keys.split(',')[0]
+
+	const keylist = keys.split(',')
+	const key = keylist[Math.floor(Math.random() * keylist.length)]
+
+	headers.set('content-type', 'application/json')
 
 	let params = req.url.split('?')[1] ?? ''
 	let city = ''
@@ -39,8 +43,20 @@ export default async function weather(req: Request, keys: string, headers: Heade
 		params += `&lat=${geo.lat}&lon=${geo.lon}`
 	}
 
-	const current = (await (await fetch(`${base}weather?appid=${key}&${params}`)).json()) as Current
-	const forecast = (await (await fetch(`${base}forecast?appid=${key}&${params}&cnt=14`)).json()) as Forecast
+	const currentResponse = await fetch(`${base}weather?appid=${key}&${params}`)
+	const forecastResponse = await fetch(`${base}forecast?appid=${key}&${params}&cnt=14`)
+	const current = (await currentResponse.json()) as Current
+	const forecast = (await forecastResponse.json()) as Forecast
+
+	if (currentResponse.status !== 200) {
+		const isInvalidKey = currentResponse.status === 401
+		const error = isInvalidKey ? 'Invalid API key' : 'Could not get weather data'
+
+		return new Response(JSON.stringify({ error }), {
+			status: currentResponse.status,
+			headers,
+		})
+	}
 
 	const onecall: WeatherResponse = {
 		city: hasLocation ? undefined : city,
@@ -62,8 +78,6 @@ export default async function weather(req: Request, keys: string, headers: Heade
 			feels_like: item.main.feels_like,
 		})),
 	}
-
-	headers.set('content-type', 'application/json')
 
 	return new Response(JSON.stringify(onecall), { status: 200, headers })
 }
