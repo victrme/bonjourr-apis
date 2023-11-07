@@ -16,16 +16,20 @@ export default async function weather(req: Request, keys: string, headers: Heade
 		if (params.includes('q')) {
 			const q = (params.split('&').filter((p) => p.includes('q='))[0] ?? '').replace('q=', '')
 			const resp = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=1&appid=${key}`)
-			const json = await resp.json<Onecall>()
+			const json = await resp.json<Geo>()
 
-			geo.lat = json.lat
-			geo.lon = json.lon
-			city = q?.split(',')[0] ?? ''
-			ccode = q?.split(',')[1] ?? ''
+			if (json[0]) {
+				geo.lat = json[0].lat
+				geo.lon = json[0].lon
+				city = q?.split(',')[0] ?? ''
+				ccode = q?.split(',')[1] ?? ''
+			}
+
+			params = params.slice(0, params.indexOf('&q='))
 		}
 
 		// Approximate location from ip
-		else if (req?.cf) {
+		if (req?.cf && geo.lat === 0 && geo.lon === 0) {
 			geo.lat = parseFloat(req.cf?.latitude as string)
 			geo.lon = parseFloat(req.cf?.longitude as string)
 			ccode = req.cf?.country as string
@@ -126,3 +130,10 @@ type WeatherInfos = {
 	description: string
 	icon: string
 }
+
+type Geo = {
+	name: string
+	lat: number
+	lon: number
+	country: string
+}[]
