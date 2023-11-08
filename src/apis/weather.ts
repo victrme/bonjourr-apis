@@ -43,43 +43,50 @@ export default async function weather(req: Request, keys: string, headers: Heade
 		params += `&lat=${geo.lat}&lon=${geo.lon}`
 	}
 
-	const currentResponse = await fetch(`${base}weather?appid=${key}&${params}`)
-	const forecastResponse = await fetch(`${base}forecast?appid=${key}&${params}&cnt=14`)
-	const current = (await currentResponse.json()) as Current
-	const forecast = (await forecastResponse.json()) as Forecast
+	const currentResponse = fetch(`${base}weather?appid=${key}&${params}`)
+	const forecastResponse = fetch(`${base}forecast?appid=${key}&${params}&cnt=14`)
 
-	if (currentResponse.status !== 200) {
-		const isInvalidKey = currentResponse.status === 401
-		const error = isInvalidKey ? 'Invalid API key' : 'Could not get weather data'
+	const response = await Promise.all([currentResponse, forecastResponse])
+	const isAllOk = response[0].status === 200 && response[1].status === 200
 
-		return new Response(JSON.stringify({ error }), {
-			status: currentResponse.status,
+	if (isAllOk) {
+		const current = await response[0].json<Current>()
+		const forecast = await response[1].json<Forecast>()
+
+		const onecall: WeatherResponse = {
+			city: hasLocation ? undefined : city,
+			ccode: hasLocation ? undefined : ccode,
+			lat: current.coord.lat,
+			lon: current.coord.lon,
+			current: {
+				dt: current.dt,
+				temp: current.main.temp,
+				feels_like: current.main.feels_like,
+				sunrise: current.sys.sunrise,
+				sunset: current.sys.sunset,
+				weather: current.weather,
+			},
+			hourly: forecast.list.map((item) => ({
+				dt: item.dt,
+				temp: item.main.temp,
+				weather: item.weather,
+				feels_like: item.main.feels_like,
+			})),
+		}
+
+		return new Response(JSON.stringify(onecall), {
+			status: 200,
 			headers,
 		})
 	}
 
-	const onecall: WeatherResponse = {
-		city: hasLocation ? undefined : city,
-		ccode: hasLocation ? undefined : ccode,
-		lat: current.coord.lat,
-		lon: current.coord.lon,
-		current: {
-			dt: current.dt,
-			temp: current.main.temp,
-			feels_like: current.main.feels_like,
-			sunrise: current.sys.sunrise,
-			sunset: current.sys.sunset,
-			weather: current.weather,
-		},
-		hourly: forecast.list.map((item) => ({
-			dt: item.dt,
-			temp: item.main.temp,
-			weather: item.weather,
-			feels_like: item.main.feels_like,
-		})),
-	}
+	const isInvalidKey = response[0].status === 401
+	const error = isInvalidKey ? 'Invalid API key' : 'Could not get weather data'
 
-	return new Response(JSON.stringify(onecall), { status: 200, headers })
+	return new Response(JSON.stringify({ error }), {
+		status: response[0].status,
+		headers,
+	})
 }
 
 interface WeatherResponse extends Onecall {
