@@ -2,7 +2,7 @@
 import html from './index.html'
 import weather from './apis/weather'
 import unsplash from './apis/unsplash'
-import suggestions from './apis/suggestions'
+import suggestions from './apis/suggestions/src/worker'
 
 const headers = new Headers({
 	'access-control-allow-origin': '*',
@@ -17,7 +17,6 @@ interface Env {
 	WEATHER?: string
 	quotes: Fetcher
 	favicon: Fetcher
-	suggestions: Fetcher
 }
 
 export default {
@@ -38,7 +37,7 @@ export default {
 		}
 
 		if (path.startsWith('/suggestions')) {
-			return await suggestions(req, env.suggestions, headers)
+			return await suggestions.fetch(req)
 		}
 
 		if (path.startsWith('/favicon')) {

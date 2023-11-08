@@ -3,7 +3,6 @@ main = "src/index.ts"
 compatibility_date = "2023-05-18"
 
 services = [
-  { binding = "suggestions", service = "suggestions" },
   { binding = "favicon", service = "favicon-fetcher" },
   { binding = "quotes", service = "i18n-quotes" },
 ]
