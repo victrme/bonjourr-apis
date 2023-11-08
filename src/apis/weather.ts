@@ -29,7 +29,7 @@ export default async function weather(req: Request, keys: string, headers: Heade
 				ccode = q?.split(',')[1] ?? ''
 			}
 
-			params = params.slice(0, params.indexOf('&q='))
+			params = params.slice(0, params.indexOf(params.includes('&q=') ? '&q=' : 'q=')) // no "&" if first param
 		}
 
 		// Approximate location from ip
