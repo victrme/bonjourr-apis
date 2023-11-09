@@ -3,9 +3,10 @@ main = "src/index.ts"
 compatibility_date = "2023-05-18"
 
 services = [
-  { binding = "favicon", service = "favicon-fetcher" },
   { binding = "quotes", service = "i18n-quotes" },
 ]
+
+minify = true
 
 [build]
 command = "git submodule update --init --recursive"

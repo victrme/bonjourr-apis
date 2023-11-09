@@ -2,6 +2,7 @@
 import html from './index.html'
 import weather from './apis/weather'
 import unsplash from './apis/unsplash'
+import favicon from './apis/favicon/src/worker'
 import suggestions from './apis/suggestions/src/worker'
 
 const headers = new Headers({
@@ -16,7 +17,6 @@ interface Env {
 	UNSPLASH?: string
 	WEATHER?: string
 	quotes: Fetcher
-	favicon: Fetcher
 }
 
 export default {
@@ -41,7 +41,7 @@ export default {
 		}
 
 		if (path.startsWith('/favicon')) {
-			return await env.favicon.fetch(req)
+			return await favicon.fetch(req)
 		}
 
 		if (path.startsWith('/quotes')) {
