@@ -1,32 +1,56 @@
 # Bonjourr APIs
 
-This is Bonjourr API system. It is only usable as a cloudflare worker since it leverages service bindings.
+This is Bonjourr API system.  
+  
+It is only usable as a cloudflare worker since it uses features like `waitUntil` or geolocation in request.  
+With a bit of tweaking, it can be deployed on other serverless hosting platforms.
 
 ## Install
 
--   You need to clone [favicon-fetcher](https://github.com/victrme/favicon-fetcher), [search-suggestions](https://github.com/victrme/search-suggestions) & [i18n-quotes](https://github.com/victrme/i18n-quotes) and deploy them as workers.
--   Once these workers are deployed, you can also deploy bonjourr-apis
--   Add your weather & unsplash keys as environnement variables as "WEATHER" and "UNSPLASH"
+- Fork this repository. (future me can skip this step)
+- Initialize the submodules for quotes, favicon, and suggestions.
+- Add your secrets to a `.dev.vars` for local dev to work
 
-### Deploy
+```bash
+# Global tools
+npm install --global wrangler pnpm
 
-Add repository secrets for Github Action to work:
+# Initialize the submodules
+git submodule update --init --recursive
 
--   `CF_API_TOKEN` (the api token for workers in all account)
+# For cloudflare types
+pnpm i
+
+# should work
+wrangler dev
+```
+
+```yaml
+# .dev.vars
+
+WEATHER=comma,separated,strings
+UNSPLASH=string
+```
+
+## Deploy on Cloudflare
+
+### With Github Actions
+/!\ Work in progress  
+Add repository secrets for Github Action in [Settings > Secrets and Variables > Actions](https://github.com/victrme/bonjourr-apis/settings/secrets/actions):
+
+-   `CF_API_TOKEN` (the single api token for all accounts that you forgot)
 -   `CF_MAIN_ACCOUNT_ID`
 -   `CF_FALLBACK_1_ACCOUNT_ID`
 -   `CF_FALLBACK_2_ACCOUNT_ID`
+-   `WEATHER`
+-   `UNSPLASH`
+
+### Manually
 
 ```bash
-# wrangler is the cli tool for cloudflare
-npm install --global wrangler
-
-# You need to login for dev because of remote
+# Using account with token
 wrangler login
 
-# dev needs remote for service bindings to work
-wrangler dev --remote
-
-# deploy
+# To the account you want
 wrangler deploy
 ```
