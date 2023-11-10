@@ -49,6 +49,9 @@ export default async function weather(req: Request, keys: string, headers: Heade
 	const response = await Promise.all([currentResponse, forecastResponse])
 	const isAllOk = response[0].status === 200 && response[1].status === 200
 
+	console.log(`${base}weather?appid=${key}&${params}`)
+	console.log(response[0].status)
+
 	if (isAllOk) {
 		const current = await response[0].json<Current>()
 		const forecast = await response[1].json<Forecast>()
@@ -80,8 +83,9 @@ export default async function weather(req: Request, keys: string, headers: Heade
 		})
 	}
 
-	const isInvalidKey = response[0].status === 401
-	const error = isInvalidKey ? 'Invalid API key' : 'Could not get weather data'
+	let error = 'Could not get weather data'
+	if (response[0].status === 429) error = 'Account blocked'
+	if (response[0].status === 401) error = 'Invalid API key'
 
 	return new Response(JSON.stringify({ error }), {
 		status: response[0].status,

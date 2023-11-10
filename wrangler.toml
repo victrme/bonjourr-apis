@@ -7,6 +7,8 @@ services = [
   { binding = "quotes", service = "i18n-quotes" },
 ]
 
+minify = true
+
 [build]
 command = "git submodule update --init --recursive"
 
