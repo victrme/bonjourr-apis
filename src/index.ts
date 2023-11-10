@@ -2,6 +2,7 @@
 import html from './index.html'
 import weather from './apis/weather'
 import unsplash from './apis/unsplash'
+import quotes from './apis/quotes/src/index'
 import favicon from './apis/favicon/src/worker'
 import suggestions from './apis/suggestions/src/worker'
 
@@ -16,11 +17,10 @@ const headers = new Headers({
 interface Env {
 	UNSPLASH?: string
 	WEATHER?: string
-	quotes: Fetcher
 }
 
 export default {
-	async fetch(req: Request, env: Env) {
+	async fetch(req: Request, env: Env, ctx: ExecutionContext) {
 		const url = new URL(req.url)
 		const path = url.pathname
 
@@ -45,7 +45,7 @@ export default {
 		}
 
 		if (path.startsWith('/quotes')) {
-			return await env.quotes.fetch(req)
+			return await quotes.fetch(req, env, ctx)
 		}
 
 		return new Response('404 Not found', { status: 404, headers })
