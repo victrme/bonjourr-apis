@@ -3,3 +3,12 @@
 	path = src/apis/suggestions
 	url = https://github.com/victrme/search-suggestions
 	branch = cloudflare
+	
+[submodule "src/apis/favicon"]
+	path = src/apis/favicon
+	url = https://github.com/victrme/favicon-fetcher
+	branch = cloudflare
+[submodule "src/apis/quotes"]
+	path = src/apis/quotes
+	url = https://github.com/victrme/i18n-quotes
+	branch = cloudflare
