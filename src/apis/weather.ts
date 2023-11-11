@@ -101,7 +101,7 @@ async function cacheControl(ctx: ExecutionContext, url: string, key: string): Pr
 
 	response = await fetch(url + `&appid=${key}`)
 	response = new Response(response.body, response)
-	response.headers.append('Cache-Control', 's-maxage=1200')
+	response.headers.append('Cache-Control', 's-maxage=1800')
 
 	ctx.waitUntil(cache.put(cacheKey, response.clone()))
 
