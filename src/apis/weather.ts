@@ -1,6 +1,4 @@
-import type { Request } from '@cloudflare/workers-types'
-
-export default async function weather(req: Request, keys: string, headers: Headers) {
+export default async function weather(req: Request, ctx: ExecutionContext, keys: string, headers: Headers) {
 	const hasLocation = req.url.includes('lat=') && req.url.includes('lon=')
 	const base = 'https://api.openweathermap.org/data/2.5/'
 
@@ -43,18 +41,14 @@ export default async function weather(req: Request, keys: string, headers: Heade
 		params += `&lat=${geo.lat}&lon=${geo.lon}`
 	}
 
-	const currentResponse = fetch(`${base}weather?appid=${key}&${params}`)
-	const forecastResponse = fetch(`${base}forecast?appid=${key}&${params}&cnt=14`)
+	const currentResponse = await cacheControl(ctx, `${base}weather?${params}`, key)
+	const forecastResponse = await cacheControl(ctx, `${base}forecast?${params}&cnt=14`, key)
 
-	const response = await Promise.all([currentResponse, forecastResponse])
-	const isAllOk = response[0].status === 200 && response[1].status === 200
-
-	console.log(`${base}weather?appid=${key}&${params}`)
-	console.log(response[0].status)
+	const isAllOk = currentResponse.status === 200 && forecastResponse.status === 200
 
 	if (isAllOk) {
-		const current = await response[0].json<Current>()
-		const forecast = await response[1].json<Forecast>()
+		const current = await currentResponse.json<Current>()
+		const forecast = await forecastResponse.json<Forecast>()
 
 		const onecall: WeatherResponse = {
 			city: hasLocation ? undefined : city,
@@ -84,13 +78,34 @@ export default async function weather(req: Request, keys: string, headers: Heade
 	}
 
 	let error = 'Could not get weather data'
-	if (response[0].status === 429) error = 'Account blocked'
-	if (response[0].status === 401) error = 'Invalid API key'
+	if (currentResponse.status === 429) error = 'Account blocked'
+	if (currentResponse.status === 401) error = 'Invalid API key'
 
 	return new Response(JSON.stringify({ error }), {
-		status: response[0].status,
+		status: currentResponse.status,
 		headers,
 	})
+}
+
+async function cacheControl(ctx: ExecutionContext, url: string, key: string): Promise<Response> {
+	const cacheKey = new Request(url)
+	const cache = caches.default
+	let response = await cache.match(cacheKey)
+
+	if (response) {
+		console.log(`Cache hit for: ${url}.`)
+		return response
+	}
+
+	console.log(`Response for request not present in cache. Fetching and caching request.`)
+
+	response = await fetch(url + `&appid=${key}`)
+	response = new Response(response.body, response)
+	response.headers.append('Cache-Control', 's-maxage=1200')
+
+	ctx.waitUntil(cache.put(cacheKey, response.clone()))
+
+	return response
 }
 
 interface WeatherResponse extends Onecall {

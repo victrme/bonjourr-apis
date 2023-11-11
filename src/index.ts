@@ -11,7 +11,6 @@ const headers = new Headers({
 	'access-control-allow-headers': '*',
 	'access-control-allow-methods': 'GET, OPTIONS',
 	'access-control-max-age': '3600',
-	'cache-control': 'public, maxage=3600',
 })
 
 interface Env {
@@ -33,7 +32,7 @@ export default {
 		}
 
 		if (path.startsWith('/weather')) {
-			return await weather(req, env.WEATHER ?? '', headers)
+			return await weather(req, ctx, env.WEATHER ?? '', headers)
 		}
 
 		if (path.startsWith('/suggestions')) {
