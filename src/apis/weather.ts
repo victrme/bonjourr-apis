@@ -17,7 +17,8 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 		// City,Country is available
 		if (params.includes('q')) {
 			const q = (params.split('&').filter((p) => p.includes('q='))[0] ?? '').replace('q=', '')
-			const resp = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=1&appid=${key}`)
+			const url = `https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=1`
+			const resp = await cacheControl(ctx, url, key, 31536000)
 			const json = await resp.json<Geo>()
 
 			if (json[0]) {
@@ -87,7 +88,7 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 	})
 }
 
-async function cacheControl(ctx: ExecutionContext, url: string, key: string): Promise<Response> {
+async function cacheControl(ctx: ExecutionContext, url: string, key: string, maxage = 1800): Promise<Response> {
 	const cacheKey = new Request(url)
 	const cache = caches.default
 	let response = await cache.match(cacheKey)
@@ -101,7 +102,7 @@ async function cacheControl(ctx: ExecutionContext, url: string, key: string): Pr
 
 	response = await fetch(url + `&appid=${key}`)
 	response = new Response(response.body, response)
-	response.headers.append('Cache-Control', 's-maxage=1800')
+	response.headers.append('Cache-Control', 's-maxage=' + maxage)
 
 	ctx.waitUntil(cache.put(cacheKey, response.clone()))
 
