@@ -1,114 +1,3 @@
-export default async function weather(req: Request, ctx: ExecutionContext, keys: string, headers: Headers) {
-	const hasLocation = req.url.includes('lat=') && req.url.includes('lon=')
-	const base = 'https://api.openweathermap.org/data/2.5/'
-
-	const keylist = keys.split(',')
-	const key = keylist[Math.floor(Math.random() * keylist.length)]
-
-	headers.set('content-type', 'application/json')
-
-	let params = req.url.split('?')[1] ?? ''
-	let city = ''
-	let ccode = ''
-
-	if (!hasLocation) {
-		const geo = { lat: 0, lon: 0 }
-
-		// City,Country is available
-		if (params.includes('q')) {
-			const q = (params.split('&').filter((p) => p.includes('q='))[0] ?? '').replace('q=', '')
-			const url = `https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=1`
-			const resp = await cacheControl(ctx, url, key, 31536000)
-			const json = await resp.json<Geo>()
-
-			if (json[0]) {
-				geo.lat = json[0].lat
-				geo.lon = json[0].lon
-				city = q?.split(',')[0] ?? ''
-				ccode = q?.split(',')[1] ?? ''
-			}
-
-			params = params.slice(0, params.indexOf(params.includes('&q=') ? '&q=' : 'q=')) // no "&" if first param
-		}
-
-		// Approximate location from ip
-		if (req?.cf && geo.lat === 0 && geo.lon === 0) {
-			geo.lat = parseFloat(req.cf?.latitude as string)
-			geo.lon = parseFloat(req.cf?.longitude as string)
-			ccode = req.cf?.country as string
-			city = req.cf?.city as string
-		}
-
-		params += `&lat=${geo.lat}&lon=${geo.lon}`
-	}
-
-	const currentResponse = await cacheControl(ctx, `${base}weather?${params}`, key)
-	const forecastResponse = await cacheControl(ctx, `${base}forecast?${params}&cnt=14`, key)
-
-	const isAllOk = currentResponse.status === 200 && forecastResponse.status === 200
-
-	if (isAllOk) {
-		const current = await currentResponse.json<Current>()
-		const forecast = await forecastResponse.json<Forecast>()
-
-		const onecall: WeatherResponse = {
-			city: hasLocation ? undefined : city,
-			ccode: hasLocation ? undefined : ccode,
-			lat: current.coord.lat,
-			lon: current.coord.lon,
-			current: {
-				dt: current.dt,
-				temp: current.main.temp,
-				feels_like: current.main.feels_like,
-				sunrise: current.sys.sunrise,
-				sunset: current.sys.sunset,
-				weather: current.weather,
-			},
-			hourly: forecast.list.map((item) => ({
-				dt: item.dt,
-				temp: item.main.temp,
-				weather: item.weather,
-				feels_like: item.main.feels_like,
-			})),
-		}
-
-		return new Response(JSON.stringify(onecall), {
-			status: 200,
-			headers,
-		})
-	}
-
-	let error = 'Could not get weather data'
-	if (currentResponse.status === 429) error = 'Account blocked'
-	if (currentResponse.status === 401) error = 'Invalid API key'
-
-	return new Response(JSON.stringify({ error }), {
-		status: currentResponse.status,
-		headers,
-	})
-}
-
-async function cacheControl(ctx: ExecutionContext, url: string, key: string, maxage = 1800): Promise<Response> {
-	const cacheKey = new Request(url)
-	const cache = caches.default
-	let response = await cache.match(cacheKey)
-
-	if (response) {
-		console.log(`Cache hit for: ${url}.`)
-		return response
-	}
-
-	console.log(`Response for request not present in cache. Fetching and caching request.`)
-
-	response = await fetch(url + `&appid=${key}`)
-	response = new Response(response.body, response)
-	response.headers.append('Cache-Control', 's-maxage=' + maxage)
-
-	ctx.waitUntil(cache.put(cacheKey, response.clone()))
-
-	return response
-}
-
 interface WeatherResponse extends Onecall {
 	city?: string
 	ccode?: string
@@ -177,4 +66,185 @@ type Geo = {
 	lat: number
 	lon: number
 	country: string
-}[]
+}
+
+export default async function weather(req: Request, ctx: ExecutionContext, keys: string, headers: Headers) {
+	const hasLocation = req.url.includes('lat=') && req.url.includes('lon=')
+	const base = 'https://api.openweathermap.org/data/2.5/'
+	const url = new URL(req.url)
+
+	const keylist = keys.split(',')
+	const key = keylist[Math.floor(Math.random() * keylist.length)]
+
+	headers.set('content-type', 'application/json')
+
+	let error = 'Could not get weather data'
+	let response: Response = new Response(JSON.stringify({ error }), {
+		status: 500,
+		headers,
+	})
+
+	switch (url.pathname) {
+		case '/weather/current':
+		case '/weather/current/':
+			response = await getWeatherData('current')
+			break
+
+		case '/weather/forecast':
+		case '/weather/forecast/':
+			response = await getWeatherData('forecast')
+			break
+
+		default:
+			response = await createOnecallData()
+			break
+	}
+
+	if (response.status === 200) return response
+	if (response.status === 429) error = 'Account blocked'
+	if (response.status === 401) error = 'Invalid API key'
+
+	return new Response(JSON.stringify({ error }), {
+		status: response.status,
+		headers,
+	})
+
+	//
+	//
+	//
+
+	async function getWeatherData(type: 'current' | 'forecast'): Promise<Response> {
+		let params = url.search
+
+		if (!params.includes('q=') && !params.includes('lon=')) {
+			const { lat, lon } = getCoordsFromIp()
+			params += `&lat=${lat}&lon=${lon}`
+		}
+
+		if (type === 'forecast') {
+			params += '&cnt=14'
+		}
+
+		const path = type === 'forecast' ? 'forecast' : 'weather'
+		const currentResponse = await cacheControl(ctx, base + path + params, key)
+
+		if (currentResponse.status === 200) {
+			return new Response(JSON.stringify(await currentResponse.json()), {
+				status: currentResponse.status,
+				headers: { ...headers, 'content-type': 'application/json' },
+			})
+		}
+
+		return new Response(undefined, { status: currentResponse.status, headers })
+	}
+
+	async function createOnecallData(): Promise<Response> {
+		let city = ''
+		let ccode = ''
+		let params = url.search
+
+		if (!hasLocation) {
+			let geo = { lat: 0, lon: 0, name: '', country: '' }
+
+			if (params.includes('q=')) {
+				geo = await getCoordsFromCityQuery(key, url.search)
+				params = params.slice(0, params.indexOf(params.includes('&q=') ? '&q=' : 'q=')) // no "&" if first param
+			}
+
+			if (geo.lat === 0 && geo.lon === 0) {
+				geo = getCoordsFromIp()
+				city = geo.name
+				ccode = geo.country
+			}
+
+			params += `&lat=${geo.lat}&lon=${geo.lon}`
+		}
+
+		const currentResponse = await cacheControl(ctx, `${base}weather${params}`, key)
+		const forecastResponse = await cacheControl(ctx, `${base}forecast${params}&cnt=14`, key)
+
+		const isAllOk = currentResponse.status === 200 && forecastResponse.status === 200
+
+		if (isAllOk) {
+			const current = await currentResponse.json<Current>()
+			const forecast = await forecastResponse.json<Forecast>()
+
+			const onecall: WeatherResponse = {
+				city: hasLocation ? undefined : city,
+				ccode: hasLocation ? undefined : ccode,
+				lat: current.coord.lat,
+				lon: current.coord.lon,
+				current: {
+					dt: current.dt,
+					temp: current.main.temp,
+					feels_like: current.main.feels_like,
+					sunrise: current.sys.sunrise,
+					sunset: current.sys.sunset,
+					weather: current.weather,
+				},
+				hourly: forecast.list.map((item) => ({
+					dt: item.dt,
+					temp: item.main.temp,
+					weather: item.weather,
+					feels_like: item.main.feels_like,
+				})),
+			}
+
+			return new Response(JSON.stringify(onecall), { status: 200, headers })
+		}
+
+		return new Response(undefined, { status: currentResponse.status, headers })
+	}
+
+	function getCoordsFromIp(): Geo {
+		if (req?.cf) {
+			return {
+				lat: parseFloat(req.cf?.latitude as string),
+				lon: parseFloat(req.cf?.longitude as string),
+				name: req.cf?.country as string,
+				country: req.cf?.city as string,
+			}
+		}
+
+		return { lat: 0, lon: 0, name: '', country: '' }
+	}
+
+	async function getCoordsFromCityQuery(key: string, search: string): Promise<Geo> {
+		const q = (search.split('&').filter((p) => p.includes('q='))[0] ?? '').replace('q=', '')
+		const url = `https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=1`
+		const resp = await cacheControl(ctx, url, key, 31536000)
+		const json = await resp.json<Geo[]>()
+
+		if (json[0]) {
+			return {
+				lat: json[0].lat,
+				lon: json[0].lon,
+				name: q?.split(',')[0],
+				country: q?.split(',')[1] ?? '',
+			}
+		}
+
+		return { lat: 0, lon: 0, name: '', country: '' }
+	}
+}
+
+async function cacheControl(ctx: ExecutionContext, url: string, key: string, maxage = 1800): Promise<Response> {
+	const cacheKey = new Request(url)
+	const cache = caches.default
+	let response = await cache.match(cacheKey)
+
+	if (response) {
+		console.log(`Cache hit for: ${url}.`)
+		return response
+	}
+
+	console.log(`Response for request not present in cache. Fetching and caching request.`)
+
+	response = await fetch(url + `&appid=${key}`)
+	response = new Response(response.body, response)
+	response.headers.append('Cache-Control', 's-maxage=' + maxage)
+
+	ctx.waitUntil(cache.put(cacheKey, response.clone()))
+
+	return response
+}
