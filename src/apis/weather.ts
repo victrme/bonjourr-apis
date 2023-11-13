@@ -121,8 +121,12 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 			params += `&lat=${lat}&lon=${lon}`
 		}
 
+		if (type === 'forecast') {
+			params += '&cnt=14'
+		}
+
 		const path = type === 'forecast' ? 'forecast' : 'weather'
-		const currentResponse = await cacheControl(ctx, `${base}${path}?${params}`, key)
+		const currentResponse = await cacheControl(ctx, base + path + params, key)
 
 		if (currentResponse.status === 200) {
 			return new Response(JSON.stringify(await currentResponse.json()), {
@@ -156,8 +160,8 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 			params += `&lat=${geo.lat}&lon=${geo.lon}`
 		}
 
-		const currentResponse = await cacheControl(ctx, `${base}weather?${params}`, key)
-		const forecastResponse = await cacheControl(ctx, `${base}forecast?${params}&cnt=14`, key)
+		const currentResponse = await cacheControl(ctx, `${base}weather${params}`, key)
+		const forecastResponse = await cacheControl(ctx, `${base}forecast${params}&cnt=14`, key)
 
 		const isAllOk = currentResponse.status === 200 && forecastResponse.status === 200
 
@@ -196,7 +200,7 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 		if (req?.cf) {
 			return {
 				lat: parseFloat(req.cf?.latitude as string),
-				lon: parseFloat(req.cf?.latitude as string),
+				lon: parseFloat(req.cf?.longitude as string),
 				name: req.cf?.country as string,
 				country: req.cf?.city as string,
 			}
