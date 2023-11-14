@@ -131,11 +131,11 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 		if (currentResponse.status === 200) {
 			return new Response(JSON.stringify(await currentResponse.json()), {
 				status: currentResponse.status,
-				headers: { ...headers, 'content-type': 'application/json' },
+				headers,
 			})
 		}
 
-		return new Response(undefined, { status: currentResponse.status, headers })
+		return new Response('{}', { status: currentResponse.status, headers })
 	}
 
 	async function createOnecallData(): Promise<Response> {
@@ -193,7 +193,7 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 			return new Response(JSON.stringify(onecall), { status: 200, headers })
 		}
 
-		return new Response(undefined, { status: currentResponse.status, headers })
+		return new Response('{}', { status: currentResponse.status, headers })
 	}
 
 	function getCoordsFromIp(): Geo {
