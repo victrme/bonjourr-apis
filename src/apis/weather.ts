@@ -76,7 +76,8 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 	const keylist = keys.split(',')
 	const key = keylist[Math.floor(Math.random() * keylist.length)]
 
-	headers.set('content-type', 'application/json')
+	headers.set('Content-Type', 'application/json')
+	headers.set('Cache-Control', 'public, max-age=1800')
 
 	let error = 'Could not get weather data'
 	let response: Response = new Response(JSON.stringify({ error }), {
@@ -101,8 +102,8 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 	}
 
 	if (response.status === 200) return response
-	if (response.status === 429) error = 'Account blocked'
-	if (response.status === 401) error = 'Invalid API key'
+	if (response.status === 429) error = response.status + ' ' + response.statusText
+	if (response.status === 401) error = response.status + ' ' + response.statusText
 
 	return new Response(JSON.stringify({ error }), {
 		status: response.status,
@@ -157,7 +158,7 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 				ccode = geo.country
 			}
 
-			params += `&lat=${geo.lat}&lon=${geo.lon}`
+			params += `${params.includes('?') ? '&' : '?'}lat=${geo.lat}&lon=${geo.lon}`
 		}
 
 		const currentResponse = await cacheControl(ctx, `${base}weather${params}`, key)
@@ -238,7 +239,9 @@ async function cacheControl(ctx: ExecutionContext, url: string, key: string, max
 		return response
 	}
 
-	console.log(`Response for request not present in cache. Fetching and caching request.`)
+	console.log(url)
+
+	console.log(`Response for request not present in cache`)
 
 	response = await fetch(url + `&appid=${key}`)
 	response = new Response(response.body, response)
