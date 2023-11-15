@@ -234,20 +234,12 @@ async function cacheControl(ctx: ExecutionContext, url: string, key: string, max
 	const cache = caches.default
 	let response = await cache.match(cacheKey)
 
-	if (response) {
-		console.log(`Cache hit for: ${url}.`)
-		return response
+	if (!response) {
+		response = await fetch(url + `&appid=${key}`)
+		response = new Response(response.body, response)
+		response.headers.append('Cache-Control', 's-maxage=' + maxage)
+		ctx.waitUntil(cache.put(cacheKey, response.clone()))
 	}
-
-	console.log(url)
-
-	console.log(`Response for request not present in cache`)
-
-	response = await fetch(url + `&appid=${key}`)
-	response = new Response(response.body, response)
-	response.headers.append('Cache-Control', 's-maxage=' + maxage)
-
-	ctx.waitUntil(cache.put(cacheKey, response.clone()))
 
 	return response
 }
