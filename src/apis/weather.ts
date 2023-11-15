@@ -79,36 +79,39 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 	headers.set('Content-Type', 'application/json')
 	headers.set('Cache-Control', 'public, max-age=1800')
 
-	let error = 'Could not get weather data'
-	let response: Response = new Response(JSON.stringify({ error }), {
-		status: 500,
-		headers,
-	})
+	const validParams = ['q', 'lat', 'lon', 'units', 'lang', 'mode']
+	const requestParams = [...url.searchParams.keys()]
+	let hasInvalidParams = false
+
+	for (const param of requestParams) {
+		if (validParams.includes(param) === false) {
+			hasInvalidParams = true
+		}
+	}
+
+	if (hasInvalidParams) {
+		return new Response(JSON.stringify({ error: 'Invalid queries' }), {
+			status: 400,
+			headers,
+		})
+	}
 
 	switch (url.pathname) {
 		case '/weather/current':
 		case '/weather/current/':
-			response = await getWeatherData('current')
-			break
+			return await getWeatherData('current')
 
 		case '/weather/forecast':
 		case '/weather/forecast/':
-			response = await getWeatherData('forecast')
-			break
+			return await getWeatherData('forecast')
+
+		case '/weather/':
+		case '/weather':
+			return await createOnecallData()
 
 		default:
-			response = await createOnecallData()
-			break
+			return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 })
 	}
-
-	if (response.status === 200) return response
-	if (response.status === 429) error = response.status + ' ' + response.statusText
-	if (response.status === 401) error = response.status + ' ' + response.statusText
-
-	return new Response(JSON.stringify({ error }), {
-		status: response.status,
-		headers,
-	})
 
 	//
 	//
