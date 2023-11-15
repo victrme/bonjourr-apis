@@ -7,10 +7,10 @@ import favicon from './apis/favicon/src/worker'
 import suggestions from './apis/suggestions/src/worker'
 
 const headers = new Headers({
-	'access-control-allow-origin': '*',
-	'access-control-allow-headers': '*',
-	'access-control-allow-methods': 'GET, OPTIONS',
-	'access-control-max-age': '3600',
+	'Access-Control-Allow-Origin': '*',
+	'Access-Control-Allow-Headers': '*',
+	'Access-Control-Allow-Methods': 'GET, OPTIONS',
+	'Access-Control-Max-Age': '3600',
 })
 
 interface Env {
@@ -24,7 +24,7 @@ export default {
 		const path = url.pathname
 
 		if (path === '/') {
-			return new Response(html, { headers: { ...headers, 'content-type': 'text/html' } })
+			return new Response(html, { headers: { ...headers, 'Content-Type': 'text/html' } })
 		}
 
 		if (path.startsWith('/unsplash')) {

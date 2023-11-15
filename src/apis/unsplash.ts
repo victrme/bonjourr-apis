@@ -24,7 +24,7 @@ export default async function unsplash(requrl: string, key: string, headers: Hea
 		console.log(error)
 	}
 
-	headers.set('content-type', 'application/json')
+	headers.set('Content-Type', 'application/json')
 
 	return new Response(JSON.stringify(result), {
 		status: resp.status,
