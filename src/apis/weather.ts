@@ -164,14 +164,14 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 			params += `${params.includes('?') ? '&' : '?'}lat=${geo.lat}&lon=${geo.lon}`
 		}
 
-		const currentResponse = await cacheControl(ctx, `${base}weather${params}`, key)
-		const forecastResponse = await cacheControl(ctx, `${base}forecast${params}&cnt=14`, key)
+		const responses = await Promise.all([
+			cacheControl(ctx, `${base}weather${params}`, key),
+			cacheControl(ctx, `${base}forecast${params}&cnt=14`, key),
+		])
 
-		const isAllOk = currentResponse.status === 200 && forecastResponse.status === 200
-
-		if (isAllOk) {
-			const current = await currentResponse.json<Current>()
-			const forecast = await forecastResponse.json<Forecast>()
+		if (responses[0].ok && responses[1].ok) {
+			const current = (await responses[0].json()) as Current
+			const forecast = (await responses[1].json()) as Forecast
 
 			const onecall: WeatherResponse = {
 				city: hasLocation ? undefined : city,
@@ -197,7 +197,7 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 			return new Response(JSON.stringify(onecall), { status: 200, headers })
 		}
 
-		return new Response('{}', { status: currentResponse.status, headers })
+		return new Response('{}', { status: responses[0].status, headers })
 	}
 
 	function getCoordsFromIp(): Geo {
