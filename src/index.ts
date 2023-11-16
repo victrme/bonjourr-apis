@@ -21,32 +21,34 @@ interface Env {
 export default {
 	async fetch(req: Request, env: Env, ctx: ExecutionContext) {
 		const url = new URL(req.url)
-		const path = url.pathname
+		const path = url.pathname.split('/')[1] ?? ''
 
-		if (path === '/') {
-			return new Response(html, { headers: { ...headers, 'Content-Type': 'text/html' } })
+		switch (path) {
+			case 'unsplash':
+				return await unsplash(req.url, env.UNSPLASH ?? '', headers)
+
+			case 'weather':
+				return await weather(req, ctx, env.WEATHER ?? '', headers)
+
+			case 'suggestions':
+				return await suggestions.fetch(req)
+
+			case 'favicon':
+				return await favicon.fetch(req)
+
+			case 'quotes':
+				return await quotes.fetch(req, env, ctx)
+
+			case '': {
+				headers.set('Content-Type', 'text/html')
+				return new Response(html, { headers })
+			}
+
+			default:
+				return new Response('Not found', {
+					status: 404,
+					headers,
+				})
 		}
-
-		if (path.startsWith('/unsplash')) {
-			return await unsplash(req.url, env.UNSPLASH ?? '', headers)
-		}
-
-		if (path.startsWith('/weather')) {
-			return await weather(req, ctx, env.WEATHER ?? '', headers)
-		}
-
-		if (path.startsWith('/suggestions')) {
-			return await suggestions.fetch(req)
-		}
-
-		if (path.startsWith('/favicon')) {
-			return await favicon.fetch(req)
-		}
-
-		if (path.startsWith('/quotes')) {
-			return await quotes.fetch(req, env, ctx)
-		}
-
-		return new Response('404 Not found', { status: 404, headers })
 	},
 }
