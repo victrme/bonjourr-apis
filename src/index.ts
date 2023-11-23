@@ -32,7 +32,7 @@ export default {
 			case 'weather':
 				return await weather(req, ctx, env.WEATHER ?? '', headers)
 
-			case 'fonts':
+			case 'font':
 				return await fonts(req, ctx, env.FONTS ?? '', headers)
 
 			case 'suggestions':
