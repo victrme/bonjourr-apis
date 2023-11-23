@@ -5,6 +5,7 @@ import unsplash from './apis/unsplash'
 import quotes from './apis/quotes/src/index'
 import favicon from './apis/favicon/src/worker'
 import suggestions from './apis/suggestions/src/worker'
+import fonts from './apis/fonts'
 
 const headers = new Headers({
 	'Access-Control-Allow-Origin': '*',
@@ -16,6 +17,7 @@ const headers = new Headers({
 interface Env {
 	UNSPLASH?: string
 	WEATHER?: string
+	FONTS?: string
 }
 
 export default {
@@ -29,6 +31,9 @@ export default {
 
 			case 'weather':
 				return await weather(req, ctx, env.WEATHER ?? '', headers)
+
+			case 'fonts':
+				return await fonts(req, ctx, env.FONTS ?? '', headers)
 
 			case 'suggestions':
 				return await suggestions.fetch(req)
