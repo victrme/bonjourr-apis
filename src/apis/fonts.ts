@@ -1,121 +1,44 @@
-export declare namespace google.fonts {
-	interface WebfontList {
-		kind: string
-		items: WebfontFamily[]
-	}
+// https://fontsource.org/docs/api/fonts
 
-	interface WebfontFamily {
-		category?: string | undefined
-		kind: string
-		family: string
-		subsets: string[]
-		variants: string[]
-		version: string
-		lastModified: string
-		axes?: {
-			tag: 'wght' | 'wdth'
-			start: number
-			end: number
-		}[]
-		files: { [variant: string]: string }
-	}
-}
-
-type FontList = {
+type Fontsource = {
+	id: string
 	family: string
-	weights: string[]
+	subsets: string[]
+	weights: number[]
 	variable: boolean
-}[]
-
-export default async function fonts(req: Request, ctx: ExecutionContext, key: string, headers: Headers): Promise<Response> {
-	const url = new URL(req.url)
-
-	switch (url.pathname) {
-		case '/font':
-		case '/font/':
-			return await getFont(url, headers)
-
-		case '/font/list':
-		case '/font/list/':
-			return await getFontList(key, headers)
-	}
-
-	return new Response(undefined, {
-		status: 404,
-		headers,
-	})
+	category: string
+	license: string
+	type: 'google' | 'other'
 }
 
-async function getFont(url: URL, headers: Headers) {
-	let family = decodeURI(url.searchParams.get('family') ?? '')
-	const subset = decodeURI(url.searchParams.get('subset') ?? 'latin')
-	const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0'
-	const initRequest = { headers: { 'User-Agent': userAgent } }
+type FontList = Pick<Fontsource, 'family' | 'subsets' | 'weights' | 'variable'>[]
 
-	family = family
-		.split(' ')
-		.map((a) => capitalizeWord(a))
-		.join('+')
+export default async function fonts(headers: Headers): Promise<Response> {
+	const fontlist: FontList = []
 
-	const resp = await fetch(`https://fonts.googleapis.com/css2?family=${family}`, initRequest)
-	const text = await resp.text()
+	headers.set('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800')
+	headers.set('Content-Type', 'application/json')
 
-	return new Response(text, {
-		status: resp.status,
-		headers,
-	})
-}
+	try {
+		const resp = await fetch('https://api.fontsource.org/v1/fonts')
+		const fonts = (await resp.json()) as Fontsource[]
 
-async function getFontList(key: string, headers: Headers): Promise<Response> {
-	const url = 'https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&capability=WOFF2&capability=VF&key=' + key
-	const resp = await fetch(url)
-	const json = (await resp.json()) as google.fonts.WebfontList
-	let weights: string[] = []
-	let list: FontList = []
-
-	// json has at least one available family
-	if (json.items?.length > 0 && 'family' in json.items[0]) {
-		const noRegulars = (arr: string[]) => arr.map((weight) => weight.replace('regular', '400'))
-		const noItalics = (arr: string[]) => arr.filter((str) => !str.includes('italic'))
-
-		for (const item of json.items) {
-			//
-			// If variable, infer weights from axes
-			if (!!item?.axes) {
-				// Some variable fonts doesn't have wght
-				if (item.axes.some((axe) => axe.tag === 'wght')) {
-					const { start, end } = item.axes.filter((axe) => axe.tag === 'wght')[0]
-					for (let ii = start; ii <= end; ii += 100) {
-						weights.push(ii.toString())
-					}
-				} else {
-					weights = ['400']
-				}
-
-				//
-			} else {
-				weights = noRegulars(noItalics(item.variants))
+		for (const item of fonts) {
+			if (item.subsets.includes('latin') && item.category !== 'icons') {
+				fontlist.push({
+					family: item.family,
+					subsets: item.subsets,
+					weights: item.weights,
+					variable: item.variable,
+				})
 			}
-
-			list.push({
-				family: item.family,
-				variable: !!item?.axes,
-				weights,
-			})
-
-			weights = []
 		}
+	} catch (error) {
+		console.error(error)
+		headers.set('Cache-Control', 'no-cache')
 	}
 
-	headers.set('content-type', 'application/json')
-	headers.set('Cache-Control', 'public, max-age=604800')
-
-	return new Response(JSON.stringify(json), {
-		status: resp.status,
+	return new Response(JSON.stringify(fontlist), {
 		headers,
 	})
-}
-
-function capitalizeWord(word: string): string {
-	return word.charAt(0).toUpperCase() + word.slice(1)
 }

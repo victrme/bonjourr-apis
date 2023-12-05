@@ -32,8 +32,8 @@ export default {
 			case 'weather':
 				return await weather(req, ctx, env.WEATHER ?? '', headers)
 
-			case 'font':
-				return await fonts(req, ctx, env.FONTS ?? '', headers)
+			case 'fonts':
+				return await fonts(headers)
 
 			case 'suggestions':
 				return await suggestions.fetch(req)
