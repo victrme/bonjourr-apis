@@ -56,7 +56,7 @@ wrangler login
 wrangler deploy
 ```
 
-## Enpoints return types
+## Enpoints
 
 ### Unsplash
 
@@ -66,35 +66,35 @@ GET /unsplash/photos/random
 
 ```typescript
 type Photo = {
-	color: string
-	blur_hash: string
-	description: string
-	exif: {
-		make: string
-		model: string
-		exposure_time: string
-		aperture: string
-		focal_length: string
-		iso: number
-	}
-	location: {
-		name: string
-		city: string
-		country: string
-	}
-	urls: {
-		raw: string
-	}
-	links: {
-		html: string
-	}
-	user: {
-		username: string
-		name: string
-		links: {
-			html: string
-		}
-	}
+  color: string
+  blur_hash: string
+  description: string
+  exif: {
+    make: string
+    model: string
+    exposure_time: string
+    aperture: string
+    focal_length: string
+    iso: number
+  }
+  location: {
+    name: string
+    city: string
+    country: string
+  }
+  urls: {
+    raw: string
+  }
+  links: {
+    html: string
+  }
+  user: {
+    username: string
+    name: string
+    links: {
+      html: string
+    }
+  }
 }[]
 ```
 
@@ -106,34 +106,34 @@ GET /weather
 
 ```typescript
 type Onecall = {
-	city?: string
-	ccode?: string
-	lat: number
-	lon: number
-	current: {
-		dt: number
-		sunrise: number
-		sunset: number
-		temp: number
-		feels_like: number
-		weather: {
-			id: number
-			main: string
-			description: string
-			icon: string
-		}[]
-	}
-	hourly: {
-		dt: number
-		temp: number
-		feels_like: number
-		weather: {
-			id: number
-			main: string
-			description: string
-			icon: string
-		}[]
-	}[]
+  city?: string
+  ccode?: string
+  lat: number
+  lon: number
+  current: {
+    dt: number
+    sunrise: number
+    sunset: number
+    temp: number
+    feels_like: number
+    weather: {
+      id: number
+      main: string
+      description: string
+      icon: string
+    }[]
+  }
+  hourly: {
+    dt: number
+    temp: number
+    feels_like: number
+    weather: {
+      id: number
+      main: string
+      description: string
+      icon: string
+    }[]
+  }[]
 }
 ```
 
@@ -143,28 +143,28 @@ GET /weather/current
 
 ```typescript
 type Current = {
-	name: string
-	cod: number
-	coord: {
-		lon: number
-		lat: number
-	}
-	weather: {
-		id: number
-		main: string
-		description: string
-		icon: string
-	}[]
-	main: {
-		temp: number
-		feels_like: number
-	}
-	dt: number
-	sys: {
-		country: string
-		sunrise: number
-		sunset: number
-	}
+  name: string
+  cod: number
+  coord: {
+    lon: number
+    lat: number
+  }
+  weather: {
+    id: number
+    main: string
+    description: string
+    icon: string
+  }[]
+  main: {
+    temp: number
+    feels_like: number
+  }
+  dt: number
+  sys: {
+    country: string
+    sunrise: number
+    sunset: number
+  }
 }
 ```
 
@@ -174,20 +174,20 @@ GET /weather/forecast
 
 ```typescript
 type Forecast = {
-	cod: string
-	list: {
-		dt: number
-		main: {
-			temp: number
-			feels_like: number
-		}
-		weather: {
-			id: number
-			main: string
-			description: string
-			icon: string
-		}[]
-	}[]
+  cod: string
+  list: {
+    dt: number
+    main: {
+      temp: number
+      feels_like: number
+    }
+    weather: {
+      id: number
+      main: string
+      description: string
+      icon: string
+    }[]
+  }[]
 }
 ```
 
@@ -199,10 +199,10 @@ GET /fonts
 
 ```typescript
 type Fonts = {
-	family: string
-	subsets: string[]
-	weights: number[]
-	variable: boolean
+  family: string
+  subsets: string[]
+  weights: number[]
+  variable: boolean
 }[]
 ```
 
@@ -214,8 +214,8 @@ GET /quotes/[classic | inspirobot | kaamelott ]
 
 ```typescript
 type Quotes = {
-	author: string
-	content: string
+  author: string
+  content: string
 }[]
 ```
 
@@ -227,9 +227,9 @@ GET /suggestions/
 
 ```typescript
 type Suggestions = {
-	text: string
-	desc?: string
-	image?: string
+  text: string
+  desc?: string
+  image?: string
 }[]
 ```
 
