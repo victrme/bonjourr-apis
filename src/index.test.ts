@@ -20,6 +20,11 @@ describe('Paths', function () {
 		expect(response.status).toBe(200)
 	})
 
+	it('200 on /fonts', async function () {
+		const response = await fetch(origin + '/fonts')
+		expect(response.status).toBe(200)
+	})
+
 	it('200 on /favicon', async function () {
 		const response = await fetch(origin + '/favicon')
 		expect(response.status).toBe(200)
@@ -194,5 +199,30 @@ describe('Quotes', async function () {
 			expectTypeOf(quotes[0].author).toBeString()
 			expectTypeOf(quotes[0].content).toBeString()
 		})
+	})
+})
+
+describe('Fonts', async function () {
+	const response = await fetch(origin + '/fonts/')
+
+	it('has application/json as content-type', function () {
+		expect(response.headers.get('content-type')).toBe('application/json')
+	})
+
+	const fontlist = (await response?.json()) as any[]
+
+	it('has valid type', async function () {
+		expectTypeOf(fontlist[0].family).toBeString()
+		expectTypeOf(fontlist[0].subsets).toBeArray()
+		expectTypeOf(fontlist[0].weights).toBeArray()
+		expectTypeOf(fontlist[0].variable).toBeBoolean()
+	})
+
+	it('have all "latin" subset', async function () {
+		expect(fontlist.every((font) => font.subsets.includes('latin'))).toBe(true)
+	})
+
+	it('have at least "400" weight', async function () {
+		expect(fontlist.every((font) => font.weights.includes(400))).toBe(true)
 	})
 })

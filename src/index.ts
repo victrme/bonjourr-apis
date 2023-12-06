@@ -1,5 +1,6 @@
 //@ts-ignore
 import html from './index.html'
+import fonts from './apis/fonts'
 import weather from './apis/weather'
 import unsplash from './apis/unsplash'
 import quotes from './apis/quotes/src/index'
@@ -29,6 +30,9 @@ export default {
 
 			case 'weather':
 				return await weather(req, ctx, env.WEATHER ?? '', headers)
+
+			case 'fonts':
+				return await fonts(headers)
 
 			case 'suggestions':
 				return await suggestions.fetch(req)
