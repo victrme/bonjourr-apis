@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="shortcut icon" href="https://bonjourr.fr/favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="https://bonjourr.fr/favicon.ico" type="image/x-icon" />
 
 		<title>Bonjourr API - Homepage</title>
 
@@ -14,14 +14,14 @@
 				margin: auto;
 				padding: 5vh;
 				color: #3a3b3c;
-				letter-spacing: .1px;
+				letter-spacing: 0.1px;
 				line-height: 1.5em;
 			}
 
 			button,
 			body,
 			a {
-				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				font-family: system-ui, sans-serif;
 			}
 
 			header {
@@ -29,14 +29,15 @@
 				margin-bottom: 8em;
 			}
 
-
-			h1, h2, h3 {
+			h1,
+			h2,
+			h3 {
 				font-weight: 600;
 			}
 
 			h1 {
 				margin-bottom: 0;
-				padding: .4em;
+				padding: 0.4em;
 				font-size: 3em;
 				letter-spacing: 1px;
 			}
@@ -44,9 +45,9 @@
 			h2 {
 				font-size: 2em;
 			}
-			
+
 			h3 {
-				margin: 2em 0 .5em 0;
+				margin: 2em 0 0.5em 0;
 			}
 
 			hr {
@@ -54,12 +55,11 @@
 				border-color: #fff5;
 			}
 
-			
 			code {
 				display: inline-block;
 				font-size: 1em;
 				padding: 1em;
-				margin: .2em 0;
+				margin: 0.2em 0;
 				background: #f5f5f5;
 				border-radius: 4px;
 			}
@@ -68,121 +68,140 @@
 	<body>
 		<header>
 			<h1>Hello world !</h1>
-			<p>This is Bonjourr API system. More information in <a href="https://github.com/victrme/bonjourr-apis">the source code</a>.</p>
+			<p>
+				This is Bonjourr API system. More information in
+				<a href="https://github.com/victrme/bonjourr-apis">the source code</a>.
+			</p>
 		</header>
-	
-			<h2 id="unsplash">Unsplash</h2>
 
-			<p>
-				This is a proxy of the unsplash endpoints. Read their documentation to learn more:
-				<a href="https://unsplash.com/documentation#get-a-photo">unsplash.com/documentation</a>. When cloning this API,
-				add your key with "UNSPLASH" as an environnement variable.
-			</p>
+		<h2 id="unsplash">Unsplash</h2>
 
-			<h3>Endpoint</h3>
-			<code>GET /unsplash/[unsplash-endpoints]</code>
+		<p>
+			This is a proxy of the unsplash endpoints. Read their documentation to learn more:
+			<a href="https://unsplash.com/documentation#get-a-photo">unsplash.com/documentation</a>. When cloning this API, add
+			your key with "UNSPLASH" as an environnement variable.
+		</p>
 
-			<h3>Example</h3>
-			<ul>
-				<li><a href="/unsplash/photos/random">/unsplash/photos/random</a></li>
-			</ul>
+		<h3>Endpoint</h3>
+		<code>GET /unsplash/[unsplash-endpoints]</code>
 
-			<hr>
-	
-			<h2 id="weather">Weather</h2>
-			<p>
-				This is a mostly a proxy of openweathermap that combines their current & forecast endpoints to return data in a One Call format. Use their documentation
-				here:
-				<a href="https://openweathermap.org/api/one-call-3">openweathermap.org/one-call-3</a>.
-				You can also specify a city using the 'q=' parameter. Approximate IP location is used when no locations are specified. It also returns the city and country code in this case.
-				When cloning this API,
-				add your key with "WEATHER" as an environnement variable.
-			</p>
+		<h3>Example</h3>
+		<ul>
+			<li><a href="/unsplash/photos/random">/unsplash/photos/random</a></li>
+		</ul>
 
-			<h3>Endpoints</h3>
-			<code>GET /weather?[openweathermap-parameters]</code><br />
-			<code>GET /weather/current?[openweathermap-parameters]</code><br />
-			<code>GET /weather/forecast?[openweathermap-parameters]</code>
+		<hr />
 
-			<h3>Examples</h3>
-			<ul>
-				<li><a href="/weather">/weather</a></li>
-				<li><a href="/weather/current?q=Paris,FR">/weather/current?q=Paris,FR</a></li>
-				<li><a href="/weather/forecast?units=metric&lat=48.8589&lon=2.32">/weather/forecast?units=metric&lat=48.8589&lon=2.32</a></li>
-			</ul>
-		</div>
+		<h2 id="weather">Weather</h2>
+		<p>
+			This is a mostly a proxy of openweathermap that combines their current & forecast endpoints to return data in a One
+			Call format. Use their documentation here:
+			<a href="https://openweathermap.org/api/one-call-3">openweathermap.org/one-call-3</a>. You can also specify a city
+			using the 'q=' parameter. Approximate IP location is used when no locations are specified. It also returns the city
+			and country code in this case. When cloning this API, add your key with "WEATHER" as an environnement variable.
+		</p>
 
-		<hr>
+		<h3>Endpoints</h3>
+		<code>GET /weather?[openweathermap-parameters]</code><br />
+		<code>GET /weather/current?[openweathermap-parameters]</code><br />
+		<code>GET /weather/forecast?[openweathermap-parameters]</code>
 
-		<div>
-			<h2 id="favicon">Favicon</h2>
-			<p>
-				Fetches the URL of a website's favicon. Add the URL of the website you want (with the protocol!) to the API
-				path. <br>
-				Source code: <a href="https://github.com/victrme/favicon-fetcher">favicon-fetcher</a>
-			</p>
+		<h3>Examples</h3>
+		<ul>
+			<li><a href="/weather">/weather</a></li>
+			<li><a href="/weather/current?q=Paris,FR">/weather/current?q=Paris,FR</a></li>
+			<li>
+				<a href="/weather/forecast?units=metric&lat=48.8589&lon=2.32"
+					>/weather/forecast?units=metric&lat=48.8589&lon=2.32</a
+				>
+			</li>
+		</ul>
 
-			<h3>Endpoint</h3>
-			<code>GET /favicon/:your-website</code>
+		<hr />
 
-			<h3>Example</h3>
-			<ul>
-				<li><a href="/favicon/https://victr.me">/favicon/https://victr.me</a></li>
-			</ul>
-		</div>
+		<h2 id="weather">Fonts</h2>
+		<p>
+			Returns the list of available fonts in Fontsource, more info on their docs:
+			<a href="https://fontsource.org/docs/api/fonts">fontsource.org/docs/api/fonts</a>. Fonts are sorted by popularity
+			as seen on fonts.google.com and filtered to only allow text fonts, no icons.
+		</p>
 
-		<hr>
+		<h3>Endpoint</h3>
+		<code>GET /fonts</code>
 
-		<div>
-			<h2 id="quotes">Quotes</h2>
-			<p>
-				Serves quotes in different languages, but also inspirobot and kaamelott quotes. For classic quotes, if the language is not available, it defaults to
-				english.
-				<br>Source code: <a href="https://github.com/victrme/i18n-quotes">i18n-quotes</a>
-			</p>
+		<h3>Example</h3>
+		<ul>
+			<li><a href="/fonts">/fonts</a></li>
+		</ul>
 
-			<h3>Endpoints</h3>
-			<code>GET /quotes/classic/:lang</code><br>
-			<code>GET /quotes/inspirobot</code><br>
-			<code>GET /quotes/kaamelott</code>
+		<hr />
 
-			<h3>Examples</h3>
-			<ul>
-				<li><a href="/quotes/classic/fr">/quotes/classic/fr</a></li>
-				<li><a href="/quotes/inspirobot">/quotes/inspirobot</a></li>
-				<li><a href="/quotes/kaamelott">/quotes/kaamelott</a></li>
-			</ul>
-		</div>
+		<h2 id="favicon">Favicon</h2>
+		<p>
+			Fetches the URL of a website's favicon. Add the URL of the website you want (with the protocol!) to the API path.
+			<br />
+			Source code: <a href="https://github.com/victrme/favicon-fetcher">favicon-fetcher</a>
+		</p>
 
-		<hr>
+		<h3>Endpoint</h3>
+		<code>GET /favicon/:your-website</code>
 
-		<div>
-			<h2 id="suggestions">Suggestions</h2>
-			<p>
-				This is a scraping tool that returns search suggestions from different providers. It uses websockets, so no live examples.
-				<br>Source code: <a href="https://github.com/victrme/search-suggestions">search-suggestions</a>
-			</p>
+		<h3>Example</h3>
+		<ul>
+			<li><a href="/favicon/https://victr.me">/favicon/https://victr.me</a></li>
+		</ul>
 
-			<h3>Endpoints</h3>
-			<code>WS /suggestions</code><br />
-			<code>GET /suggestions?q=[query]&l=[lang]&with=[provider]</code>
+		<hr />
 
-			<h3>GET examples</h3>
-			<ul>
-				<li><a href="/suggestions?q=hello">/suggestions?q=hello</a></li>
-				<li><a href="/suggestions?q=minecraft&with=google&l=fr">/suggestions?q=minecraft&with=google&lang=fr</a></li>
-			</ul>
+		<h2 id="quotes">Quotes</h2>
+		<p>
+			Serves quotes in different languages, but also inspirobot and kaamelott quotes. For classic quotes, if the language
+			is not available, it defaults to english.
+			<br />Source code: <a href="https://github.com/victrme/i18n-quotes">i18n-quotes</a>
+		</p>
 
-			<h3>WS code example</h3>
-			<code>
-				<pre>const socket = new WebSocket('wss://api.bonjourr.lol/suggestions')
+		<h3>Endpoints</h3>
+		<code>GET /quotes/classic/:lang</code><br />
+		<code>GET /quotes/inspirobot</code><br />
+		<code>GET /quotes/kaamelott</code>
+
+		<h3>Examples</h3>
+		<ul>
+			<li><a href="/quotes/classic/fr">/quotes/classic/fr</a></li>
+			<li><a href="/quotes/inspirobot">/quotes/inspirobot</a></li>
+			<li><a href="/quotes/kaamelott">/quotes/kaamelott</a></li>
+		</ul>
+
+		<hr />
+
+		<h2 id="suggestions">Suggestions</h2>
+		<p>
+			This is a scraping tool that returns search suggestions from different providers. It uses websockets, so no live
+			examples.
+			<br />Source code: <a href="https://github.com/victrme/search-suggestions">search-suggestions</a>
+		</p>
+
+		<h3>Endpoints</h3>
+		<code>WS /suggestions</code><br />
+		<code>GET /suggestions?q=[query]&l=[lang]&with=[provider]</code>
+
+		<h3>GET examples</h3>
+		<ul>
+			<li><a href="/suggestions?q=hello">/suggestions?q=hello</a></li>
+			<li><a href="/suggestions?q=minecraft&with=google&l=fr">/suggestions?q=minecraft&with=google&lang=fr</a></li>
+		</ul>
+
+		<h3>WS code example</h3>
+		<code>
+			<pre>
+const socket = new WebSocket('wss://api.bonjourr.lol/suggestions')
 
 socket.onmessage = function (event: MessageEvent) {
   console.log(JSON.parse(event.data))
 }
 
-socket.send(JSON.stringify({ q, with, lang }))</pre>
-			</code>
-		</div>
+socket.send(JSON.stringify({ q, with, lang }))</pre
+			>
+		</code>
 	</body>
 </html>
