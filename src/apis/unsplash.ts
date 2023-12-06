@@ -27,6 +27,7 @@ export default async function unsplash(requrl: string, key: string, headers: Hea
 	}
 
 	headers.set('Content-Type', 'application/json')
+	headers.set('Cache-Control', 'no-cache')
 
 	return new Response(JSON.stringify(result), {
 		status: resp.status,
