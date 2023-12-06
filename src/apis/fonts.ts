@@ -1,15 +1,4 @@
-// https://fontsource.org/docs/api/fonts
-
-type Fontsource = {
-	id: string
-	family: string
-	subsets: string[]
-	weights: number[]
-	variable: boolean
-	category: string
-	license: string
-	type: 'google' | 'other'
-}
+import { Fontsource } from '../types/fonts'
 
 type FontList = Pick<Fontsource, 'family' | 'subsets' | 'weights' | 'variable'>[]
 

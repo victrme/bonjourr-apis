@@ -1,71 +1,8 @@
+import type { Onecall, Current, Forecast, Geo } from '../types/weather'
+
 interface WeatherResponse extends Onecall {
 	city?: string
 	ccode?: string
-}
-
-type Onecall = {
-	lat: number
-	lon: number
-	current: {
-		dt: number
-		sunrise: number
-		sunset: number
-		temp: number
-		feels_like: number
-		weather: WeatherInfos[]
-	}
-	hourly: {
-		dt: number
-		temp: number
-		feels_like: number
-		weather: WeatherInfos[]
-	}[]
-}
-
-type Current = {
-	name: string
-	cod: number
-	coord: {
-		lon: number
-		lat: number
-	}
-	weather: WeatherInfos[]
-	main: {
-		temp: number
-		feels_like: number
-	}
-	dt: number
-	sys: {
-		country: string
-		sunrise: number
-		sunset: number
-	}
-}
-
-type Forecast = {
-	cod: string
-	list: {
-		dt: number
-		main: {
-			temp: number
-			feels_like: number
-		}
-		weather: WeatherInfos[]
-	}[]
-}
-
-type WeatherInfos = {
-	id: number
-	main: string
-	description: string
-	icon: string
-}
-
-type Geo = {
-	name: string
-	lat: number
-	lon: number
-	country: string
 }
 
 export default async function weather(req: Request, ctx: ExecutionContext, keys: string, headers: Headers) {
@@ -239,7 +176,7 @@ async function cacheControl(ctx: ExecutionContext, url: string, key: string, max
 
 	if (!response) {
 		response = await fetch(url + `&appid=${key}`)
-		response = new Response(response.body, response)
+		response = new Response(response?.body, response)
 		response.headers.append('Cache-Control', 's-maxage=' + maxage)
 		ctx.waitUntil(cache.put(cacheKey, response.clone()))
 	}

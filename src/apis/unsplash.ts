@@ -1,3 +1,5 @@
+import type { UnsplashPhoto } from '../types/unsplash'
+
 export default async function unsplash(requrl: string, key: string, headers: Headers): Promise<Response> {
 	const endpoint = requrl.slice(requrl.indexOf('/unsplash') + 9)
 
@@ -16,10 +18,10 @@ export default async function unsplash(requrl: string, key: string, headers: Hea
 		},
 	})
 
-	let result: unknown[] = []
+	let result: UnsplashPhoto[] = []
 
 	try {
-		result = await resp.json()
+		result = (await resp.json()) as UnsplashPhoto[]
 	} catch (error) {
 		console.log(error)
 	}
