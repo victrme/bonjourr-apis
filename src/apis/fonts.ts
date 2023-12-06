@@ -34,7 +34,13 @@ export default async function fonts(headers: Headers): Promise<Response> {
 		for (const family of popularity) {
 			font = fonts[familyOnly.indexOf(family)]
 
-			if (font && font.subsets.includes('latin') && font.category !== 'icons' && font.category !== 'other') {
+			if (
+				font &&
+				font.subsets.includes('latin') &&
+				font.weights.includes(400) &&
+				font.category !== 'icons' &&
+				font.category !== 'other'
+			) {
 				fontlist.push({
 					family: font.family,
 					subsets: font.subsets,
