@@ -11,7 +11,7 @@ export default async function fonts(headers: Headers): Promise<Response> {
 	try {
 		const responses = await Promise.all([
 			fetch('https://api.fontsource.org/v1/fonts'),
-			fetch('https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis@fonts/src/assets/font_popularity.txt'),
+			fetch('https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis/src/assets/font_popularity.txt'),
 		])
 
 		const fonts = (await responses[0]?.json()) as Fontsource[]
