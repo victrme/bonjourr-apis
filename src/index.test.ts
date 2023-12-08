@@ -202,8 +202,46 @@ describe('Quotes', async function () {
 	})
 })
 
+describe('Suggestions', function () {
+	describe('GET request', async function () {
+		const response = await fetch(origin + '/suggestions?q=minecraft&with=google')
+
+		it('has application/json as content-type', function () {
+			expect(response.headers.get('content-type')).toBe('application/json')
+		})
+
+		const results = (await response?.json()) as any[]
+		const detailedResultIndex = results.findIndex((item) => item.image)
+
+		it('has valid type', async function () {
+			expectTypeOf(results[0].text).toBeString()
+			expectTypeOf(results[detailedResultIndex].desc).toBeString()
+			expectTypeOf(results[detailedResultIndex].image).toBeString()
+		})
+	})
+
+	// describe('WS request', async function () {
+	// 	const WS = (await import('vitest-websocket-mock')).default
+	// 	const server = new WS(origin.replace('http', 'ws') + '/suggestions/')
+	// 	const client = new WebSocket(origin.replace('http', 'ws') + '/suggestions/')
+
+	// 	it('connects to a websocket', async function () {
+	// 		expect(await server.connected).toBeTruthy()
+	// 	})
+
+	// 	it('receives messges', async function () {
+	// 		const message = await new Promise((r) => {
+	// 			server.on('message', r)
+	// 			client.send(JSON.stringify({ q: 'hello', with: 'duckduckgo' }))
+	// 		})
+
+	// 		expect(message).toBe(true)
+	// 	})
+	// })
+})
+
 describe('Fonts', async function () {
-	const response = await fetch(origin + '/fonts/')
+	const response = await fetch(origin + '/fonts')
 
 	it('has application/json as content-type', function () {
 		expect(response.headers.get('content-type')).toBe('application/json')

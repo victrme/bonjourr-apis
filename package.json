@@ -1,6 +1,5 @@
 {
 	"name": "bonjourr-apis",
-	"version": "0.0.0",
 	"author": "Victor Azevedo",
 	"description": "This regroups all APIs used by Bonjourr as a single cloudflare worker",
 	"license": "ISC",
@@ -9,10 +8,12 @@
 		"url": "https://github.com/victrme/bonjourr-apis"
 	},
 	"scripts": {
-		"test": "vitest"
+		"dev": "wrangler dev",
+		"test": "vitest run"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20231025.0",
-		"vitest": "^0.34.6"
+		"vitest": "^0.34.6",
+		"vitest-websocket-mock": "^0.3.0"
 	}
 }
