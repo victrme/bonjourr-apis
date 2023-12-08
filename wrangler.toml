@@ -5,6 +5,3 @@ minify = true
 
 [build]
 command = "git submodule update --init --recursive"
-
-[limits]
-cpu_ms = 100
