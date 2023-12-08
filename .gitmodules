@@ -2,6 +2,7 @@
 [submodule "src/apis/suggestions"]
 	path = src/apis/suggestions
 	url = https://github.com/victrme/search-suggestions
+	branch = main
 	
 [submodule "src/apis/favicon"]
 	path = src/apis/favicon
