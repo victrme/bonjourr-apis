@@ -9,7 +9,9 @@
 	},
 	"scripts": {
 		"dev": "wrangler dev",
-		"test": "vitest run"
+		"test": "vitest run",
+		"git:init": "git submodule update --init --recursive",
+		"git:update": "git submodule update --remote"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20231025.0",
