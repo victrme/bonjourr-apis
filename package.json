@@ -8,13 +8,16 @@
 		"url": "https://github.com/victrme/bonjourr-apis"
 	},
 	"scripts": {
-		"dev": "wrangler dev",
+		"dev": "wrangler dev --ip 127.0.0.1 --port 8787",
 		"test": "vitest run",
 		"git:init": "git submodule update --init --recursive",
 		"git:update": "git submodule update --remote"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20231025.0",
-		"vitest": "^1.0.2"
+		"@vitest/coverage-v8": "^1.0.3",
+		"vite": "^5.0.7",
+		"vitest": "^1.0.2",
+		"wrangler": "^3.19.0"
 	}
 }

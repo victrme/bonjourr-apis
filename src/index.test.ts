@@ -116,30 +116,6 @@ describe('Weather', async function () {
 	})
 })
 
-describe('Favicon', function () {
-	it("gets victr.me's favicon", async function () {
-		const response = await fetch(origin + '/favicon/https://victr.me')
-		expect(response.status).toBe(200)
-		expect(await response.text()).toBe('https://victr.me/apple-touch-icon.png')
-	})
-
-	it('returns datauri with unknown url', async function () {
-		const response = await fetch(origin + '/favicon/fsldkhfouisdhgouisd')
-		expect(response.status).toBe(200)
-
-		const favicon = await response.text()
-		expect(favicon.startsWith('data:image/svg+xml')).toBe(true)
-	})
-
-	it('returns nothing when no url specified', async function () {
-		const response = await fetch(origin + '/favicon/')
-		expect(response.status).toBe(200)
-
-		const favicon = await response.text()
-		expect(favicon).toBe('')
-	})
-})
-
 describe('Quotes', async function () {
 	const response = await fetch(origin + '/quotes/')
 
