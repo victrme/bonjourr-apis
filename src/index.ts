@@ -4,7 +4,7 @@ import fonts from './apis/fonts'
 import weather from './apis/weather'
 import unsplash from './apis/unsplash'
 import quotes from './apis/quotes/src/index'
-import favicon from './apis/favicon/src/worker'
+import favicon from './apis/favicon/cloudflare/src/index'
 import suggestions from './apis/suggestions/cloudflare/src/index'
 
 const headers = new Headers({

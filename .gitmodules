@@ -7,7 +7,7 @@
 [submodule "src/apis/favicon"]
 	path = src/apis/favicon
 	url = https://github.com/victrme/favicon-fetcher
-	branch = cloudflare
+	branch = main
 	
 [submodule "src/apis/quotes"]
 	path = src/apis/quotes

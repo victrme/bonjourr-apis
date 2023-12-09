@@ -16,7 +16,7 @@ With a bit of tweaking, it can be deployed on other serverless hosting platforms
 npm install --global wrangler pnpm
 
 # Initialize the submodules
-git submodule update --init --recursive
+pnpm git:init
 
 # For cloudflare types
 pnpm i
@@ -209,9 +209,14 @@ type Fonts = {
 ### Quotes
 
 ```http
-GET /quotes/[classic | inspirobot | kaamelott ]
+GET /quotes/classic/:lang
 ```
-
+```http
+GET /quotes/kaamelott
+```
+```http
+GET /quotes/inspirobot
+```
 ```typescript
 type Quotes = {
   author: string
@@ -222,7 +227,7 @@ type Quotes = {
 ### Suggestions
 
 ```http
-GET /suggestions/
+GET /suggestions
 ```
 
 ```typescript
@@ -236,9 +241,15 @@ type Suggestions = {
 ### Favicon
 
 ```http
-GET /favicon/:url
+GET /favicon/text/:url
 ```
-
 ```typescript
 type Favicon = string
+```
+
+```http
+GET /favicon/blob/:url
+```
+```typescript
+type Favicon = Blob
 ```
