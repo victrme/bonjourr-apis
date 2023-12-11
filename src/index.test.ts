@@ -1,102 +1,118 @@
-import { describe, it, expect, expectTypeOf } from 'vitest'
+import { describe, it, expect, expectTypeOf, beforeAll, afterAll } from 'vitest'
+import { unstable_dev, UnstableDevWorker } from 'wrangler'
 
-// > wrangler dev
-// > ⎔ Starting local server...
-const origin = 'http://127.0.0.1:8787'
+let worker: UnstableDevWorker
+let response: Awaited<ReturnType<typeof worker.fetch>>
+
+beforeAll(async () => {
+	worker = await unstable_dev('src/index.ts', {
+		experimental: { disableExperimentalWarning: true },
+	})
+})
+
+afterAll(async () => {
+	await worker.stop()
+})
 
 describe('Paths', function () {
 	it('404 on unknown path', async function () {
-		const response = await fetch(origin + '/lol')
+		const response = await worker.fetch('/lol')
 		expect(response.status).toBe(404)
 	})
 
 	it('200 on /', async function () {
-		const response = await fetch(origin + '/')
+		const response = await worker.fetch('/')
 		expect(response.status).toBe(200)
 	})
 
 	it('200 on /weather', async function () {
-		const response = await fetch(origin + '/weather')
+		const response = await worker.fetch('/weather')
 		expect(response.status).toBe(200)
 	})
 
 	it('200 on /fonts', async function () {
-		const response = await fetch(origin + '/fonts')
+		const response = await worker.fetch('/fonts')
 		expect(response.status).toBe(200)
 	})
 
 	it('200 on /favicon', async function () {
-		const response = await fetch(origin + '/favicon')
+		const response = await worker.fetch('/favicon')
 		expect(response.status).toBe(200)
 	})
 
 	it('200 on /suggestions', async function () {
-		const response = await fetch(origin + '/suggestions')
+		const response = await worker.fetch('/suggestions')
 		expect(response.status).toBe(200)
 	})
 
 	it('200 on /quotes', async function () {
-		const response = await fetch(origin + '/quotes')
+		const response = await worker.fetch('/quotes')
 		expect(response.status).toBe(200)
 	})
 
 	it('403 on /unsplash (restricted)', async function () {
-		const response = await fetch(origin + '/unsplash')
+		const response = await worker.fetch('/unsplash')
 		expect(response.status).toBe(403)
 	})
 
 	it('200 on /unsplash/photos/random', async function () {
-		const response = await fetch(origin + '/unsplash/photos/random')
+		const response = await worker.fetch('/unsplash/photos/random')
 		expect(response.status).toBe(200)
 	})
 })
 
-describe('Homepage', async function () {
-	const response = await fetch(origin)
-
+describe('Homepage', function () {
 	it('has text/html as content-type', async function () {
+		const response = await worker.fetch('/')
 		expect(response.headers.get('content-type')).toBe('text/html')
 	})
 
 	it('is an HTML page', async function () {
+		const response = await worker.fetch('/')
 		const text = await response.text()
 		expect(text.includes('<html lang="en">')).toBe(true)
 		expect(text.length).toBeGreaterThan(2000)
 	})
 })
 
-describe('Unsplash', async function () {
-	const response = await fetch(origin + '/unsplash/photos/random?collections=GD4aOSg4yQE&count=8')
-	const json = (await response.json()) as any
+describe('Unsplash', function () {
+	let json: any
 
-	it('returns correct amount of images', function () {
+	beforeAll(async () => {
+		response = await worker.fetch('/unsplash/photos/random?collections=GD4aOSg4yQE&count=8')
+		json = (await response.json()) as any
+	})
+
+	it('returns correct amount of images', async function () {
 		expect(json.length).toBe(8)
 	})
 
-	it('has correct fields', function () {
+	it('has correct fields', async function () {
 		const { color, urls, links, exif, user } = json[0]
 		const exifkeys = ['make', 'model', 'exposure_time', 'aperture', 'focal_length', 'iso']
-		expectTypeOf(color).toBeString()
-		expectTypeOf(urls.raw).toBeString()
-		expectTypeOf(links.html).toBeString()
-		expectTypeOf(user.username).toBeString()
-		expectTypeOf(user.name).toBeString()
+		expectTypeOf(color).toBeString.result
+		expectTypeOf(urls.raw).toBeString.result
+		expectTypeOf(links.html).toBeString.result
+		expectTypeOf(user.username).toBeString.result
+		expectTypeOf(user.name).toBeString.result
 		expect(exifkeys.every((key) => key in exif)).toBe(true)
 	})
 })
 
-describe('Weather', async function () {
+describe('Weather', function () {
 	it('returns 404 on wrong path', async function () {
-		const response = await fetch(origin + '/weather/lol')
+		response = await worker.fetch('/weather/lol')
 		expect(response.status).toBe(404)
 	})
 
 	it('returns 400 on wrong queries', async function () {
-		const response = await fetch(origin + '/weather/?lol=test')
+		response = await worker.fetch('/weather/?lol=test')
 		expect(response.status).toBe(400)
 	})
 
-	const response = await fetch(origin + '/weather')
+	beforeAll(async () => {
+		response = await worker.fetch('/weather')
+	})
 
 	it('has correct headers', async function () {
 		expect(response.headers.get('content-type')).toBe('application/json')
@@ -107,92 +123,106 @@ describe('Weather', async function () {
 		const json = (await response.json()) as any
 		const { city, ccode, lat, lon, current, hourly } = json
 
-		expectTypeOf(city).toBeString()
-		expectTypeOf(ccode).toBeString()
-		expectTypeOf(lat).toBeString()
-		expectTypeOf(lon).toBeString()
-		expectTypeOf(current).toBeObject()
-		expectTypeOf(hourly).toBeObject()
+		expectTypeOf(city).toBeString.result
+		expectTypeOf(ccode).toBeString.result
+		expectTypeOf(lat).toBeString.result
+		expectTypeOf(lon).toBeString.result
+		expectTypeOf(current).toBeObject.result
+		expectTypeOf(hourly).toBeObject.result
 	})
 })
 
-describe('Quotes', async function () {
-	const response = await fetch(origin + '/quotes/')
-
+describe('Quotes', function () {
 	it('has application/json as content-type', async function () {
+		const response = await worker.fetch('/quotes/classic')
 		expect(response.headers.get('content-type')).toBe('application/json')
 	})
 
 	it('returns classic when no other paths are specified', async function () {
+		const response = await worker.fetch('/quotes')
 		expect(response.status).toBe(200)
 		expect(await response.json()).toBeTruthy()
 	})
 
-	describe('Classic', async function () {
-		const response = await fetch(origin + '/quotes/classic')
-		const quotes = (await response.json()) as any
+	describe('Classic', function () {
+		let quotes: any[]
+
+		beforeAll(async () => {
+			response = await worker.fetch('/quotes/classic')
+			quotes = (await response?.json()) as any[]
+		})
 
 		it('gives 20 quotes by default', function () {
 			expect(quotes.length).toBe(20)
 		})
 
 		it('has valid type', function () {
-			expectTypeOf(quotes[0].author).toBeString()
-			expectTypeOf(quotes[0].content).toBeString()
+			expectTypeOf(quotes[0].author).toBeString.result
+			expectTypeOf(quotes[0].content).toBeString.result
 		})
 
 		it('returns quotes with lang endpoint', async function () {
-			const response = await fetch(origin + '/quotes/classic/fr')
+			const response = await worker.fetch('/quotes/classic/fr')
 			const quotes = (await response.json()) as any
-			expectTypeOf(quotes[0].author).toBeString()
-			expectTypeOf(quotes[0].content).toBeString()
+			expectTypeOf(quotes[0].author).toBeString.result
+			expectTypeOf(quotes[0].content).toBeString.result
 		})
 	})
 
 	describe('Kaamelott', async function () {
-		const response = await fetch(origin + '/quotes/kaamelott')
-		const quotes = (await response.json()) as any
+		let quotes: any[]
+
+		beforeAll(async () => {
+			response = await worker.fetch('/quotes/kaamelott')
+			quotes = (await response?.json()) as any[]
+		})
 
 		it('gives 20 quotes by default', function () {
 			expect(quotes.length).toBe(20)
 		})
 
 		it('has valid type', function () {
-			expectTypeOf(quotes[0].author).toBeString()
-			expectTypeOf(quotes[0].content).toBeString()
+			expectTypeOf(quotes[0].author).toBeString.result
+			expectTypeOf(quotes[0].content).toBeString.result
 		})
 	})
 
 	describe('Inspirobot', async function () {
-		const response = await fetch(origin + '/quotes/inspirobot')
-		const quotes = (await response.json()) as any
+		let quotes: any[]
+
+		beforeAll(async () => {
+			response = await worker.fetch('/quotes/inspirobot')
+			quotes = (await response?.json()) as any[]
+		})
 
 		it('gives at least 10 quotes', function () {
 			expect(quotes.length).toBeGreaterThan(10)
 		})
 
 		it('has valid type', function () {
-			expectTypeOf(quotes[0].author).toBeString()
-			expectTypeOf(quotes[0].content).toBeString()
+			expectTypeOf(quotes[0].author).toBeString.result
+			expectTypeOf(quotes[0].content).toBeString.result
 		})
 	})
 })
 
 describe('Suggestions', function () {
 	describe('GET request', async function () {
-		const response = await fetch(origin + '/suggestions?q=minecraft&with=google')
+		beforeAll(async () => {
+			response = await worker.fetch('/suggestions')
+		})
 
 		it('has application/json as content-type', function () {
 			expect(response.headers.get('content-type')).toBe('application/json')
 		})
 
-		const results = (await response?.json()) as any[]
-		const detailedResultIndex = results.findIndex((item) => item.image)
-
 		it('has valid type', async function () {
-			expectTypeOf(results[0].text).toBeString()
-			expectTypeOf(results[detailedResultIndex].desc).toBeString()
-			expectTypeOf(results[detailedResultIndex].image).toBeString()
+			const results = (await response?.json()) as any[]
+			const detailedResultIndex = results.findIndex((item) => item.image)
+
+			expectTypeOf(results[0].text).toBeString.result
+			expectTypeOf(results[detailedResultIndex].desc).toBeString.result
+			expectTypeOf(results[detailedResultIndex].image).toBeString.result
 		})
 	})
 
@@ -216,20 +246,23 @@ describe('Suggestions', function () {
 	// })
 })
 
-describe('Fonts', async function () {
-	const response = await fetch(origin + '/fonts')
+describe('Fonts', function () {
+	let fontlist: any[]
+
+	beforeAll(async () => {
+		response = await worker.fetch('/fonts')
+		fontlist = (await response?.json()) as any[]
+	})
 
 	it('has application/json as content-type', function () {
 		expect(response.headers.get('content-type')).toBe('application/json')
 	})
 
-	const fontlist = (await response?.json()) as any[]
-
 	it('has valid type', async function () {
-		expectTypeOf(fontlist[0].family).toBeString()
-		expectTypeOf(fontlist[0].subsets).toBeArray()
-		expectTypeOf(fontlist[0].weights).toBeArray()
-		expectTypeOf(fontlist[0].variable).toBeBoolean()
+		expectTypeOf(fontlist[0].family).toBeString.result
+		expectTypeOf(fontlist[0].subsets).toBeArray.result
+		expectTypeOf(fontlist[0].weights).toBeArray.result
+		expectTypeOf(fontlist[0].variable).toBeBoolean.result
 	})
 
 	it('have all "latin" subset', async function () {

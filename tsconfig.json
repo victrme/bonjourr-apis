@@ -1,12 +1,14 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
-		"lib": ["ESNext"],
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
+		"target": "ES2022",
+		"lib": ["ES2022"],
+		"module": "ES2022",
+		"moduleResolution": "Bundler",
 		"types": ["@cloudflare/workers-types"],
 		"strict": true,
+		"noEmit": true,
 		"isolatedModules": true,
+		"allowImportingTsExtensions": true,
 		"allowSyntheticDefaultImports": true,
 		"forceConsistentCasingInFileNames": true
 	},

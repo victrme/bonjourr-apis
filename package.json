@@ -3,21 +3,22 @@
 	"author": "Victor Azevedo",
 	"description": "This regroups all APIs used by Bonjourr as a single cloudflare worker",
 	"license": "ISC",
+	"type": "module",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/victrme/bonjourr-apis"
 	},
 	"scripts": {
+		"test": "vitest",
 		"dev": "wrangler dev --ip 127.0.0.1 --port 8787",
-		"test": "vitest run",
 		"git:init": "git submodule update --init --recursive",
 		"git:update": "git submodule update --remote"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20231025.0",
-		"@vitest/coverage-v8": "^1.0.3",
+		"@cloudflare/workers-types": "^4.20231121.0",
+		"@vitest/coverage-v8": "^1.0.4",
 		"vite": "^5.0.7",
-		"vitest": "^1.0.2",
+		"vitest": "^1.0.4",
 		"wrangler": "^3.19.0"
 	}
 }

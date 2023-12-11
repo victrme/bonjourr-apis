@@ -1,11 +1,11 @@
 //@ts-ignore
 import html from './index.html'
-import fonts from './apis/fonts'
-import weather from './apis/weather'
-import unsplash from './apis/unsplash'
-import quotes from './apis/quotes/src/index'
-import favicon from './apis/favicon/cloudflare/index'
-import suggestions from './apis/suggestions/cloudflare/src/index'
+import fonts from './apis/fonts.ts'
+import weather from './apis/weather.ts'
+import unsplash from './apis/unsplash.ts'
+import quotes from './apis/quotes/src/index.ts'
+import favicon from './apis/favicon/cloudflare/index.ts'
+import suggestions from './apis/suggestions/cloudflare/src/index.ts'
 
 const headers = new Headers({
 	'Access-Control-Allow-Origin': '*',
