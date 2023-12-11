@@ -133,6 +133,8 @@ describe('Weather', function () {
 })
 
 describe('Quotes', function () {
+	let quotes: any[]
+
 	it('has application/json as content-type', async function () {
 		const response = await worker.fetch('/quotes/classic')
 		expect(response.headers.get('content-type')).toBe('application/json')
@@ -145,8 +147,6 @@ describe('Quotes', function () {
 	})
 
 	describe('Classic', function () {
-		let quotes: any[]
-
 		beforeAll(async () => {
 			response = await worker.fetch('/quotes/classic')
 			quotes = (await response?.json()) as any[]
@@ -170,8 +170,6 @@ describe('Quotes', function () {
 	})
 
 	describe('Kaamelott', async function () {
-		let quotes: any[]
-
 		beforeAll(async () => {
 			response = await worker.fetch('/quotes/kaamelott')
 			quotes = (await response?.json()) as any[]
@@ -188,8 +186,6 @@ describe('Quotes', function () {
 	})
 
 	describe('Inspirobot', async function () {
-		let quotes: any[]
-
 		beforeAll(async () => {
 			response = await worker.fetch('/quotes/inspirobot')
 			quotes = (await response?.json()) as any[]
@@ -209,15 +205,15 @@ describe('Quotes', function () {
 describe('Suggestions', function () {
 	describe('GET request', async function () {
 		beforeAll(async () => {
-			response = await worker.fetch('/suggestions')
+			response = await worker.fetch('/suggestions?q=minecraft&with=google')
 		})
 
 		it('has application/json as content-type', function () {
-			expect(response.headers.get('content-type')).toBe('application/json')
+			expect(response.clone().headers.get('content-type')).toBe('application/json')
 		})
 
 		it('has valid type', async function () {
-			const results = (await response?.json()) as any[]
+			const results = (await response?.clone().json()) as any[]
 			const detailedResultIndex = results.findIndex((item) => item.image)
 
 			expectTypeOf(results[0].text).toBeString.result
@@ -226,24 +222,23 @@ describe('Suggestions', function () {
 		})
 	})
 
-	// describe('WS request', async function () {
-	// 	const WS = (await import('vitest-websocket-mock')).default
-	// 	const server = new WS(origin.replace('http', 'ws') + '/suggestions/')
-	// 	const client = new WebSocket(origin.replace('http', 'ws') + '/suggestions/')
+	describe('WS request', async function () {
+		// const WS: any = (await import('vitest-websocket-mock')).default
+		// const server = new WS(origin.replace('http', 'ws') + '/suggestions/')
+		// const client = new WebSocket(origin.replace('http', 'ws') + '/suggestions/')
 
-	// 	it('connects to a websocket', async function () {
-	// 		expect(await server.connected).toBeTruthy()
-	// 	})
+		it.todo('connects to a websocket', async function () {
+			// expect(await server.connected).toBeTruthy()
+		})
 
-	// 	it('receives messges', async function () {
-	// 		const message = await new Promise((r) => {
-	// 			server.on('message', r)
-	// 			client.send(JSON.stringify({ q: 'hello', with: 'duckduckgo' }))
-	// 		})
-
-	// 		expect(message).toBe(true)
-	// 	})
-	// })
+		it.todo('receives messges', async function () {
+			// const message = await new Promise((r) => {
+			// 	server.on('message', r)
+			// 	client.send(JSON.stringify({ q: 'hello', with: 'duckduckgo' }))
+			// })
+			// expect(message).toBe(true)
+		})
+	})
 })
 
 describe('Fonts', function () {
