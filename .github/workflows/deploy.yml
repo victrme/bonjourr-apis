@@ -9,7 +9,7 @@ on:
             - main
 
 jobs:
-    run-tests:
+    test:
         runs-on: ubuntu-latest
 
         env:
@@ -17,34 +17,35 @@ jobs:
             WEATHER: ${{ secrets.WEATHER }}
 
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 20
-
-            - name: Install pnpm
-              uses: pnpm/action-setup@v2
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v2
               with:
                   version: latest
-                  run_install: true
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'pnpm'
 
             - name: Create .dev.vars file
               run: echo "UNSPLASH=${UNSPLASH}" > .dev.vars && echo "WEATHER=${WEATHER}" >> .dev.vars
 
+            - name: Install dependencies
+              run: pnpm install
+
             - name: Run tests
-              run: npm run test
+              run: pnpm test
 
     deploy:
-        needs: run-tests
+        needs: test
         runs-on: ubuntu-latest
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v2
+              with:
+                  version: latest
 
             - name: Deploy
               uses: cloudflare/wrangler-action@v3
