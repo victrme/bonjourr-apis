@@ -1,17 +1,17 @@
 import { describe, it, expect, expectTypeOf, beforeAll, afterAll } from 'vitest'
 import { unstable_dev, UnstableDevWorker } from 'wrangler'
 
+process.on('uncaughtException', function (err) {
+	console.log(err)
+})
+
 let worker: UnstableDevWorker
 let response: Awaited<ReturnType<typeof worker.fetch>>
 
 beforeAll(async () => {
-	try {
-		worker = await unstable_dev('src/index.ts', {
-			experimental: { disableExperimentalWarning: true },
-		})
-	} catch (error) {
-		console.log(error)
-	}
+	worker = await unstable_dev('src/index.ts', {
+		experimental: { disableExperimentalWarning: true },
+	})
 })
 
 afterAll(async () => {
