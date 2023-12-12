@@ -28,7 +28,7 @@ jobs:
             - name: Install pnpm & dependencies
               run: |
                   npm install -g pnpm
-                  pnpm ci
+                  pnpm i -r
 
             - name: Run tests
               run: pnpm test
