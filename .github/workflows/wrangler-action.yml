@@ -9,30 +9,30 @@ on:
             - main
 
 jobs:
-    # run-tests:
-    #     runs-on: ubuntu-latest
+    run-tests:
+        runs-on: ubuntu-latest
 
-    #     env:
-    #         UNSPLASH: ${{ secrets.UNSPLASH }}
-    #         WEATHER: ${{ secrets.WEATHER }}
+        env:
+            UNSPLASH: ${{ secrets.UNSPLASH }}
+            WEATHER: ${{ secrets.WEATHER }}
 
-    #     steps:
-    #         - name: Checkout repository
-    #           uses: actions/checkout@v2
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
 
-    #         - name: Setup Node.js
-    #           uses: actions/setup-node@v3
-    #           with:
-    #               node-version: 21.4.0
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 21.4.0
 
-    #         - name: Install dependencies
-    #           run: npm install
+            - name: Clean install dependencies
+              run: npm ci
 
-    #         - name: Run tests
-    #           run: npm test
+            - name: Run tests
+              run: npm test
 
     deploy-main-account:
-        # needs: run-tests
+        needs: run-tests
         runs-on: ubuntu-latest
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
