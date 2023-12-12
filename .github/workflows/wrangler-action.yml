@@ -1,59 +1,49 @@
-name: Deploy to Cloudflare
+name: CI/CD
 
 on:
-  push:
-    branches:
-      - main
+    pull_request:
+        branches:
+            - main
+    push:
+        branches:
+            - main
 
 jobs:
-  deploy-main-account:
-    runs-on: ubuntu-latest
-    name: To main account
-    steps:
-      - uses: actions/checkout@v3
-      - name: Deploy
-        uses: cloudflare/wrangler-action@v3.1.0     
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
-          secrets: |
-            UNSPLASH
-            WEATHER
-        env:
-          UNSPLASH: ${{ secrets.UNSPLASH }}
-          WEATHER: ${{ secrets.WEATHER }}
+    run-tests:
+        runs-on: ubuntu-latest
 
-  deploy-first-fallback-account:
-    runs-on: ubuntu-latest
-    name: To first fallback
-    steps:
-      - uses: actions/checkout@v3
-      - name: Deploy
-        uses: cloudflare/wrangler-action@v3.1.0     
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_FALLBACK_1_ACCOUNT_ID }}
-          secrets: |
-            UNSPLASH
-            WEATHER
-        env:
-          UNSPLASH: ${{ secrets.UNSPLASH }}
-          WEATHER: ${{ secrets.WEATHER }}
-          
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
 
-  deploy-third-account:
-    runs-on: ubuntu-latest
-    name: To second fallback
-    steps:
-      - uses: actions/checkout@v3
-      - name: Deploy
-        uses: cloudflare/wrangler-action@v3.1.0     
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_FALLBACK_2_ACCOUNT_ID }}
-          secrets: |
-            UNSPLASH
-            WEATHER
-        env:
-          UNSPLASH: ${{ secrets.UNSPLASH }}
-          WEATHER: ${{ secrets.WEATHER }}
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Run tests
+              run: npm test
+
+    deploy-main-account:
+        needs: run-tests
+        runs-on: ubuntu-latest
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Deploy
+              uses: cloudflare/wrangler-action@v3.1.0
+              with:
+                  apiToken: ${{ secrets.CF_API_TOKEN }}
+                  accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
+                  secrets: |
+                      UNSPLASH
+                      WEATHER
+              env:
+                  UNSPLASH: ${{ secrets.UNSPLASH }}
+                  WEATHER: ${{ secrets.WEATHER }}
