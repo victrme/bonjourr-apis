@@ -5,9 +5,13 @@ let worker: UnstableDevWorker
 let response: Awaited<ReturnType<typeof worker.fetch>>
 
 beforeAll(async () => {
-	worker = await unstable_dev('src/index.ts', {
-		experimental: { disableExperimentalWarning: true },
-	})
+	try {
+		worker = await unstable_dev('src/index.ts', {
+			experimental: { disableExperimentalWarning: true },
+		})
+	} catch (error) {
+		console.log(error)
+	}
 })
 
 afterAll(async () => {
