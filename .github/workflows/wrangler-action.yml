@@ -25,11 +25,13 @@ jobs:
               with:
                   node-version: 21.4.0
 
-            - name: Clean install dependencies
-              run: npm ci
+            - name: Install pnpm & dependencies
+              run: |
+                  npm install -g pnpm
+                  pnpm ci
 
             - name: Run tests
-              run: npm test
+              run: pnpm test
 
     deploy-main-account:
         needs: run-tests
