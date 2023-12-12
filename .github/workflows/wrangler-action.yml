@@ -25,13 +25,14 @@ jobs:
               with:
                   node-version: 21.4.0
 
-            - name: Install pnpm & dependencies
-              run: |
-                  npm install -g pnpm
-                  pnpm i -r
+            - name: Install dependencies
+              run: npm i
+
+            - name: Create .dev.vars file
+              run: echo "UNSPLASH=${UNSPLASH}" > .dev.vars && echo "WEATHER=${WEATHER}" >> .dev.vars
 
             - name: Run tests
-              run: pnpm test
+              run: npm run test
 
     deploy-main-account:
         needs: run-tests
