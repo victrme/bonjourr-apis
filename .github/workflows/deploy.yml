@@ -1,12 +1,42 @@
-name: CI/CD
+name: Run tests and deploy
 
 on:
-    workflow_run:
-        workflows: ['Run tests']
-        types:
-            - completed
+    pull_request:
+        branches:
+            - main
+    push:
+        branches:
+            - main
 
 jobs:
+    run-tests:
+        runs-on: ubuntu-latest
+
+        env:
+            UNSPLASH: ${{ secrets.UNSPLASH }}
+            WEATHER: ${{ secrets.WEATHER }}
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v2
+              with:
+                  version: latest
+                  run_install: true
+
+            - name: Create .dev.vars file
+              run: echo "UNSPLASH=${UNSPLASH}" > .dev.vars && echo "WEATHER=${WEATHER}" >> .dev.vars
+
+            - name: Run tests
+              run: npm run test
+
     deploy:
         needs: run-tests
         runs-on: ubuntu-latest
@@ -14,10 +44,10 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Deploy
-              uses: cloudflare/wrangler-action@v3.1.0
+              uses: cloudflare/wrangler-action@v3
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
