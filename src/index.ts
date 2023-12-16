@@ -3,7 +3,7 @@ import html from './index.html'
 import fonts from './apis/fonts.ts'
 import weather from './apis/weather.ts'
 import unsplash from './apis/unsplash.ts'
-import quotes from './apis/quotes/src/index.ts'
+import quotes from './apis/quotes/cloudflare/index.ts'
 import favicon from './apis/favicon/cloudflare/index.ts'
 import suggestions from './apis/suggestions/cloudflare/src/index.ts'
 
@@ -41,7 +41,7 @@ export default {
 				return await favicon.fetch(req)
 
 			case 'quotes':
-				return await quotes.fetch(req, env, ctx)
+				return await quotes.fetch(req)
 
 			case '': {
 				headers.set('Content-Type', 'text/html')
