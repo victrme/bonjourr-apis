@@ -142,8 +142,8 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 			return {
 				lat: parseFloat(req.cf?.latitude as string),
 				lon: parseFloat(req.cf?.longitude as string),
-				name: req.cf?.country as string,
-				country: req.cf?.city as string,
+				name: req.cf?.city as string,
+				country: req.cf?.country as string,
 			}
 		}
 
