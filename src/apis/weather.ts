@@ -175,7 +175,7 @@ async function cacheControl(ctx: ExecutionContext, url: string, key: string, max
 	let response = await cache.match(cacheKey)
 
 	if (!response) {
-		response = await fetch(url + `&appid=${key}`)
+		response = (await fetch(url + `&appid=${key}`)) as any
 		response = new Response(response?.body, response)
 		response.headers.append('Cache-Control', 's-maxage=' + maxage)
 		ctx.waitUntil(cache.put(cacheKey, response.clone()))
