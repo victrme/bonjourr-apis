@@ -21,4 +21,4 @@ jobs:
                   git config --local user.name "GitHub Action"
                   git add .
                   git commit -m "Update submodules"
-                  git push https://$GITHUB_ACTOR:$PAT@github.com/victrme/bonjourr-apis.git HEAD:main
+                  git push https://github_actor:${{secrets.PAT}}@github.com/victrme/bonjourr-apis.git HEAD:main
