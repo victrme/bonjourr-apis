@@ -6,7 +6,7 @@ It is only usable as a cloudflare worker since it uses features like `waitUntil`
 With a bit of tweaking, it can be deployed on other serverless hosting platforms.
 
 ## Install
-
+ 
 -   Fork this repository. (future me can skip this step)
 -   Initialize the submodules for quotes, favicon, and suggestions.
 -   Add your secrets to a `.dev.vars` for local dev to work
