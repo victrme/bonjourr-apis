@@ -1,0 +1,26 @@
+name: Update Submodules
+
+on:
+    repository_dispatch:
+        types: [update]
+
+jobs:
+    update_submodules:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Update submodules
+              run: |
+                  git submodule update --init --recursive
+                  git submodule update --remote --recursive
+
+            - name: Commit changes
+              run: |
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  git add .
+                  git commit -m "Updated submodules"
+                  git push
