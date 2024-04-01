@@ -17,10 +17,6 @@ jobs:
                   git submodule update --init --recursive
                   git submodule update --remote --recursive
 
-            - name: Commit changes
-              run: |
-                  git config --local user.email "action@github.com"
-                  git config --local user.name "GitHub Action"
-                  git add .
-                  git commit -m "Updated submodules"
-                  git push
+            - uses: EndBug/add-and-commit@v9
+              with:
+                  message: 'Updated submodules'
