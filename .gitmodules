@@ -12,4 +12,4 @@
 [submodule "src/apis/quotes"]
 	path = src/apis/quotes
 	url = https://github.com/victrme/i18n-quotes
-	branch = cloudflare
+	branch = main
