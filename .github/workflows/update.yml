@@ -17,6 +17,8 @@ jobs:
                   git submodule update --init --recursive
                   git submodule update --remote --recursive
 
-            - uses: EndBug/add-and-commit@v9
-              with:
-                  message: 'Updated submodules'
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  git add .
+                  git commit -m "Update submodules"
+                  git push https://$GITHUB_ACTOR:$PAT@github.com/victrme/bonjourr-apis.git HEAD:main
