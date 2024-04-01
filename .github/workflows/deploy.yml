@@ -34,7 +34,7 @@ jobs:
               run: pnpm install
 
             - name: Run tests
-              run: pnpm test:ci
+              run: pnpm test
 
     deploy:
         needs: test
