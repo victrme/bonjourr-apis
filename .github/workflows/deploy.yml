@@ -1,4 +1,4 @@
-name: Run tests and deploy
+name: CI
 
 on:
     pull_request:
@@ -34,7 +34,7 @@ jobs:
               run: pnpm install
 
             - name: Run tests
-              run: pnpm test
+              run: pnpm test:ci
 
     deploy:
         needs: test

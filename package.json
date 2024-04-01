@@ -10,7 +10,8 @@
 	},
 	"scripts": {
 		"test": "vitest",
-		"dev": "git submodule sync && wrangler dev --ip 127.0.0.1 --port 8787",
+		"test:ci": "pnpm git:init && vitest",
+		"dev": "pnpm git:update && wrangler dev --ip 127.0.0.1 --port 8787",
 		"git:init": "git submodule update --init --recursive",
 		"git:update": "git submodule update --remote"
 	},
