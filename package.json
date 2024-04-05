@@ -10,7 +10,8 @@
 	},
 	"scripts": {
 		"test": "vitest",
-		"dev": "wrangler dev --env update"
+		"dev": "wrangler dev --env update",
+		"sync": "git submodule update --remote --recursive && git add .gitmodules && git commit -m \"Updated submodules\""
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20240329.0",
