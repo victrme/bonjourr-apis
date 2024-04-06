@@ -15,8 +15,8 @@
 		"sync": "git submodule update --remote --recursive && git add ./src/apis/** && git commit -m \"Updated submodules\""
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240329.0",
+		"@cloudflare/workers-types": "^4.20240405.0",
 		"vitest": "^1.4.0",
-		"wrangler": "^3.41.0"
+		"wrangler": "^3.48.0"
 	}
 }
