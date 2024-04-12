@@ -6,25 +6,23 @@ It is only usable as a cloudflare worker since it uses features like `waitUntil`
 With a bit of tweaking, it can be deployed on other serverless hosting platforms.
 
 ## Install
- 
+
+-   [Install pnpm](https://pnpm.io/installation) on your system for convenience
 -   Fork this repository. (future me can skip this step)
--   Initialize the submodules for quotes, favicon, and suggestions.
+-   Install quotes, favicon, and suggestions
 -   Add your secrets to a `.dev.vars` for local dev to work
 
 ```bash
-# Global tools
-npm install --global wrangler pnpm
 
-# Initialize the submodules
-pnpm git:init
+# Install the dependencies
+pnpm install
 
-# For cloudflare types
-pnpm i
+# Fetch the apis on your device
+pnpm apis:init
 
 # should work
-wrangler dev
+pnpm dev
 ```
-
 ```yaml
 # .dev.vars
 
@@ -32,17 +30,63 @@ WEATHER=comma,separated,strings
 UNSPLASH=string
 ```
 
-## Deploy on Cloudflare
+This is what your terminal should look like:
+```bash
+> pnpm install
+
+# devDependencies:
+# + @cloudflare/workers-types .0.00000000.0
+# + vitest 0.0.0
+# + wrangler 0.0.0
+
+> pnpm apis:init
+
+# Sous-module 'src/apis/favicon' (...) enregistré pour le chemin 'src/apis/favicon'
+# Sous-module 'src/apis/quotes' (...) enregistré pour le chemin 'src/apis/quotes'
+# Sous-module 'src/apis/suggestions' (...) enregistré pour le chemin 'src/apis/suggestions'
+# Chemin de sous-module 'src/apis/favicon' : '...' extrait
+# Chemin de sous-module 'src/apis/quotes' : '...' extrait
+# Chemin de sous-module 'src/apis/suggestions' : '...' extrait
+
+> pnpm dev
+
+# Your worker has access to the following bindings:
+# - Vars:
+#  - WEATHER: "(hidden)"
+#  - UNSPLASH: "(hidden)"
+# ⎔ Starting local server...
+# [wrangler:inf] Ready on http://127.0.0.1:8787
+```
+
+## Update
+
+For skill issue reasons, bonjourr-apis does not automatically deploy remote apis updates.  
+To deploy a new update:
+
+- Make sure remote apis are initialized using `pnpm apis:init`
+- Once added to your device, update with `pnpm apis:sync`
+- A submodule file should update showing the latest commit hash from the remote api
+- Push a new commit with that file
+
+```bash
+> pnpm apis:init
+
+# ...
+# see above
+
+> pnpm apis:sync
+
+# Chemin de sous-module 'src/apis/favicon' : '10f7fd5d8a714f358080b917c74c91b859ce3a88' extrait
+```
+
+## Deploy
 
 ### With Github Actions
 
-/!\ Work in progress  
 Add repository secrets for Github Action in [Settings > Secrets and Variables > Actions](https://github.com/victrme/bonjourr-apis/settings/secrets/actions):
 
 -   `CF_API_TOKEN` (the single api token for all accounts that you forgot)
 -   `CF_MAIN_ACCOUNT_ID`
--   `CF_FALLBACK_1_ACCOUNT_ID`
--   `CF_FALLBACK_2_ACCOUNT_ID`
 -   `WEATHER`
 -   `UNSPLASH`
 
