@@ -1,18 +1,22 @@
-import { getWeatherData, createOnecallData } from './openweathermap'
-import accuweather from './accuweather'
+import { openweathermap } from './openweathermap'
+import { accuweather } from './accuweather'
 
-export default async function weather(req: Request, ctx: ExecutionContext, keys: string, headers: Headers) {
+import type * as Worker from '@cloudflare/workers-types'
+import { Geo } from '../../types/weather'
+
+export default async function weather(
+	req: Worker.Request,
+	ctx: ExecutionContext,
+	owmkeys: string,
+	headers: Headers,
+) {
 	const url = new URL(req.url)
-	const keylist = keys.split(',')
-	const key = keylist[Math.floor(Math.random() * keylist.length)]
 
-	headers.set('Content-Type', 'application/json')
-	headers.set('Cache-Control', 'public, max-age=1800')
+	// Validate parameters
 
 	const validParams = ['q', 'lat', 'lon', 'units', 'lang', 'mode', 'provider']
 	const requestParams = [...url.searchParams.keys()]
 	let hasInvalidParams = false
-	let json: any
 
 	for (const param of requestParams) {
 		if (validParams.includes(param) === false) {
@@ -27,27 +31,58 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 		})
 	}
 
-	if (url.searchParams.get('provider') === 'accuweather') {
-		return accuweather.fetch(req)
-	}
+	// Fetch weather infos
 
-	switch (url.pathname) {
-		case '/weather/current':
-		case '/weather/current/':
-			json = await getWeatherData('current', key, req, ctx)
+	const keylist = owmkeys.split(',')
+	const key = keylist[Math.floor(Math.random() * keylist.length)]
+	const provider = url.searchParams.get('provider') ?? 'openweathermap'
+	let json: unknown
 
-		case '/weather/forecast':
-		case '/weather/forecast/':
-			json = await getWeatherData('forecast', key, req, ctx)
+	if (provider === 'accuweather') json = await accuweather(req, ctx, key)
+	if (provider === 'openweathermap') json = await openweathermap(req, ctx, key)
 
-		case '/weather/':
-		case '/weather':
-			json = await createOnecallData(key, req, ctx)
-	}
+	headers.set('Content-Type', 'application/json')
+	headers.set('Cache-Control', 'public, max-age=1800')
 
 	if (json) {
 		return new Response(JSON.stringify(json), { headers })
-	} else {
-		return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 })
 	}
+
+	return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 })
+}
+
+// Cloudflare Workers specifics
+
+export function getCoordsFromIp(req: Worker.Request): Geo {
+	if (req?.cf) {
+		return {
+			lat: parseFloat(req.cf?.latitude as string),
+			lon: parseFloat(req.cf?.longitude as string),
+			name: req.cf?.city as string,
+			country: req.cf?.country as string,
+		}
+	}
+
+	return { lat: 0, lon: 0, name: '', country: '' }
+}
+
+export async function cacheControl(
+	ctx: Worker.ExecutionContext,
+	url: string,
+	key: string,
+	maxage = 1800,
+): Promise<Worker.Response> {
+	const cacheKey = new Request(url)
+	const cache = caches.default
+	let response = await cache.match(cacheKey)
+
+	if (!response) {
+		response = (await fetch(url + `&appid=${key}`)) as any
+		response = new Response(response?.body, response)
+		response.headers.append('Cache-Control', 's-maxage=' + maxage)
+		ctx.waitUntil(cache.put(cacheKey, response.clone()))
+	}
+
+	//@ts-expect-error
+	return response
 }

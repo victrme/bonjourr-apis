@@ -1,3 +1,8 @@
+export interface WeatherResponse extends Onecall {
+	city?: string
+	ccode?: string
+}
+
 export interface Onecall {
 	lat: number
 	lon: number

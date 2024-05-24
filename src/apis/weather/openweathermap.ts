@@ -1,15 +1,34 @@
-import type { Onecall, Current, Forecast, Geo } from '../../types/weather'
+import { cacheControl, getCoordsFromIp } from './weather'
 
-interface WeatherResponse extends Onecall {
-	city?: string
-	ccode?: string
+import type * as Worker from '@cloudflare/workers-types'
+import type { WeatherResponse, Current, Forecast, Geo } from '../../types/weather'
+
+export async function openweathermap(req: Worker.Request, ctx: Worker.ExecutionContext, key: string) {
+	const url = new URL(req.url)
+	let json: Current | Forecast | WeatherResponse | undefined
+
+	switch (url.pathname) {
+		case '/weather/current':
+		case '/weather/current/':
+			json = await getWeatherData('current', key, req, ctx)
+
+		case '/weather/forecast':
+		case '/weather/forecast/':
+			json = await getWeatherData('forecast', key, req, ctx)
+
+		case '/weather/':
+		case '/weather':
+			json = await createOnecallData(key, req, ctx)
+	}
+
+	return json
 }
 
 export async function getWeatherData(
 	type: 'current' | 'forecast',
 	key: string,
-	req: Request,
-	ctx: ExecutionContext,
+	req: Worker.Request,
+	ctx: Worker.ExecutionContext,
 ): Promise<Current | Forecast | undefined> {
 	const base = 'https://api.openweathermap.org/data/2.5/'
 	const url = new URL(req.url)
@@ -35,8 +54,8 @@ export async function getWeatherData(
 
 export async function createOnecallData(
 	key: string,
-	req: Request,
-	ctx: ExecutionContext,
+	req: Worker.Request,
+	ctx: Worker.ExecutionContext,
 ): Promise<WeatherResponse | undefined> {
 	const hasLocation = req.url.includes('lat=') && req.url.includes('lon=')
 	const base = 'https://api.openweathermap.org/data/2.5/'
@@ -50,7 +69,7 @@ export async function createOnecallData(
 		let geo = { lat: 0, lon: 0, name: '', country: '' }
 
 		if (params.includes('q=')) {
-			geo = await getCoordsFromCityQuery(key, url.search, ctx)
+			geo = await geocodingAPI(key, url.search, ctx)
 			params = params.slice(0, params.indexOf(params.includes('&q=') ? '&q=' : 'q=')) // no "&" if first param
 		}
 
@@ -97,11 +116,11 @@ export async function createOnecallData(
 	}
 }
 
-export async function getCoordsFromCityQuery(key: string, search: string, ctx: ExecutionContext): Promise<Geo> {
+export async function geocodingAPI(key: string, search: string, ctx: Worker.ExecutionContext): Promise<Geo> {
 	const q = (search.split('&').filter((p) => p.includes('q='))[0] ?? '').replace('q=', '')
 	const url = `https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=1`
 	const resp = await cacheControl(ctx, url, key, 31536000)
-	const json = await resp.json<Geo[]>()
+	const json: Geo[] = (await resp.json()) as Geo[]
 
 	if (json[0]) {
 		return {
@@ -113,34 +132,4 @@ export async function getCoordsFromCityQuery(key: string, search: string, ctx: E
 	}
 
 	return { lat: 0, lon: 0, name: '', country: '' }
-}
-
-export function getCoordsFromIp(req: Request): Geo {
-	if (req?.cf) {
-		return {
-			lat: parseFloat(req.cf?.latitude as string),
-			lon: parseFloat(req.cf?.longitude as string),
-			name: req.cf?.city as string,
-			country: req.cf?.country as string,
-		}
-	}
-
-	return { lat: 0, lon: 0, name: '', country: '' }
-}
-
-//
-
-async function cacheControl(ctx: ExecutionContext, url: string, key: string, maxage = 1800): Promise<Response> {
-	const cacheKey = new Request(url)
-	const cache = caches.default
-	let response = await cache.match(cacheKey)
-
-	if (!response) {
-		response = (await fetch(url + `&appid=${key}`)) as any
-		response = new Response(response?.body, response)
-		response.headers.append('Cache-Control', 's-maxage=' + maxage)
-		ctx.waitUntil(cache.put(cacheKey, response.clone()))
-	}
-
-	return response
 }
