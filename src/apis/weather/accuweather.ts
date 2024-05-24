@@ -13,8 +13,10 @@ export async function accuweather(
 	key: string,
 ): Promise<WeatherResponse> {
 	const url = new URL(req.url)
+	const lat = parseFloat(url.searchParams.get('lat') ?? '0')
+	const lon = parseFloat(url.searchParams.get('lon') ?? '0')
 
-	let geo: Geo = { lat: 0, lon: 0, name: '', country: '' }
+	let geo: Geo = { lat, lon, name: '', country: '' }
 	let city = ''
 	let ccode = ''
 
@@ -39,16 +41,16 @@ export async function accuweather(
 	const json = await response.json<AccuWeather.Data>()
 
 	const result: WeatherResponse = {
-		city: city,
-		ccode: ccode,
+		city: city ? city : undefined,
+		ccode: ccode ? ccode : undefined,
 		lat: json.lat,
 		lon: json.lon,
 		current: {
-			dt: Date.now() / 1000,
+			dt: Math.floor(Date.now() / 1000),
 			temp: json.now.temp,
 			feels_like: json.now.feels,
-			sunrise: json.sun.rise,
-			sunset: json.sun.set,
+			sunrise: json.sun.rise / 1000,
+			sunset: json.sun.set / 1000,
 			weather: [
 				{
 					id: json.now.icon,
@@ -59,62 +61,10 @@ export async function accuweather(
 			],
 		},
 		hourly: json.hourly.map((item) => ({
-			dt: item.timestamp,
+			dt: item.timestamp / 1000,
 			temp: item.temp,
-			feels_like: item.temp,
-			weather: [{ description: '', icon: '', id: 0, main: '' }],
 		})),
 	}
 
 	return result
-}
-
-namespace AccuWeather {
-	export interface Data {
-		lat: number
-		lon: number
-		city: string
-		region: string
-		link: string
-		now: Now
-		sun: Sun
-		today?: Today
-		hourly: Hourly[]
-		daily: Daily[]
-	}
-
-	export type Today = {
-		day: string
-		night: string
-		high: number
-		low: number
-	}
-
-	export type Now = {
-		icon: number
-		temp: number
-		feels: number
-		description: string
-	}
-
-	export type Sun = {
-		duration: string
-		rise: number
-		set: number
-	}
-
-	export type Hourly = {
-		timestamp: number
-		temp: number
-		rain: string
-	}
-
-	export type Daily = {
-		timestamp: number
-		high: number
-		low: number
-		day: string
-		night: string
-		rain: string
-	}
 }

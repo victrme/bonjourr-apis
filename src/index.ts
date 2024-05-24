@@ -1,4 +1,4 @@
-//@ts-ignore
+//@ts-expect-error
 import html from './index.html'
 import fonts from './apis/fonts.ts'
 import weather from './apis/weather/weather.ts'

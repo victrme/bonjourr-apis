@@ -35,7 +35,7 @@ export default async function weather(
 
 	const keylist = owmkeys.split(',')
 	const key = keylist[Math.floor(Math.random() * keylist.length)]
-	const provider = url.searchParams.get('provider') ?? 'openweathermap'
+	const provider = url.searchParams.get('provider') ?? 'accuweather'
 	let json: unknown
 
 	if (provider === 'accuweather') json = await accuweather(req, ctx, key)

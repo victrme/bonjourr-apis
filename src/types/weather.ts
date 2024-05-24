@@ -22,8 +22,8 @@ export interface Onecall {
 	hourly: {
 		dt: number
 		temp: number
-		feels_like: number
-		weather: {
+		feels_like?: number
+		weather?: {
 			id: number
 			main: string
 			description: string
