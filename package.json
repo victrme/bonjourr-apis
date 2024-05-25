@@ -15,8 +15,8 @@
 		"apis:sync": "git submodule update --remote --recursive"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240405.0",
-		"vitest": "^1.4.0",
-		"wrangler": "^3.48.0"
+		"@cloudflare/workers-types": "^4.20240512.0",
+		"vitest": "^1.6.0",
+		"wrangler": "^3.57.1"
 	}
 }
