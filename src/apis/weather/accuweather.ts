@@ -53,6 +53,7 @@ export async function accuweather(
 		ccode: ccode ? ccode : undefined,
 		lat: json.lat,
 		lon: json.lon,
+		link: json.link,
 		current: {
 			dt: Math.floor(Date.now() / 1000),
 			temp: json.now.temp,
