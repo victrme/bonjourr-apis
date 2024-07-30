@@ -209,6 +209,7 @@ function sanitizeLanguageCode(lang: string, openweathermap?: true): string {
 		if (lang === 'pt-BR') lang = 'pt_br'
 		if (lang === 'zh-CN') lang = 'zh_cn'
 		if (lang === 'zh-HK') lang = 'zh_tw'
+		if (lang === 'zh-TW') lang = 'zh_tw'
 	}
 
 	return lang
