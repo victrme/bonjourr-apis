@@ -33,6 +33,11 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 		})
 	}
 
+	const rawlang = url.searchParams.get('lang') ?? 'en'
+	const owmlang = sanitizeLanguageCode(rawlang, true)
+
+	url.searchParams.set('lang', owmlang)
+
 	switch (url.pathname) {
 		case '/weather/current':
 		case '/weather/current/':
@@ -182,4 +187,29 @@ async function cacheControl(ctx: ExecutionContext, url: string, key: string, max
 	}
 
 	return response
+}
+
+function sanitizeLanguageCode(lang: string, openweathermap?: true): string {
+	// https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
+	if (lang === 'jp') lang = 'ja'
+	if (lang === 'cz') lang = 'cs'
+	if (lang === 'gr') lang = 'el'
+	if (lang === 'es-ES') lang = 'es'
+	if (lang === 'es_ES') lang = 'es'
+	if (lang === 'pt_BR') lang = 'pt-BR'
+	if (lang === 'zh_CN') lang = 'zh-CN'
+	if (lang === 'zh_HK') lang = 'zh-HK'
+	if (lang === 'zh_TW') lang = 'zh-TW'
+
+	// https://openweathermap.org/current#multi
+	if (openweathermap) {
+		if (lang === 'cs') lang = 'cz'
+		if (lang === 'nb') lang = 'no'
+		if (lang === 'pt-PT') lang = 'pt'
+		if (lang === 'pt-BR') lang = 'pt_br'
+		if (lang === 'zh-CN') lang = 'zh_cn'
+		if (lang === 'zh-HK') lang = 'zh_tw'
+	}
+
+	return lang
 }
