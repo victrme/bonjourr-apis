@@ -35,8 +35,13 @@ export default async function weather(
 
 	const keylist = owmkeys.split(',')
 	const key = keylist[Math.floor(Math.random() * keylist.length)]
-	const provider = url.searchParams.get('provider') ?? 'accuweather'
+	const provider = url.searchParams.get('provider') ?? 'openweathermap'
 	let json: unknown
+
+	const rawlang = url.searchParams.get('lang') ?? 'en'
+	const owmlang = sanitizeLanguageCode(rawlang, provider === 'openweathermap')
+
+	url.searchParams.set('lang', owmlang)
 
 	if (provider === 'accuweather') json = await accuweather(req, ctx, key)
 	if (provider === 'openweathermap') json = await openweathermap(req, ctx, key)
@@ -85,4 +90,30 @@ export async function cacheControl(
 
 	//@ts-expect-error
 	return response
+}
+
+function sanitizeLanguageCode(lang: string, openweathermap?: boolean): string {
+	// https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
+	if (lang === 'jp') lang = 'ja'
+	if (lang === 'cz') lang = 'cs'
+	if (lang === 'gr') lang = 'el'
+	if (lang === 'es-ES') lang = 'es'
+	if (lang === 'es_ES') lang = 'es'
+	if (lang === 'pt_BR') lang = 'pt-BR'
+	if (lang === 'zh_CN') lang = 'zh-CN'
+	if (lang === 'zh_HK') lang = 'zh-HK'
+	if (lang === 'zh_TW') lang = 'zh-TW'
+
+	// https://openweathermap.org/current#multi
+	if (openweathermap) {
+		if (lang === 'cs') lang = 'cz'
+		if (lang === 'nb') lang = 'no'
+		if (lang === 'pt-PT') lang = 'pt'
+		if (lang === 'pt-BR') lang = 'pt_br'
+		if (lang === 'zh-CN') lang = 'zh_cn'
+		if (lang === 'zh-HK') lang = 'zh_tw'
+		if (lang === 'zh-TW') lang = 'zh_tw'
+	}
+
+	return lang
 }
