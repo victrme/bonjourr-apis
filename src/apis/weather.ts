@@ -120,6 +120,10 @@ export default async function weather(req: Request, ctx: ExecutionContext, keys:
 				ccode: hasLocation ? undefined : ccode,
 				lat: current.coord.lat,
 				lon: current.coord.lon,
+				coord: {
+					lat: current.coord.lat, // old
+					lon: current.coord.lon, // old
+				},
 				current: {
 					dt: current.dt,
 					temp: current.main.temp,

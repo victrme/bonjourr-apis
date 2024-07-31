@@ -1,6 +1,10 @@
 export interface Onecall {
 	lat: number
 	lon: number
+	coord: {
+		lon: number // old
+		lat: number // old
+	}
 	current: {
 		dt: number
 		sunrise: number
