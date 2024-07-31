@@ -31,7 +31,7 @@ jobs:
               run: echo "UNSPLASH=${UNSPLASH}" > .dev.vars && echo "WEATHER=${WEATHER}" >> .dev.vars
 
             - name: Install dependencies
-              run: pnpm install
+              run: pnpm install && pnpm --filter accuweather-scraper install
 
             - name: Run tests
               run: pnpm test
