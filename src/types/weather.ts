@@ -1,4 +1,6 @@
-export interface WeatherResponse extends Onecall {
+export interface ExtendedOpenWeatherMap extends ExtendedOnecall, Current, Forecast {}
+
+export interface ExtendedOnecall extends Onecall {
 	city?: string
 	ccode?: string
 	link?: string
@@ -7,10 +9,6 @@ export interface WeatherResponse extends Onecall {
 export interface Onecall {
 	lat: number
 	lon: number
-	coord?: {
-		lon: number // old
-		lat: number // old
-	}
 	current: {
 		dt: number
 		sunrise: number
@@ -39,7 +37,7 @@ export interface Onecall {
 
 export interface Current {
 	name: string
-	cod: number
+	cod: string | number
 	coord: {
 		lon: number
 		lat: number
@@ -63,7 +61,7 @@ export interface Current {
 }
 
 export interface Forecast {
-	cod: string
+	cod: string | number
 	list: {
 		dt: number
 		main: {

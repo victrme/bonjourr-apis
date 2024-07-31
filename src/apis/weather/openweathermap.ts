@@ -1,11 +1,11 @@
 import { cacheControl, getCoordsFromIp } from './weather'
 
 import type * as Worker from '@cloudflare/workers-types'
-import type { WeatherResponse, Current, Forecast, Geo } from '../../types/weather'
+import type { ExtendedOpenWeatherMap, Current, Forecast, Geo, Onecall } from '../../types/weather'
 
 export async function openweathermap(req: Worker.Request, ctx: Worker.ExecutionContext, key: string) {
 	const url = new URL(req.url)
-	let json: Current | Forecast | WeatherResponse | undefined
+	let json: Current | Forecast | Onecall | ExtendedOpenWeatherMap | undefined
 
 	switch (url.pathname) {
 		case '/weather/current':
@@ -56,7 +56,7 @@ export async function createOnecallData(
 	key: string,
 	req: Worker.Request,
 	ctx: Worker.ExecutionContext,
-): Promise<WeatherResponse | undefined> {
+): Promise<ExtendedOpenWeatherMap | undefined> {
 	const hasLocation = req.url.includes('lat=') && req.url.includes('lon=')
 	const base = 'https://api.openweathermap.org/data/2.5/'
 	const url = new URL(req.url)
@@ -91,15 +91,9 @@ export async function createOnecallData(
 		const current = (await responses[0].json()) as Current
 		const forecast = (await responses[1].json()) as Forecast
 
-		const onecall: WeatherResponse = {
-			city: hasLocation ? undefined : city,
-			ccode: hasLocation ? undefined : ccode,
+		const onecall: Onecall = {
 			lat: current.coord.lat,
 			lon: current.coord.lon,
-			coord: {
-				lat: current.coord.lat,
-				lon: current.coord.lon,
-			},
 			current: {
 				dt: current.dt,
 				temp: current.main.temp,
@@ -116,7 +110,15 @@ export async function createOnecallData(
 			})),
 		}
 
-		return onecall
+		const allInOne: ExtendedOpenWeatherMap = {
+			city: hasLocation ? undefined : city,
+			ccode: hasLocation ? undefined : ccode,
+			...onecall,
+			...current,
+			...forecast,
+		}
+
+		return allInOne
 	}
 }
 

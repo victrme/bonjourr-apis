@@ -5,13 +5,13 @@ import { geocodingAPI } from './openweathermap'
 import scraper from '../accuweather'
 
 import type * as Worker from '@cloudflare/workers-types'
-import type { WeatherResponse, Geo } from '../../types/weather'
+import type { ExtendedOnecall, Geo } from '../../types/weather'
 
 export async function accuweather(
 	req: Worker.Request,
 	ctx: ExecutionContext,
 	key: string,
-): Promise<WeatherResponse> {
+): Promise<ExtendedOnecall> {
 	const url = new URL(req.url)
 	const lat = parseFloat(url.searchParams.get('lat') ?? '0')
 	const lon = parseFloat(url.searchParams.get('lon') ?? '0')
@@ -48,7 +48,7 @@ export async function accuweather(
 		}
 	}
 
-	const result: WeatherResponse = {
+	const result: ExtendedOnecall = {
 		city: city ? city : undefined,
 		ccode: ccode ? ccode : undefined,
 		lat: json.lat,
