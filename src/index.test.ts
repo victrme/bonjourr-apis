@@ -206,7 +206,7 @@ describe('Quotes', function () {
 describe('Suggestions', function () {
 	describe('GET request', async function () {
 		beforeAll(async () => {
-			response = await worker.fetch('/suggestions?q=minecraft&with=google')
+			response = await worker.fetch('/suggestions?q=minecraft&with=bing')
 		})
 
 		it('has application/json as content-type', function () {

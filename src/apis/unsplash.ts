@@ -3,8 +3,8 @@ import type { UnsplashPhoto } from '../types/unsplash'
 export default async function unsplash(requrl: string, key: string, headers: Headers): Promise<Response> {
 	const endpoint = requrl.slice(requrl.indexOf('/unsplash') + 9)
 
-	// Narrow endpoint to /photos/random
-	if (!endpoint.startsWith('/photos/random')) {
+	// Narrow endpoint to /photos
+	if (!endpoint.startsWith('/photos')) {
 		return new Response('Forbidden', {
 			status: 403,
 			headers,
