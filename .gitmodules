@@ -13,3 +13,7 @@
 	path = src/apis/quotes
 	url = https://github.com/victrme/i18n-quotes
 	branch = main
+	
+[submodule "src/apis/accuweather"]
+	path = src/apis/accuweather
+	url = https://github.com/victrme/accuweather-scraper
