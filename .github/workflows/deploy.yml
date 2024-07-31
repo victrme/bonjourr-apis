@@ -52,9 +52,9 @@ jobs:
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
-                  secrets: |
-                      UNSPLASH
-                      WEATHER
-              env:
-                  UNSPLASH: ${{ secrets.UNSPLASH }}
-                  WEATHER: ${{ secrets.WEATHER }}
+              #     secrets: |
+              #         UNSPLASH
+              #         WEATHER
+              # env:
+              #     UNSPLASH: ${{ secrets.UNSPLASH }}
+              #     WEATHER: ${{ secrets.WEATHER }}
