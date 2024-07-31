@@ -96,6 +96,10 @@ export async function createOnecallData(
 			ccode: hasLocation ? undefined : ccode,
 			lat: current.coord.lat,
 			lon: current.coord.lon,
+			coord: {
+				lat: current.coord.lat,
+				lon: current.coord.lon,
+			},
 			current: {
 				dt: current.dt,
 				temp: current.main.temp,

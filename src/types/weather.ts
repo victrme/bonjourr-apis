@@ -7,7 +7,7 @@ export interface WeatherResponse extends Onecall {
 export interface Onecall {
 	lat: number
 	lon: number
-	coord: {
+	coord?: {
 		lon: number // old
 		lat: number // old
 	}
