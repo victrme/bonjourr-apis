@@ -32,9 +32,9 @@ export async function accuweather(
 		ccode = geo.country
 	}
 
-	const unit = url.searchParams.get('unit') === 'imperial' ? 'F' : 'C'
+	const units = url.searchParams.get('units') === 'imperial' ? 'F' : 'C'
 	const lang = url.searchParams.get('lang') ?? 'en'
-	const params = `?lat=${geo.lat}&lon=${geo.lon}&unit=${unit}&lang=${lang}`
+	const params = `?lat=${geo.lat}&lon=${geo.lon}&unit=${units}&lang=${lang}`
 	const request = new Request(url.origin + params)
 
 	const response = (await scraper.fetch(request)) as Worker.Response
