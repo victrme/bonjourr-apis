@@ -7,6 +7,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      html-entities:
+        specifier: ^2.5.2
+        version: 2.5.2
+      striptags:
+        specifier: ^3.2.0
+        version: 3.2.0
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20240725.0
@@ -622,6 +629,9 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
+  html-entities@2.5.2:
+    resolution: {integrity: sha512-K//PSRMQk4FZ78Kyau+mZurHn3FH0Vwr+H36eE0rPbeYkRRi9YxceYPhuN60UwWorxyKHhqoAJl2OFKa4BVtaA==}
+
   human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
@@ -819,6 +829,9 @@ packages:
   strip-final-newline@3.0.0:
     resolution: {integrity: sha512-dOESqjYr96iWYylGObzd39EuNTa5VJxyvVAEm5Jnh7KGo75V43Hk1odPQkNDyXNmUR6k+gEiDVXnjB8HJ3crXw==}
     engines: {node: '>=12'}
+
+  striptags@3.2.0:
+    resolution: {integrity: sha512-g45ZOGzHDMe2bdYMdIvdAfCQkCTDMGBazSw1ypMowwGIee7ZQ5dU0rBJ8Jqgl+jAKIv4dbeE1jscZq9wid1Tkw==}
 
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
@@ -1434,6 +1447,8 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
+  html-entities@2.5.2: {}
+
   human-signals@5.0.0: {}
 
   is-binary-path@2.1.0:
@@ -1618,6 +1633,8 @@ snapshots:
   stoppable@1.1.0: {}
 
   strip-final-newline@3.0.0: {}
+
+  striptags@3.2.0: {}
 
   supports-preserve-symlinks-flag@1.0.0: {}
 

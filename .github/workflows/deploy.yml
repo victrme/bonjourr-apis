@@ -33,9 +33,6 @@ jobs:
             - name: Install dependencies
               run: pnpm install
 
-            - name: Accuweather dependencies
-              run: pnpm --filter accuweather-scraper install
-
             - name: Run tests
               run: pnpm test
 
