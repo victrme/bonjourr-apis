@@ -14,9 +14,13 @@
 		"apis:init": "git submodule update --init --recursive",
 		"apis:sync": "git submodule update --remote --recursive"
 	},
+	"dependencies": {
+		"html-entities": "^2.5.2",
+		"striptags": "^3.2.0"
+	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240620.0",
-		"vitest": "^2.0.1",
-		"wrangler": "^3.63.2"
+		"@cloudflare/workers-types": "^4.20240725.0",
+		"vitest": "^2.0.4",
+		"wrangler": "^3.67.1"
 	}
 }

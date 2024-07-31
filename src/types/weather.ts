@@ -1,3 +1,9 @@
+export interface WeatherResponse extends Onecall {
+	city?: string
+	ccode?: string
+	link?: string
+}
+
 export interface Onecall {
 	lat: number
 	lon: number
@@ -21,8 +27,8 @@ export interface Onecall {
 	hourly: {
 		dt: number
 		temp: number
-		feels_like: number
-		weather: {
+		feels_like?: number
+		weather?: {
 			id: number
 			main: string
 			description: string
