@@ -69,10 +69,20 @@ export async function accuweather(
 				},
 			],
 		},
-		hourly: json.hourly.map((item) => ({
-			dt: item.timestamp / 1000,
-			temp: item.temp,
-		})),
+		hourly: [
+			{
+				dt: json.daily[0].timestamp / 1000,
+				temp: json.daily[0].high,
+			},
+			...json.hourly.map((item) => ({
+				dt: item.timestamp / 1000,
+				temp: item.temp,
+			})),
+			{
+				dt: json.daily[1].timestamp / 1000,
+				temp: json.daily[1].high,
+			},
+		],
 	}
 
 	return result
