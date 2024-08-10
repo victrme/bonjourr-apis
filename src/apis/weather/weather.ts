@@ -88,7 +88,6 @@ export async function cacheControl(
 		ctx.waitUntil(cache.put(cacheKey, response.clone()))
 	}
 
-	//@ts-expect-error
 	return response
 }
 

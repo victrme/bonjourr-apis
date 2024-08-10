@@ -1,5 +1,3 @@
-export interface ExtendedOpenWeatherMap extends ExtendedOnecall, Current, Forecast {}
-
 export interface ExtendedOnecall extends Onecall {
 	city?: string
 	ccode?: string
