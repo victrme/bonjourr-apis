@@ -13,16 +13,22 @@ export async function openweathermap(
 
 	switch (url.pathname) {
 		case '/weather/current':
-		case '/weather/current/':
+		case '/weather/current/': {
 			json = await getWeatherData('current', key, req, ctx)
+			break
+		}
 
 		case '/weather/forecast':
-		case '/weather/forecast/':
+		case '/weather/forecast/': {
 			json = await getWeatherData('forecast', key, req, ctx)
+			break
+		}
 
 		case '/weather/':
-		case '/weather':
+		case '/weather': {
 			json = await createOnecallData(key, req, ctx)
+			break
+		}
 	}
 
 	return json
