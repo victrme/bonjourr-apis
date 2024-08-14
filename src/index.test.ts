@@ -111,25 +111,75 @@ describe('Weather', function () {
 		expect(response.status).toBe(400)
 	})
 
-	beforeAll(async () => {
-		response = await worker.fetch('/weather')
-	})
-
 	it('has correct headers', async function () {
+		response = await worker.fetch('/weather')
 		expect(response.headers.get('content-type')).toBe('application/json')
 		expect(response.headers.get('cache-control')).toBe('public, max-age=1800')
 	})
 
-	it('has correct fields', async function () {
-		const json = (await response.json()) as any
-		const { city, ccode, lat, lon, current, hourly } = json
+	describe('Types', () => {
+		it('/weather', async function () {
+			response = await worker.fetch('/weather')
+			const json = (await response.json()) as any
+			const { city, ccode, lat, lon, current, hourly } = json
 
-		expectTypeOf(city).toBeString.result
-		expectTypeOf(ccode).toBeString.result
-		expectTypeOf(lat).toBeString.result
-		expectTypeOf(lon).toBeString.result
-		expectTypeOf(current).toBeObject.result
-		expectTypeOf(hourly).toBeObject.result
+			expectTypeOf(city).toBeString.result
+			expectTypeOf(ccode).toBeString.result
+			expectTypeOf(lat).toBeString.result
+			expectTypeOf(lon).toBeString.result
+			expectTypeOf(current).toBeObject.result
+			expectTypeOf(hourly).toBeObject.result
+		})
+
+		it('/weather/current', async function () {
+			response = await worker.fetch('/weather/current?q=Berlin,DE')
+			const json = (await response.json()) as any
+			const { coord, weather, main, dt, sys, cod, name } = json
+
+			expectTypeOf(coord).toBeObject.result
+			expectTypeOf(coord.lat).toBeNumber.result
+			expectTypeOf(coord.lon).toBeNumber.result
+
+			expectTypeOf(weather).toBeObject.result
+			expectTypeOf(weather[0].main).toBeString.result
+			expectTypeOf(weather[0].description).toBeString.result
+			expectTypeOf(weather[0].icon).toBeString.result
+			expectTypeOf(weather[0].id).toBeNumber.result
+
+			expectTypeOf(main).toBeObject.result
+			expectTypeOf(main.temp).toBeNumber.result
+			expectTypeOf(main.feels_like).toBeNumber.result
+
+			expectTypeOf(sys).toBeObject.result
+			expectTypeOf(sys.country).toBeString.result
+			expectTypeOf(sys.sunset).toBeNumber.result
+			expectTypeOf(sys.sunrise).toBeNumber.result
+
+			expectTypeOf(dt).toBeNumber.result
+			expectTypeOf(name).toBeString.result
+			expectTypeOf(cod).toBeNumber.result
+		})
+
+		it('/weather/forecast', async function () {
+			response = await worker.fetch('/weather/forecast?q=Berlin,DE')
+			const json = (await response.json()) as any
+			const { list, cod } = json
+			const { dt, main, weather } = list[0]
+
+			expectTypeOf(weather).toBeObject.result
+			expectTypeOf(weather[0].main).toBeString.result
+			expectTypeOf(weather[0].description).toBeString.result
+			expectTypeOf(weather[0].icon).toBeString.result
+			expectTypeOf(weather[0].id).toBeNumber.result
+
+			expectTypeOf(main).toBeObject.result
+			expectTypeOf(main.temp).toBeNumber.result
+			expectTypeOf(main.feels_like).toBeNumber.result
+			expectTypeOf(main.temp_max).toBeNumber.result
+
+			expectTypeOf(dt).toBeNumber.result
+			expectTypeOf(cod).toBeString.result
+		})
 	})
 })
 
