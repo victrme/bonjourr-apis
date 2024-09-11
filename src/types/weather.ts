@@ -1,7 +1,10 @@
-export interface ExtendedOnecall extends Onecall {
+export interface Weather extends Onecall, BonjourrSpecific {}
+
+export interface BonjourrSpecific {
 	city?: string
 	ccode?: string
 	link?: string
+	from: 'accuweather' | 'openweathermap'
 }
 
 export interface Onecall {

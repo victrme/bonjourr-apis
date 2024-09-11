@@ -1,15 +1,15 @@
 import { cacheControl, getCoordsFromIp } from './weather'
 
 import type * as Worker from '@cloudflare/workers-types'
-import type { Current, Forecast, Geo, Onecall, ExtendedOnecall } from '../../types/weather'
+import type { Current, Forecast, Geo, Onecall, Weather } from '../../types/weather'
 
 export async function openweathermap(
 	req: Worker.Request,
 	ctx: Worker.ExecutionContext,
-	key: string,
+	key: string
 ) {
 	const url = new URL(req.url)
-	let json: Current | Forecast | Onecall | ExtendedOnecall | undefined
+	let json: Current | Forecast | Onecall | Weather | undefined
 
 	switch (url.pathname) {
 		case '/weather/current':
@@ -38,7 +38,7 @@ export async function getWeatherData(
 	type: 'current' | 'forecast',
 	key: string,
 	req: Worker.Request,
-	ctx: Worker.ExecutionContext,
+	ctx: Worker.ExecutionContext
 ): Promise<Current | Forecast | undefined> {
 	const base = 'https://api.openweathermap.org/data/2.5/'
 	const url = new URL(req.url)
@@ -67,8 +67,8 @@ export async function getWeatherData(
 export async function createOnecallData(
 	key: string,
 	req: Worker.Request,
-	ctx: Worker.ExecutionContext,
-): Promise<ExtendedOnecall | undefined> {
+	ctx: Worker.ExecutionContext
+): Promise<Weather | undefined> {
 	const hasLocation = req.url.includes('lat=') && req.url.includes('lon=')
 	const base = 'https://api.openweathermap.org/data/2.5/'
 	const url = new URL(req.url)
@@ -122,6 +122,7 @@ export async function createOnecallData(
 		}
 
 		return {
+			from: 'openweathermap',
 			city: hasLocation ? undefined : city,
 			ccode: hasLocation ? undefined : ccode,
 			...onecall,
@@ -132,7 +133,7 @@ export async function createOnecallData(
 export async function geocodingAPI(
 	key: string,
 	search: string,
-	ctx: Worker.ExecutionContext,
+	ctx: Worker.ExecutionContext
 ): Promise<Geo> {
 	const q = (search.split('&').filter((p) => p.includes('q='))[0] ?? '').replace('q=', '')
 	const url = `https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=1`
