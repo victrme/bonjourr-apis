@@ -22,5 +22,12 @@
 		"@cloudflare/workers-types": "^4.20240725.0",
 		"vitest": "^2.0.4",
 		"wrangler": "^3.67.1"
+	},
+	"prettier": {
+		"printWidth": 100,
+		"semi": false,
+		"tabWidth": 4,
+		"useTabs": true,
+		"singleQuote": true
 	}
 }
