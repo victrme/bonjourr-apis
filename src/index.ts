@@ -5,7 +5,7 @@ import weather from './apis/weather/weather.ts'
 import unsplash from './apis/unsplash.ts'
 import quotes from './apis/quotes/cloudflare/index.ts'
 import favicon from './apis/favicon/cloudflare/index.ts'
-import suggestions from './apis/suggestions/cloudflare/src/index.ts'
+import suggestions from './apis/suggestions/cloudflare/index.ts'
 
 const headers = new Headers({
 	'Access-Control-Allow-Origin': '*',
