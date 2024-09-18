@@ -17,3 +17,4 @@
 [submodule "src/apis/accuweather"]
 	path = src/apis/accuweather
 	url = https://github.com/victrme/accuweather-scraper
+	branch = main
