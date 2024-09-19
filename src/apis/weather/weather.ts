@@ -48,7 +48,7 @@ export default async function weather(
 		if (provider === 'openweathermap') json = await openweathermap(req, ctx, key)
 	} catch (error) {
 		console.log(error)
-		return new Response(JSON.stringify({ error }), { status: 500, headers })
+		return new Response(JSON.stringify(error), { status: 429, headers })
 	}
 
 	headers.set('Content-Type', 'application/json')
