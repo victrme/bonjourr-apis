@@ -8,7 +8,7 @@ export default async function weather(
 	req: Worker.Request,
 	ctx: ExecutionContext,
 	owmkeys: string,
-	headers: Headers,
+	headers: Headers
 ) {
 	const url = new URL(req.url)
 
@@ -43,8 +43,13 @@ export default async function weather(
 
 	url.searchParams.set('lang', owmlang)
 
-	if (provider === 'accuweather') json = await accuweather(req, ctx, key)
-	if (provider === 'openweathermap') json = await openweathermap(req, ctx, key)
+	try {
+		if (provider === 'accuweather') json = await accuweather(req, ctx, key)
+		if (provider === 'openweathermap') json = await openweathermap(req, ctx, key)
+	} catch (error) {
+		console.log(error)
+		return new Response(JSON.stringify({ error }), { status: 500, headers })
+	}
 
 	headers.set('Content-Type', 'application/json')
 	headers.set('Cache-Control', 'public, max-age=1800')
@@ -53,7 +58,7 @@ export default async function weather(
 		return new Response(JSON.stringify(json), { headers })
 	}
 
-	return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 })
+	return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers })
 }
 
 // Cloudflare Workers specifics
@@ -75,7 +80,7 @@ export async function cacheControl(
 	ctx: Worker.ExecutionContext,
 	url: string,
 	key: string,
-	maxage = 1800,
+	maxage = 1800
 ): Promise<Worker.Response> {
 	const cacheKey = new Request(url)
 	const cache = caches.default
