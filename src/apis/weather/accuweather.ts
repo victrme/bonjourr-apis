@@ -50,8 +50,8 @@ export async function accuweather(
 			dt: Math.floor(Date.now() / 1000),
 			temp: json.now.temp,
 			feels_like: json.now.feels,
-			sunrise: json.sun.rise / 1000,
-			sunset: json.sun.set / 1000,
+			sunrise: Math.floor(json.sun.rise / 1000),
+			sunset: Math.floor(json.sun.set / 1000),
 			weather: [
 				{
 					id: json.now.icon,
@@ -63,15 +63,15 @@ export async function accuweather(
 		},
 		hourly: [
 			{
-				dt: json.daily[0].timestamp / 1000,
+				dt: Math.floor(json.daily[0].timestamp / 1000),
 				temp: json.daily[0].high,
 			},
 			...json.hourly.map((item) => ({
-				dt: item.timestamp / 1000,
+				dt: Math.floor(item.timestamp / 1000),
 				temp: item.temp,
 			})),
 			{
-				dt: json.daily[1].timestamp / 1000,
+				dt: Math.floor(json.daily[1].timestamp / 1000),
 				temp: json.daily[1].high,
 			},
 		],
