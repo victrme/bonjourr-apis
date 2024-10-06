@@ -14,6 +14,8 @@ export default async function weather(
 
 	// Validate parameters
 
+	console.log(new Date().getTimezoneOffset())
+
 	const validParams = ['q', 'lat', 'lon', 'units', 'lang', 'mode', 'provider']
 	const requestParams = [...url.searchParams.keys()]
 	let hasInvalidParams = false
