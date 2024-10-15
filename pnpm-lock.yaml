@@ -11,12 +11,6 @@ importers:
       cheerio:
         specifier: ^1.0.0
         version: 1.0.0
-      html-entities:
-        specifier: ^2.5.2
-        version: 2.5.2
-      striptags:
-        specifier: ^3.2.0
-        version: 3.2.0
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20240925.0
@@ -651,9 +645,6 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
-  html-entities@2.5.2:
-    resolution: {integrity: sha512-K//PSRMQk4FZ78Kyau+mZurHn3FH0Vwr+H36eE0rPbeYkRRi9YxceYPhuN60UwWorxyKHhqoAJl2OFKa4BVtaA==}
-
   htmlparser2@9.1.0:
     resolution: {integrity: sha512-5zfg6mHUoaer/97TxnGpxmbR7zJtPwIYFMZ/H5ucTlPZhKvtum05yiPK3Mgai3a0DyVxv7qYqoweaEd2nrYQzQ==}
 
@@ -823,9 +814,6 @@ packages:
   stoppable@1.1.0:
     resolution: {integrity: sha512-KXDYZ9dszj6bzvnEMRYvxgeTHU74QBFL54XKtP3nyMuJ81CFYtABZ3bAzL2EdFUaEwJOBOgENyFj3R7oTzDyyw==}
     engines: {node: '>=4', npm: '>=6'}
-
-  striptags@3.2.0:
-    resolution: {integrity: sha512-g45ZOGzHDMe2bdYMdIvdAfCQkCTDMGBazSw1ypMowwGIee7ZQ5dU0rBJ8Jqgl+jAKIv4dbeE1jscZq9wid1Tkw==}
 
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
@@ -1484,8 +1472,6 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  html-entities@2.5.2: {}
-
   htmlparser2@9.1.0:
     dependencies:
       domelementtype: 2.3.0
@@ -1668,8 +1654,6 @@ snapshots:
   std-env@3.7.0: {}
 
   stoppable@1.1.0: {}
-
-  striptags@3.2.0: {}
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
