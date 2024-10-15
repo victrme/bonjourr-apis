@@ -36,7 +36,7 @@ export default async function weather(req: Request, headers: Headers) {
 		ccode: json.geo.country,
 		lat: json.geo.lat,
 		lon: json.geo.lon,
-		link: json.meta.link,
+		link: json.meta.url,
 		current: {
 			temp: json.now.temp,
 			feels_like: json.now.feels,
