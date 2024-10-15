@@ -14,10 +14,6 @@
 	url = https://github.com/victrme/i18n-quotes
 	branch = main
 	
-[submodule "src/apis/accuweather"]
-	path = src/apis/accuweather
-	url = https://github.com/victrme/accuweather-scraper
-	branch = main
 [submodule "src/apis/meteo"]
 	path = src/apis/meteo
 	url = https://github.com/victrme/racle-meteo
