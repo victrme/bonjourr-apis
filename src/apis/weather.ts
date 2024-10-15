@@ -11,8 +11,8 @@ export default async function weather(req: Request, headers: Headers) {
 	if (url.searchParams.get('q')) {
 		url.searchParams.set('query', url.searchParams.get('q') ?? '')
 	}
-	if (url.searchParams.get('unit') === 'imperial') {
-		url.searchParams.set('unit', 'F')
+	if (url.searchParams.get('units')) {
+		url.searchParams.set('unit', url.searchParams.get('units') === 'imperial' ? 'F' : 'C')
 	}
 	if (!url.searchParams.get('provider')) {
 		url.searchParams.set('provider', 'accuweather')
