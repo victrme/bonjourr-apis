@@ -1,5 +1,5 @@
 //@ts-expect-error
-import meteo from '../meteo/src/index.js'
+import meteo from './meteo/src/index.js'
 
 export default async function weather(req: Request, headers: Headers) {
 	const url = new URL(req.url)
