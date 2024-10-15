@@ -29,7 +29,7 @@ export default {
 				return await unsplash(req.url, env.UNSPLASH ?? '', headers)
 
 			case 'weather':
-				return await weather(req, ctx, env.WEATHER ?? '', headers)
+				return await weather(req, headers)
 
 			case 'fonts':
 				return await fonts(headers)
