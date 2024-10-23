@@ -3,7 +3,7 @@ import html from './index.html'
 import fonts from './apis/fonts.ts'
 import weather from './apis/weather.ts'
 import unsplash from './apis/unsplash.ts'
-import quotes from './apis/quotes/cloudflare/index.ts'
+import quotes from './apis/quotes/src/index.ts'
 import favicon from './apis/favicon/cloudflare/index.ts'
 import suggestions from './apis/suggestions/cloudflare/index.ts'
 
