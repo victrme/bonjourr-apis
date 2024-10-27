@@ -15,10 +15,8 @@ export default async function weather(req: Request, headers: Headers) {
 		url.searchParams.set('unit', url.searchParams.get('units') === 'imperial' ? 'F' : 'C')
 	}
 
-	url.searchParams.set('data', 'simple')
-
 	try {
-		const request = new Request('https://example.com/' + url.search, { cf: req.cf })
+		const request = new Request('https://example.com/' + url.search)
 		response = await meteo.fetch(request)
 	} catch (error) {
 		return new Response(JSON.stringify(error), {
