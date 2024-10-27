@@ -1,5 +1,5 @@
-//@ts-expect-error
-import meteo from './meteo/src/index.js'
+import meteo from './meteo/src/index.ts'
+import { SimpleWeather } from './meteo/src/types.ts'
 
 export default async function weather(req: Request, headers: Headers) {
 	const url = new URL(req.url)
@@ -14,12 +14,11 @@ export default async function weather(req: Request, headers: Headers) {
 	if (url.searchParams.get('units')) {
 		url.searchParams.set('unit', url.searchParams.get('units') === 'imperial' ? 'F' : 'C')
 	}
-	if (!url.searchParams.get('provider')) {
-		url.searchParams.set('provider', 'accuweather')
-	}
+
+	url.searchParams.set('data', 'simple')
 
 	try {
-		const request = new Request(url.origin + url.search, { cf: req.cf })
+		const request = new Request('https://example.com/' + url.search, { cf: req.cf })
 		response = await meteo.fetch(request)
 	} catch (error) {
 		return new Response(JSON.stringify(error), {
@@ -28,7 +27,7 @@ export default async function weather(req: Request, headers: Headers) {
 		})
 	}
 
-	const json = await response.json()
+	const json = await response.json<SimpleWeather>()
 
 	const result = {
 		from: url.searchParams.get('provider') === 'foreca' ? 'foreca' : 'accuweather',
@@ -90,6 +89,7 @@ function sanitizeLang(lang: string): string {
 	if (lang === 'jp') lang = 'ja'
 	if (lang === 'cz') lang = 'cs'
 	if (lang === 'gr') lang = 'el'
+	if (lang === 'nb') lang = 'no'
 	if (lang === 'es-ES') lang = 'es'
 	if (lang === 'es_ES') lang = 'es'
 	if (lang === 'pt_BR') lang = 'pt-BR'
