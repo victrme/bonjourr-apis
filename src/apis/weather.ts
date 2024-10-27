@@ -14,6 +14,9 @@ export default async function weather(req: Request, headers: Headers) {
 	if (url.searchParams.get('units')) {
 		url.searchParams.set('unit', url.searchParams.get('units') === 'imperial' ? 'F' : 'C')
 	}
+	if (!url.searchParams.get('provider')) {
+		url.searchParams.set('provider', 'accuweather')
+	}
 
 	try {
 		const request = new Request('https://example.com/' + url.search, { cf: req.cf })
