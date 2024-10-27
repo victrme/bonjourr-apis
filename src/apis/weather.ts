@@ -1,5 +1,5 @@
 import meteo from './meteo/src/index.ts'
-import { SimpleWeather } from './meteo/src/types.ts'
+import { AccuWeather } from './meteo/src/types.ts'
 
 export default async function weather(req: Request, headers: Headers) {
 	const url = new URL(req.url)
@@ -16,7 +16,7 @@ export default async function weather(req: Request, headers: Headers) {
 	}
 
 	try {
-		const request = new Request('https://example.com/' + url.search)
+		const request = new Request('https://example.com/' + url.search, { cf: req.cf })
 		response = await meteo.fetch(request)
 	} catch (error) {
 		return new Response(JSON.stringify(error), {
@@ -25,7 +25,8 @@ export default async function weather(req: Request, headers: Headers) {
 		})
 	}
 
-	const json = await response.json<SimpleWeather>()
+	const json = await response.json<AccuWeather>()
+	console.log(json)
 
 	const result = {
 		from: url.searchParams.get('provider') === 'foreca' ? 'foreca' : 'accuweather',
