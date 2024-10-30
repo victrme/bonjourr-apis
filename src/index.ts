@@ -20,7 +20,7 @@ interface Env {
 }
 
 export default {
-	async fetch(req: Request, env: Env, ctx: ExecutionContext) {
+	async fetch(req: Request, env: Env) {
 		const url = new URL(req.url)
 		const path = url.pathname.split('/')[1] ?? ''
 

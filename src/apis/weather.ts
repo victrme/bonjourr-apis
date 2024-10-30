@@ -2,6 +2,9 @@ import meteo from './meteo/src/index.ts'
 import { AccuWeather } from './meteo/src/types.ts'
 
 export default async function weather(req: Request, headers: Headers) {
+	headers.set('Content-Type', 'application/json')
+	headers.set('Cache-Control', 'public, max-age=1800')
+
 	const url = new URL(req.url)
 	let response
 
@@ -29,52 +32,52 @@ export default async function weather(req: Request, headers: Headers) {
 	}
 
 	const json = await response.json<AccuWeather>()
-	console.log(json)
 
-	const result = {
-		from: url.searchParams.get('provider') === 'foreca' ? 'foreca' : 'accuweather',
-		city: json.geo.city,
-		ccode: json.geo.country,
-		lat: json.geo.lat,
-		lon: json.geo.lon,
-		link: json.meta.url,
-		current: {
-			temp: json.now.temp,
-			feels_like: json.now.feels,
-			sunrise: Math.floor(hourAndMinToUnixTime(json.sun.rise[0], json.sun.rise[1]) / 1000),
-			sunset: Math.floor(hourAndMinToUnixTime(json.sun.set[0], json.sun.set[1]) / 1000),
-			weather: [
+	if (url.searchParams.get('provider') === 'auto') {
+		return new Response(JSON.stringify(json), { headers })
+	} else {
+		const result = {
+			from: url.searchParams.get('provider') === 'foreca' ? 'foreca' : 'accuweather',
+			city: json.geo.city,
+			ccode: json.geo.country,
+			lat: json.geo.lat,
+			lon: json.geo.lon,
+			link: json.meta.url,
+			current: {
+				temp: json.now.temp,
+				feels_like: json.now.feels,
+				sunrise: Math.floor(
+					hourAndMinToUnixTime(json.sun.rise[0], json.sun.rise[1]) / 1000
+				),
+				sunset: Math.floor(hourAndMinToUnixTime(json.sun.set[0], json.sun.set[1]) / 1000),
+				weather: [
+					{
+						id: json.now.icon,
+						description: json.now.description,
+					},
+				],
+			},
+			hourly: [
 				{
-					id: json.now.icon,
-					description: json.now.description,
+					dt: Math.floor(new Date(json.daily[0].time).getTime() / 1000),
+					temp: json.daily[0].high,
+				},
+				{
+					dt: Math.floor(new Date(json.daily[1].time).getTime() / 1000),
+					temp: json.daily[1].high,
 				},
 			],
-		},
-		hourly: [
-			{
-				dt: Math.floor(new Date(json.daily[0].time).getTime() / 1000),
-				temp: json.daily[0].high,
-			},
-			{
-				dt: Math.floor(new Date(json.daily[1].time).getTime() / 1000),
-				temp: json.daily[1].high,
-			},
-		],
+		}
+
+		if (result) {
+			return new Response(JSON.stringify(result), { headers })
+		}
 	}
 
-	headers.set('Content-Type', 'application/json')
-	headers.set('Cache-Control', 'public, max-age=1800')
-
-	if (result) {
-		return new Response(JSON.stringify(result), {
-			headers,
-		})
-	} else {
-		return new Response(JSON.stringify({ error: 'Not found' }), {
-			status: 404,
-			headers,
-		})
-	}
+	return new Response(JSON.stringify({ error: 'Not found' }), {
+		status: 404,
+		headers,
+	})
 }
 
 function hourAndMinToUnixTime(hour: number, minutes: number): number {
