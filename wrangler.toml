@@ -2,6 +2,9 @@ name = "bonjourr-apis"
 main = "src/index.ts"
 compatibility_date = "2023-05-18"
 
+[limits]
+cpu_ms = 30
+
 [build]
 command = "git submodule update --init --recursive" 
 
