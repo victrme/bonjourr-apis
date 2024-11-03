@@ -14,13 +14,13 @@
 		"apis:init": "git submodule update --init --recursive",
 		"apis:sync": "git submodule update --remote --recursive"
 	},
-	"dependencies": {
-		"cheerio": "^1.0.0"
-	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20240925.0",
 		"vitest": "^2.1.1",
 		"wrangler": "^3.78.12"
+	},
+	"dependencies": {
+		"htmlparser2": "^9.1.0"
 	},
 	"prettier": {
 		"printWidth": 100,

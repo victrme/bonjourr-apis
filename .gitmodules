@@ -17,3 +17,4 @@
 [submodule "src/apis/meteo"]
 	path = src/apis/meteo
 	url = https://github.com/victrme/racle-meteo
+	branch = use-htmlparser2
