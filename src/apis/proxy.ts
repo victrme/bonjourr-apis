@@ -6,12 +6,11 @@ export default async function proxy(req: Request, headers: Headers): Promise<Res
 		const queryUrl = new URL(query)
 		const resp = await fetch(queryUrl)
 		const text = await resp.text()
-		return new Response(text, {
-			headers: {
-				...headers,
-				'content-type': 'text/plain',
-			},
-		})
+
+		headers.set('content-type', 'text/plain')
+		headers.set('cache-control', 'max-age=10')
+
+		return new Response(text, { headers })
 	} catch (_) {
 		return new Response(undefined, {
 			status: 500,
