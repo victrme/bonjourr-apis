@@ -1,5 +1,6 @@
 //@ts-expect-error
 import html from './index.html'
+import proxy from './apis/proxy.ts'
 import fonts from './apis/fonts.ts'
 import weather from './apis/weather.ts'
 import unsplash from './apis/unsplash.ts'
@@ -42,6 +43,9 @@ export default {
 
 			case 'quotes':
 				return await quotes.fetch(req)
+
+			case 'proxy':
+				return await proxy(req)
 
 			case '': {
 				headers.set('Content-Type', 'text/html')
