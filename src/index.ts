@@ -32,6 +32,9 @@ export default {
 			case 'weather':
 				return await weather(req, headers)
 
+			case 'proxy':
+				return await proxy(req, headers)
+
 			case 'fonts':
 				return await fonts(headers)
 
@@ -43,9 +46,6 @@ export default {
 
 			case 'quotes':
 				return await quotes.fetch(req)
-
-			case 'proxy':
-				return await proxy(req)
 
 			case '': {
 				headers.set('Content-Type', 'text/html')

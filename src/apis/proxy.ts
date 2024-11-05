@@ -1,4 +1,4 @@
-export default async function proxy(req: Request): Promise<Response> {
+export default async function proxy(req: Request, headers: Headers): Promise<Response> {
 	const reqUrl = new URL(req.url)
 	const query = reqUrl.searchParams.get('query') ?? ''
 
@@ -8,8 +8,8 @@ export default async function proxy(req: Request): Promise<Response> {
 		const text = await resp.text()
 		return new Response(text, {
 			headers: {
+				...headers,
 				'content-type': 'text/plain',
-				'cache-control': 'max-age=10, immutable',
 			},
 		})
 	} catch (_) {
