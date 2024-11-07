@@ -22,7 +22,7 @@ export default async function weather(req: Request, headers: Headers) {
 	}
 
 	try {
-		const request = new Request('https://example.com/' + url.search, { cf: req.cf })
+		const request = new Request('http://localhost:8787/' + url.search, { cf: req.cf })
 		response = await meteo.fetch(request)
 	} catch (error) {
 		return new Response(JSON.stringify(error), {
@@ -40,8 +40,8 @@ export default async function weather(req: Request, headers: Headers) {
 			from: url.searchParams.get('provider') === 'foreca' ? 'foreca' : 'accuweather',
 			city: json.geo.city,
 			ccode: json.geo.country,
-			lat: json.geo.lat,
-			lon: json.geo.lon,
+			lat: json.geo.lat || undefined,
+			lon: json.geo.lon || undefined,
 			link: json.meta.url,
 			current: {
 				temp: json.now.temp,
