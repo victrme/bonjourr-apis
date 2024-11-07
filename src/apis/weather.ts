@@ -22,7 +22,9 @@ export default async function weather(req: Request, headers: Headers) {
 	}
 
 	try {
-		const request = new Request('http://localhost:8787/' + url.search, { cf: req.cf })
+		const path = 'http://localhost:8787/' + url.search
+		const init = { cf: req.cf }
+		const request = new Request(path, init)
 		response = await meteo.fetch(request)
 	} catch (error) {
 		return new Response(JSON.stringify(error), {
