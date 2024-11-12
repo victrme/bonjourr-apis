@@ -15,9 +15,9 @@
 		"apis:sync": "git submodule update --remote --recursive"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240925.0",
-		"vitest": "^2.1.1",
-		"wrangler": "^3.78.12"
+		"@cloudflare/workers-types": "^4.20241112.0",
+		"vitest": "^2.1.4",
+		"wrangler": "^3.86.1"
 	},
 	"dependencies": {
 		"htmlparser2": "^9.1.0"
