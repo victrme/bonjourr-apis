@@ -14,3 +14,7 @@ build = { command = "git submodule update --remote --recursive" }
 [dev]
 ip = "127.0.0.1"
 port = 8787
+
+[observability]
+enabled = true
+head_sampling_rate = 0.1
