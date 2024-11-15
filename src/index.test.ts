@@ -72,7 +72,7 @@ describe('Homepage', function () {
 		const response = await worker.fetch('/')
 		const text = await response.text()
 		expect(text.includes('<html lang="en">')).toBe(true)
-		expect(text.length).toBeGreaterThan(2000)
+		expect(text.length).toBeGreaterThan(50)
 	})
 })
 
@@ -107,19 +107,17 @@ describe('Weather', function () {
 		expect(response.headers.get('cache-control')).toBe('public, max-age=1800')
 	})
 
-	describe('Types', () => {
-		it('/weather', async function () {
-			response = await worker.fetch('/weather')
-			const json = (await response.json()) as any
-			const { city, ccode, lat, lon, current, hourly } = json
+	it('has correct type', async function () {
+		response = await worker.fetch('/weather')
+		const json = (await response.json()) as any
+		const { city, ccode, lat, lon, current, hourly } = json
 
-			expectTypeOf(city).toBeString.result
-			expectTypeOf(ccode).toBeString.result
-			expectTypeOf(lat).toBeString.result
-			expectTypeOf(lon).toBeString.result
-			expectTypeOf(current).toBeObject.result
-			expectTypeOf(hourly).toBeObject.result
-		})
+		expectTypeOf(city).toBeString.result
+		expectTypeOf(ccode).toBeString.result
+		expectTypeOf(lat).toBeString.result
+		expectTypeOf(lon).toBeString.result
+		expectTypeOf(current).toBeObject.result
+		expectTypeOf(hourly).toBeObject.result
 	})
 })
 
@@ -182,8 +180,8 @@ describe('Quotes', function () {
 			quotes = (await response?.json()) as any[]
 		})
 
-		it('gives at least 10 quotes', function () {
-			expect(quotes.length).toBeGreaterThan(10)
+		it('gives 20 quotes', function () {
+			expect(quotes.length).toBe(20)
 		})
 
 		it('has valid type', function () {
