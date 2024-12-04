@@ -5,11 +5,8 @@ compatibility_date = "2023-05-18"
 [limits]
 cpu_ms = 30
 
-[build]
+[env.ci]
 command = "git submodule update --init" 
-
-[env.update]
-build = { command = "git submodule update --remote" }
 
 [dev]
 ip = "127.0.0.1"

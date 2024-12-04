@@ -1,5 +1,5 @@
 import meteo from './meteo/src/index.ts'
-import { AccuWeather } from './meteo/src/types.ts'
+import type { AccuWeather } from './meteo/src/types.ts'
 
 export default async function weather(req: Request, headers: Headers) {
 	headers.set('Content-Type', 'application/json')
@@ -35,7 +35,7 @@ export default async function weather(req: Request, headers: Headers) {
 		})
 	}
 
-	const json = await response.json<AccuWeather>()
+	const json = (await response.json()) as AccuWeather.Weather
 
 	if (url.searchParams.get('provider') === 'auto') {
 		return new Response(JSON.stringify(json), { headers })

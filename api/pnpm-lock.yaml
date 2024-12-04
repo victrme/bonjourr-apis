@@ -9,10 +9,10 @@ importers:
   .:
     devDependencies:
       vitest:
-        specifier: ^2.1.4
+        specifier: ^2.1.8
         version: 2.1.8(@types/node@22.10.1)
       wrangler:
-        specifier: ^3.86.1
+        specifier: ^3.92.0
         version: 3.92.0(@cloudflare/workers-types@4.20241202.0)
 
 packages:
