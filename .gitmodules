@@ -1,3 +1,7 @@
+[submodule "weather/src/meteo"]
+	path = weather/src/meteo
+	url = https://github.com/victrme/racle-meteo
+
 [submodule "api/src/suggestions"]
 	path = api/src/suggestions
 	url = https://github.com/victrme/search-suggestions
