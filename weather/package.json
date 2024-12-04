@@ -10,9 +10,9 @@
 	},
 	"scripts": {
 		"test": "vitest",
-		"dev": "wrangler dev --env update --remote",
-		"apis:init": "git submodule update --init --recursive",
-		"apis:sync": "git submodule update --remote --recursive"
+		"dev": "wrangler dev --env update",
+		"apis:init": "git submodule update --init",
+		"apis:sync": "git submodule update --remote"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20241112.0",

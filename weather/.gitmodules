@@ -1,0 +1,3 @@
+[submodule "weather/src/meteo"]
+	path = weather/src/meteo
+	url = https://github.com/victrme/racle-meteo
