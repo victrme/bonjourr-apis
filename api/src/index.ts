@@ -1,10 +1,9 @@
-import proxy from './apis/proxy.ts'
-import fonts from './apis/fonts.ts'
-import weather from './apis/weather.ts'
-import unsplash from './apis/unsplash.ts'
-import quotes from './apis/quotes/src/index.ts'
-import favicon from './apis/favicon/cloudflare/index.ts'
-import suggestions from './apis/suggestions/cloudflare/index.ts'
+import proxy from './proxy.ts'
+import fonts from './fonts.ts'
+import unsplash from './unsplash.ts'
+import quotes from './submodules/quotes/src/index.ts'
+import favicon from './submodules/favicon/cloudflare/index.ts'
+import suggestions from './submodules/suggestions/cloudflare/index.ts'
 
 const headers = new Headers({
 	'Access-Control-Allow-Origin': '*',
@@ -15,7 +14,6 @@ const headers = new Headers({
 
 interface Env {
 	UNSPLASH?: string
-	WEATHER?: string
 }
 
 export default {
@@ -26,9 +24,6 @@ export default {
 		switch (path) {
 			case 'unsplash':
 				return await unsplash(req.url, env.UNSPLASH ?? '', headers)
-
-			case 'weather':
-				return await weather(req, headers)
 
 			case 'proxy':
 				return await proxy(req, headers)

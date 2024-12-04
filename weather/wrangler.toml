@@ -1,0 +1,20 @@
+name = "bonjourr-apis"
+main = "src/index.ts"
+compatibility_date = "2023-05-18"
+
+[limits]
+cpu_ms = 30
+
+[build]
+command = "git submodule update --init --recursive" 
+
+[env.update]
+build = { command = "git submodule update --remote --recursive" }
+
+[dev]
+ip = "127.0.0.1"
+port = 8787
+
+[observability]
+enabled = true
+head_sampling_rate = 0.1

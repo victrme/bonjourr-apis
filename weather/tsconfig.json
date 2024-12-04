@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"types": ["@cloudflare/workers-types"],
+		"allowImportingTsExtensions": true,
+		"strict": true,
+		"noEmit": true
+	},
+	"exclude": ["./src/meteo"]
+}

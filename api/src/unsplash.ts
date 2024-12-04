@@ -1,6 +1,10 @@
-import type { UnsplashPhoto } from '../types/unsplash'
+import type { UnsplashPhoto } from './types/unsplash'
 
-export default async function unsplash(requrl: string, key: string, headers: Headers): Promise<Response> {
+export default async function unsplash(
+	requrl: string,
+	key: string,
+	headers: Headers
+): Promise<Response> {
 	const endpoint = requrl.slice(requrl.indexOf('/unsplash') + 9)
 
 	// Narrow endpoint to /photos

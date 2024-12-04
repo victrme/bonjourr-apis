@@ -1,9 +1,6 @@
-name: CI
+name: Apis CI
 
 on:
-    pull_request:
-        branches:
-            - main
     push:
         branches:
             - main
@@ -14,7 +11,6 @@ jobs:
 
         env:
             UNSPLASH: ${{ secrets.UNSPLASH }}
-            WEATHER: ${{ secrets.WEATHER }}
 
         steps:
             - uses: actions/checkout@v4
@@ -52,9 +48,3 @@ jobs:
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
-              #     secrets: |
-              #         UNSPLASH
-              #         WEATHER
-              # env:
-              #     UNSPLASH: ${{ secrets.UNSPLASH }}
-              #     WEATHER: ${{ secrets.WEATHER }}

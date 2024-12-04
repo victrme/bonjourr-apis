@@ -1,7 +1,7 @@
 {
-	"name": "bonjourr-apis",
+	"name": "bonjourr-weather",
 	"author": "Victor Azevedo",
-	"description": "This regroups all APIs used by Bonjourr as a single cloudflare worker",
+	"description": "This is Bonjourr's weather API",
 	"license": "ISC",
 	"type": "module",
 	"repository": {
@@ -10,7 +10,7 @@
 	},
 	"scripts": {
 		"test": "vitest",
-		"dev": "wrangler dev --env update",
+		"dev": "wrangler dev --env update --remote",
 		"apis:init": "git submodule update --init --recursive",
 		"apis:sync": "git submodule update --remote --recursive"
 	},
