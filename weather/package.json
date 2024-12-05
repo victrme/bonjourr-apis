@@ -1,30 +1,7 @@
 {
-	"name": "bonjourr-weather",
-	"author": "Victor Azevedo",
-	"description": "This is Bonjourr's weather API",
-	"license": "ISC",
+	"name": "weather",
 	"type": "module",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/victrme/bonjourr-apis"
-	},
-	"scripts": {
-		"test": "vitest",
-		"dev": "npx wrangler dev",
-		"apis:init": "git submodule update --init",
-		"apis:sync": "git submodule update --remote"
-	},
-	"devDependencies": {
-		"vitest": "^2.1.8"
-	},
 	"dependencies": {
 		"htmlparser2": "^9.1.0"
-	},
-	"prettier": {
-		"printWidth": 100,
-		"semi": false,
-		"tabWidth": 4,
-		"useTabs": true,
-		"singleQuote": true
 	}
 }

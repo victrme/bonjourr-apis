@@ -1,14 +1,16 @@
 import { describe, it, expect, expectTypeOf, beforeAll, afterAll } from 'vitest'
+import { unstable_dev, UnstableDevWorker } from 'wrangler'
 
 let worker: UnstableDevWorker
 let response: Awaited<ReturnType<typeof worker.fetch>>
 
-// beforeAll(async () => {
-// 	worker = await unstable_dev('src/index.ts', {
-// 		ip: '127.0.0.1',
-// 		experimental: { disableExperimentalWarning: true },
-// 	})
-// })
+beforeAll(async () => {
+	worker = await unstable_dev('./weather/src/index.ts', {
+		ip: '127.0.0.1',
+		port: 9999,
+		experimental: { disableExperimentalWarning: true },
+	})
+})
 
 afterAll(async () => {
 	await worker.stop()

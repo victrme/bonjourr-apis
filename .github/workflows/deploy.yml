@@ -1,62 +1,51 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - split-workers
+    push:
+        branches:
+            - split-workers
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+    test:
+        runs-on: ubuntu-latest
 
-    env:
-      UNSPLASH: ${{ secrets.UNSPLASH }}
+        env:
+            UNSPLASH: ${{ secrets.UNSPLASH }}
 
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v3
+            - uses: actions/setup-node@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
+            - name: Init submodules
+              run: pnpm run init
 
-      - name: Install dependencies
-        run: pnpm install --recursive
+            - name: Install dependencies
+              run: pnpm run i -r
 
-      - name: API - Goto
-        run: cd api
+            - name: API - Create .dev.vars file
+              run: echo "UNSPLASH=${UNSPLASH}" > ./api/.dev.vars
 
-      - name: API - Create .dev.vars file
-        run: echo "UNSPLASH=${UNSPLASH}" > .dev.vars
+            - name: Run tests
+              run: pnpm run test
 
-      - name: API - Run tests
-        run: pnpm test
+    deploy:
+        needs: test
+        runs-on: ubuntu-latest
 
-      - name: Weather - Goto
-        run: cd ../weather
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Weather - Run tests
-        run: pnpm test
+            - name: Deploy API
+              uses: cloudflare/wrangler-action@v3
+              with:
+                  workingDirectory: 'api'
+                  apiToken: ${{ secrets.CF_API_TOKEN }}
+                  accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
 
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy API
-        uses: cloudflare/wrangler-action@v3
-        with:
-          workingDirectory: "api"
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
-
-      - name: Deploy Weather
-        uses: cloudflare/wrangler-action@v3
-        with:
-          workingDirectory: "weather"
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
+            - name: Deploy Weather
+              uses: cloudflare/wrangler-action@v3
+              with:
+                  workingDirectory: 'weather'
+                  apiToken: ${{ secrets.CF_API_TOKEN }}
+                  accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}

@@ -5,8 +5,9 @@ let worker: UnstableDevWorker
 let response: Awaited<ReturnType<typeof worker.fetch>>
 
 beforeAll(async () => {
-	worker = await unstable_dev('src/index.ts', {
+	worker = await unstable_dev('./api/src/index.ts', {
 		ip: '127.0.0.1',
+		port: 8888,
 		experimental: {
 			disableExperimentalWarning: true,
 		},
