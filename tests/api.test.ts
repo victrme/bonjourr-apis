@@ -7,7 +7,7 @@ let response: Awaited<ReturnType<typeof worker.fetch>>
 beforeAll(async () => {
 	worker = await unstable_dev('./api/src/index.ts', {
 		ip: '127.0.0.1',
-		port: 8888,
+		port: 8787,
 		experimental: {
 			disableExperimentalWarning: true,
 		},

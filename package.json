@@ -10,9 +10,10 @@
 	},
 	"scripts": {
 		"test": "vitest",
-		"dev": "wrangler dev",
 		"init": "git submodule update --init",
-		"sync": "git submodule update --remote"
+		"sync": "git submodule update --remote",
+		"weather": "pnpm --filter weather dev",
+		"services": "pnpm --filter services dev"
 	},
 	"devDependencies": {
 		"vitest": "^2.1.8",

@@ -1,6 +1,9 @@
 {
 	"name": "weather",
 	"type": "module",
+	"scripts": {
+		"dev": "npx wrangler dev"
+	},
 	"dependencies": {
 		"htmlparser2": "^9.1.0"
 	}
