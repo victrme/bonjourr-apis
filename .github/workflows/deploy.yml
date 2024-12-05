@@ -17,14 +17,13 @@ jobs:
             - uses: pnpm/action-setup@v3
               with:
                   version: latest
-
             - uses: actions/setup-node@v4
               with:
                   node-version: latest
                   cache: 'pnpm'
 
             - name: Init submodules
-              run: pnpm run init
+              run: git submodule update --init
 
             - name: Install dependencies
               run: pnpm i -r
@@ -41,6 +40,9 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
+
+            - name: Init submodules
+              run: git submodule update --init
 
             - name: Deploy API
               uses: cloudflare/wrangler-action@v3
