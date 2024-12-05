@@ -26,7 +26,9 @@ jobs:
               run: git submodule update --init
 
             - name: Install dependencies
-              run: pnpm i -r
+              run: |
+                  pnpm install
+                  pnpm --filter weather install
 
             - name: API - Create .dev.vars file
               run: echo "UNSPLASH=${UNSPLASH}" > ./api/.dev.vars
