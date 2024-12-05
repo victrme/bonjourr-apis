@@ -1,5 +1,5 @@
 name = "bonjourr-weather"
-main = "src/index.ts"
+main = "index.ts"
 compatibility_date = "2023-05-18"
 
 [limits]
