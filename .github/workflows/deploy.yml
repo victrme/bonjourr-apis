@@ -27,7 +27,7 @@ jobs:
               run: pnpm run init
 
             - name: Install dependencies
-              run: pnpm run i -r
+              run: pnpm i -r
 
             - name: API - Create .dev.vars file
               run: echo "UNSPLASH=${UNSPLASH}" > ./api/.dev.vars
