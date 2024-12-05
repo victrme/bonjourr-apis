@@ -1,16 +1,15 @@
-
-[submodule "api/src/suggestions"]
-	path = api/src/suggestions
-	url = https://github.com/victrme/search-suggestions
-	
-[submodule "api/src/favicon"]
-	path = api/src/favicon
-	url = https://github.com/victrme/favicon-fetcher
-
-[submodule "api/src/quotes"]
-	path = api/src/quotes
-	url = https://github.com/victrme/i18n-quotes
-
 [submodule "weather/meteo"]
 	path = weather/meteo
 	url = https://github.com/victrme/racle-meteo
+
+[submodule "services/src/suggestions"]
+	path = services/src/suggestions
+	url = https://github.com/victrme/search-suggestions
+
+[submodule "services/src/favicon"]
+	path = services/src/favicon
+	url = https://github.com/victrme/favicon-fetcher
+
+[submodule "services/src/quotes"]
+	path = services/src/quotes
+	url = https://github.com/victrme/i18n-quotes
