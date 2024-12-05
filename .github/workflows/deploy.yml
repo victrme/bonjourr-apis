@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - split-workers
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      UNSPLASH: ${{ secrets.UNSPLASH }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: latest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --recursive
+
+      - name: API - Goto
+        run: cd api
+
+      - name: API - Create .dev.vars file
+        run: echo "UNSPLASH=${UNSPLASH}" > .dev.vars
+
+      - name: API - Run tests
+        run: pnpm test
+
+      - name: Weather - Goto
+        run: cd ../weather
+
+      - name: Weather - Run tests
+        run: pnpm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy API
+        uses: cloudflare/wrangler-action@v3
+        with:
+          workingDirectory: "api"
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
+
+      - name: Deploy Weather
+        uses: cloudflare/wrangler-action@v3
+        with:
+          workingDirectory: "weather"
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
