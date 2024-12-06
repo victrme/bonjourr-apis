@@ -30,8 +30,8 @@ jobs:
                   pnpm install
                   pnpm --filter weather install
 
-            - name: API - Create .dev.vars file
-              run: echo "UNSPLASH=${UNSPLASH}" > ./api/.dev.vars
+            - name: Create .dev.vars file
+              run: echo "UNSPLASH=${UNSPLASH}" > ./services/.dev.vars
 
             - name: Run tests
               run: pnpm run test
@@ -46,10 +46,10 @@ jobs:
             - name: Init submodules
               run: git submodule update --init
 
-            - name: Deploy API
+            - name: Deploy Services
               uses: cloudflare/wrangler-action@v3
               with:
-                  workingDirectory: 'api'
+                  workingDirectory: 'services'
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
 

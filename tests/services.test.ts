@@ -5,7 +5,7 @@ let worker: UnstableDevWorker
 let response: Awaited<ReturnType<typeof worker.fetch>>
 
 beforeAll(async () => {
-	worker = await unstable_dev('./api/src/index.ts', {
+	worker = await unstable_dev('./services/src/index.ts', {
 		ip: '127.0.0.1',
 		port: 8787,
 		experimental: {
@@ -35,7 +35,7 @@ describe('Paths', function () {
 	})
 
 	it('200 on /favicon', async function () {
-		const response = await worker.fetch('/favicon')
+		const response = await worker.fetch('/favicon/http://localhost:8787')
 		expect(response.status).toBe(200)
 	})
 
@@ -61,16 +61,10 @@ describe('Paths', function () {
 })
 
 describe('Homepage', function () {
-	it('has text/html as content-type', async function () {
-		const response = await worker.fetch('/')
-		expect(response.headers.get('content-type')).toBe('text/html')
-	})
-
-	it('is an HTML page', async function () {
+	it('Says hello world', async function () {
 		const response = await worker.fetch('/')
 		const text = await response.text()
-		expect(text.includes('<html lang="en">')).toBe(true)
-		expect(text.length).toBeGreaterThan(50)
+		expect(text).toContain('Hello world')
 	})
 })
 

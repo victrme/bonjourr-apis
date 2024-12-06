@@ -9,7 +9,7 @@
 		"url": "https://github.com/victrme/bonjourr-apis"
 	},
 	"scripts": {
-		"test": "vitest",
+		"test": "vitest run ./tests/**",
 		"init": "git submodule update --init",
 		"sync": "git submodule update --remote",
 		"weather": "pnpm --filter weather dev",
