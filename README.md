@@ -4,7 +4,7 @@ This is Bonjourr API system.
 
 ## Install
 
--   [Install pnpm](https://pnpm.io/installation) on your system for convenience
+-   First [Install pnpm](https://pnpm.io/installation) on your system
 -   Fork this repository. (future me can skip this step)
 -   Install quotes, favicon, and suggestions
 -   Add your secrets to a `.dev.vars` for local dev to work
@@ -55,8 +55,8 @@ This is what your terminal should look like:
 For skill issue reasons, bonjourr-apis does not automatically deploy remote apis updates.  
 To deploy a new update:
 
--   Make sure remote apis are initialized using `pnpm apis:init`
--   Once added to your device, update with `pnpm apis:sync`
+-   Make sure remote apis are initialized using `git submodule update --init`
+-   Once added to your device, update with `git submodule update --remote`
 -   A submodule file should update showing the latest commit hash from the remote api
 -   Push a new commit with that file
 
