@@ -12,7 +12,6 @@ This is Bonjourr API system.
 ```yaml
 # .dev.vars
 
-WEATHER=comma,separated,strings
 UNSPLASH=string
 ```
 
