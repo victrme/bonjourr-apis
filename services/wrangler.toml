@@ -8,3 +8,6 @@ cpu_ms = 30
 [dev]
 ip = "127.0.0.1"
 port = 8787
+
+[placement]
+mode = "smart"
