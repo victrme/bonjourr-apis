@@ -27,14 +27,16 @@ This is what your terminal should look like:
 # weather      |   +6 +
 # weather      | Progress: resolved 6, reused 6, downloaded 0, added 6, done
 
-> git submodule update --remote
+> git submodule update --init
 
-# Sous-module 'src/apis/favicon' (...) enregistré pour le chemin 'src/apis/favicon'
-# Sous-module 'src/apis/quotes' (...) enregistré pour le chemin 'src/apis/quotes'
-# Sous-module 'src/apis/suggestions' (...) enregistré pour le chemin 'src/apis/suggestions'
-# Chemin de sous-module 'src/apis/favicon' : '...' extrait
-# Chemin de sous-module 'src/apis/quotes' : '...' extrait
-# Chemin de sous-module 'src/apis/suggestions' : '...' extrait
+# Cloning into 'C:/Users/Victor/Documents/Github/bonjourr-apis/services/src/favicon'...
+# Cloning into 'C:/Users/Victor/Documents/Github/bonjourr-apis/services/src/quotes'...
+# Cloning into 'C:/Users/Victor/Documents/Github/bonjourr-apis/services/src/suggestions'...
+# Cloning into 'C:/Users/Victor/Documents/Github/bonjourr-apis/weather/meteo'...
+# Submodule path 'services/src/favicon': checked out 'e792f99a82fe6c29b8b207fc8abe9aae45106fc6'
+# Submodule path 'services/src/quotes': checked out '3c6715fce8f9036ec2f71b6c9c8433f43848057a'
+# Submodule path 'services/src/suggestions': checked out '6d6a98a6f717a614435eaf3988c777602b7f9f43'
+# Submodule path 'weather/meteo': checked out '9587a5ef557a5156473cce2d6fb92b64432c7815'
 
 > pnpm services
 

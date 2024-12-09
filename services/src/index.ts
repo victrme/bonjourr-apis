@@ -1,5 +1,6 @@
 import proxy from './proxy.ts'
 import fonts from './fonts.ts'
+import pixabay from './pixabay.ts'
 import unsplash from './unsplash.ts'
 import quotes from './quotes/src/index.ts'
 import favicon from './favicon/cloudflare/index.ts'
@@ -14,6 +15,7 @@ const headers = new Headers({
 
 interface Env {
 	UNSPLASH?: string
+	PIXABAY?: string
 }
 
 export default {
@@ -39,6 +41,10 @@ export default {
 
 			case 'quotes':
 				return await quotes.fetch(req)
+
+			case 'pixabay': {
+				return await pixabay(url, env.PIXABAY)
+			}
 
 			case '': {
 				headers.set('Content-Type', 'text/html')
