@@ -5,9 +5,12 @@ let worker: UnstableDevWorker
 let response: Awaited<ReturnType<typeof worker.fetch>>
 
 beforeAll(async () => {
-	worker = await unstable_dev('src/index.ts', {
+	worker = await unstable_dev('./services/src/index.ts', {
 		ip: '127.0.0.1',
-		experimental: { disableExperimentalWarning: true },
+		port: 8787,
+		experimental: {
+			disableExperimentalWarning: true,
+		},
 	})
 })
 
@@ -26,18 +29,13 @@ describe('Paths', function () {
 		expect(response.status).toBe(200)
 	})
 
-	it('200 on /weather', async function () {
-		const response = await worker.fetch('/weather')
-		expect(response.status).toBe(200)
-	})
-
 	it('200 on /fonts', async function () {
 		const response = await worker.fetch('/fonts')
 		expect(response.status).toBe(200)
 	})
 
 	it('200 on /favicon', async function () {
-		const response = await worker.fetch('/favicon')
+		const response = await worker.fetch('/favicon/http://localhost:8787')
 		expect(response.status).toBe(200)
 	})
 
@@ -63,16 +61,10 @@ describe('Paths', function () {
 })
 
 describe('Homepage', function () {
-	it('has text/html as content-type', async function () {
-		const response = await worker.fetch('/')
-		expect(response.headers.get('content-type')).toBe('text/html')
-	})
-
-	it('is an HTML page', async function () {
+	it('Says hello world', async function () {
 		const response = await worker.fetch('/')
 		const text = await response.text()
-		expect(text.includes('<html lang="en">')).toBe(true)
-		expect(text.length).toBeGreaterThan(50)
+		expect(text).toContain('Hello world')
 	})
 })
 
@@ -97,27 +89,6 @@ describe('Unsplash', function () {
 		expectTypeOf(user.username).toBeString.result
 		expectTypeOf(user.name).toBeString.result
 		expect(exifkeys.every((key) => key in exif)).toBe(true)
-	})
-})
-
-describe('Weather', function () {
-	it('has correct headers', async function () {
-		response = await worker.fetch('/weather')
-		expect(response.headers.get('content-type')).toBe('application/json')
-		expect(response.headers.get('cache-control')).toBe('public, max-age=1800')
-	})
-
-	it('has correct type', async function () {
-		response = await worker.fetch('/weather')
-		const json = (await response.json()) as any
-		const { city, ccode, lat, lon, current, hourly } = json
-
-		expectTypeOf(city).toBeString.result
-		expectTypeOf(ccode).toBeString.result
-		expectTypeOf(lat).toBeString.result
-		expectTypeOf(lon).toBeString.result
-		expectTypeOf(current).toBeObject.result
-		expectTypeOf(hourly).toBeObject.result
 	})
 })
 

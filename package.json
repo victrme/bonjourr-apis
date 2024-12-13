@@ -9,18 +9,15 @@
 		"url": "https://github.com/victrme/bonjourr-apis"
 	},
 	"scripts": {
-		"test": "vitest",
-		"dev": "wrangler dev --env update",
-		"apis:init": "git submodule update --init --recursive",
-		"apis:sync": "git submodule update --remote --recursive"
+		"test": "vitest run ./tests/**",
+		"init": "git submodule update --init",
+		"sync": "git submodule update --remote",
+		"weather": "pnpm --filter weather dev",
+		"services": "pnpm --filter services dev"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20241112.0",
-		"vitest": "^2.1.4",
-		"wrangler": "^3.86.1"
-	},
-	"dependencies": {
-		"htmlparser2": "^9.1.0"
+		"vitest": "^2.1.8",
+		"wrangler": "^3.92.0"
 	},
 	"prettier": {
 		"printWidth": 100,

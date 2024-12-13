@@ -1,20 +1,15 @@
-
-[submodule "src/apis/suggestions"]
-	path = src/apis/suggestions
-	url = https://github.com/victrme/search-suggestions
-	branch = main
-	
-[submodule "src/apis/favicon"]
-	path = src/apis/favicon
-	url = https://github.com/victrme/favicon-fetcher
-	branch = main
-	
-[submodule "src/apis/quotes"]
-	path = src/apis/quotes
-	url = https://github.com/victrme/i18n-quotes
-	branch = main
-	
-[submodule "src/apis/meteo"]
-	path = src/apis/meteo
+[submodule "weather/meteo"]
+	path = weather/meteo
 	url = https://github.com/victrme/racle-meteo
-	branch = use-htmlparser2
+
+[submodule "services/src/suggestions"]
+	path = services/src/suggestions
+	url = https://github.com/victrme/search-suggestions
+
+[submodule "services/src/favicon"]
+	path = services/src/favicon
+	url = https://github.com/victrme/favicon-fetcher
+
+[submodule "services/src/quotes"]
+	path = services/src/quotes
+	url = https://github.com/victrme/i18n-quotes

@@ -1,10 +1,14 @@
 export default async function proxy(req: Request, headers: Headers): Promise<Response> {
-	const reqUrl = new URL(req.url)
-	const query = reqUrl.searchParams.get('query') ?? ''
+	if (req.method !== 'POST') {
+		return new Response(undefined, {
+			status: 405,
+		})
+	}
 
 	try {
-		const queryUrl = new URL(query)
-		const resp = await fetch(queryUrl)
+		const body = await req.text()
+		const query = new URL(body)
+		const resp = await fetch(query)
 		const text = await resp.text()
 
 		headers.set('content-type', 'text/plain')

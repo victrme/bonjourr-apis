@@ -1,0 +1,10 @@
+name = "bonjourr-weather"
+main = "index.ts"
+compatibility_date = "2023-05-18"
+
+[limits]
+cpu_ms = 30
+
+[dev]
+ip = "127.0.0.1"
+port = 8888
