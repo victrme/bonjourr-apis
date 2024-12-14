@@ -12,7 +12,7 @@ export default async function fonts(headers: Headers): Promise<Response> {
 		const responses = await Promise.all([
 			fetch('https://api.fontsource.org/v1/fonts'),
 			fetch(
-				'https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis/src/assets/font_popularity.txt'
+				'https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis/services/src/assets/font_popularity.txt'
 			),
 		])
 
