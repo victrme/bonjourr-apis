@@ -1,7 +1,7 @@
 import { describe, it, expect, expectTypeOf, beforeAll, afterAll } from 'vitest'
-import { unstable_dev, UnstableDevWorker } from 'wrangler'
+import { unstable_dev, Unstable_DevWorker } from 'wrangler'
 
-let worker: UnstableDevWorker
+let worker: Unstable_DevWorker
 let response: Awaited<ReturnType<typeof worker.fetch>>
 
 beforeAll(async () => {
@@ -34,8 +34,18 @@ describe('Paths', function () {
 		expect(response.status).toBe(200)
 	})
 
-	it('200 on /favicon', async function () {
+	it('400 on /favicon', async function () {
 		const response = await worker.fetch('/favicon/http://localhost:8787')
+		expect(response.status).toBe(400)
+	})
+
+	it('200 on /favicon/text', async function () {
+		const response = await worker.fetch('/favicon/text/http://localhost:8787')
+		expect(response.status).toBe(200)
+	})
+
+	it('200 on /favicon/blob', async function () {
+		const response = await worker.fetch('/favicon/blob/http://localhost:8787')
 		expect(response.status).toBe(200)
 	})
 
