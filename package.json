@@ -17,7 +17,7 @@
 	},
 	"devDependencies": {
 		"vitest": "^2.1.8",
-		"wrangler": "^3.92.0"
+		"wrangler": "^3.102.0"
 	},
 	"prettier": {
 		"printWidth": 100,

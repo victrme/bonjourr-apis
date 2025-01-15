@@ -3,7 +3,7 @@ import fonts from './fonts.ts'
 import pixabay from './pixabay.ts'
 import unsplash from './unsplash.ts'
 import quotes from './quotes/src/index.ts'
-import favicon from './favicon/cloudflare/index.ts'
+import favicon from './favicon/package/src/index.ts'
 import suggestions from './suggestions/cloudflare/index.ts'
 
 const headers = new Headers({
