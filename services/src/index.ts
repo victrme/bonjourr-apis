@@ -1,10 +1,10 @@
 import proxy from './proxy.ts'
 import fonts from './fonts.ts'
-import pixabay from './pixabay.ts'
 import unsplash from './unsplash.ts'
 import quotes from './quotes/src/index.ts'
 import favicon from './favicon/package/src/index.ts'
 import suggestions from './suggestions/cloudflare/index.ts'
+import backgrounds from './backgrounds.ts'
 
 const headers = new Headers({
 	'Access-Control-Allow-Origin': '*',
@@ -42,9 +42,8 @@ export default {
 			case 'quotes':
 				return await quotes.fetch(req)
 
-			case 'pixabay': {
-				return await pixabay(url, env.PIXABAY)
-			}
+			case 'backgrounds':
+				return await backgrounds(url, env)
 
 			case '': {
 				headers.set('Content-Type', 'text/html')
