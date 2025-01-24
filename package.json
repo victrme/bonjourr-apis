@@ -16,8 +16,8 @@
 		"services": "pnpm --filter services dev"
 	},
 	"devDependencies": {
-		"vitest": "^2.1.8",
-		"wrangler": "^3.102.0"
+		"vitest": "^3.0.4",
+		"wrangler": "^3.105.0"
 	},
 	"prettier": {
 		"printWidth": 100,
