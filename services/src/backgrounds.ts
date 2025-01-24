@@ -1,19 +1,15 @@
 import type { Backgrounds } from './types/backgrounds'
 
-const headers = {
-	'content-type': 'application/json',
-	'cache-control': 'public, max-age=604800, immutable',
-}
-
-export default async function backgrounds(url: URL, env: any): Promise<Response> {
-	//
+export default async function backgrounds(url: URL, env: any, headers: Headers): Promise<Response> {
+	headers.set('content-type', 'application/json')
+	headers.set('cache-control', 'public, max-age=604800, immutable')
 
 	if (url.pathname.includes('/backgrounds/unsplash')) {
-		return await unsplash(url, env.UNSPLASH)
+		return await unsplash(url, env.UNSPLASH, headers)
 	}
 
 	if (url.pathname.includes('/backgrounds/pixabay')) {
-		return await pixabay(url, env.PIXABAY)
+		return await pixabay(url, env.PIXABAY, headers)
 	}
 
 	return new Response('No valid provider', {
@@ -21,9 +17,9 @@ export default async function backgrounds(url: URL, env: any): Promise<Response>
 	})
 }
 
-async function unsplash(url: URL, key = ''): Promise<Response> {
-	const headers = { 'Accept-Version': 'v1', Authorization: `Client-ID ${key}` }
-	const resp = await fetch(`https://api.unsplash.com/photos/random/${url.search}`, { headers })
+async function unsplash(url: URL, key = '', headers: Headers): Promise<Response> {
+	const h = { 'Accept-Version': 'v1', Authorization: `Client-ID ${key}` }
+	const resp = await fetch(`https://api.unsplash.com/photos/random/${url.search}`, { headers: h })
 	const json = await resp.json()
 
 	let arr: Backgrounds.API.UnsplashImage[] = []
@@ -36,8 +32,8 @@ async function unsplash(url: URL, key = ''): Promise<Response> {
 		download: item.links.download,
 		username: item.user.username,
 		name: item.user.name,
-		city: item.location.city,
-		country: item.location.country,
+		city: item.location.city || undefined,
+		country: item.location.country || undefined,
 		color: item.color,
 		exif: item.exif,
 	}))
@@ -45,7 +41,7 @@ async function unsplash(url: URL, key = ''): Promise<Response> {
 	return new Response(JSON.stringify(result), { headers })
 }
 
-async function pixabay(url: URL, key = ''): Promise<Response> {
+async function pixabay(url: URL, key = '', headers: Headers): Promise<Response> {
 	const response = await fetch(`https://pixabay.com/api/videos/?key=${key}${url.search}`)
 	const json = (await response.json()) as Backgrounds.API.PixabayVideos
 	const video = json.hits[0]

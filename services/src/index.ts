@@ -43,7 +43,7 @@ export default {
 				return await quotes.fetch(req)
 
 			case 'backgrounds':
-				return await backgrounds(url, env)
+				return await backgrounds(url, env, headers)
 
 			case '': {
 				headers.set('Content-Type', 'text/html')
