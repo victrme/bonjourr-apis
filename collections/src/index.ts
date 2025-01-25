@@ -1,6 +1,7 @@
 import { getPixabay, storePixabay } from './pixabay'
 
-interface Env {
+export interface Env {
+	COLLEC_IDS_PATH: string
 	UNSPLASH_KEY?: string
 	PIXABAY_KEY?: string
 	UNSPLASH_KV?: any

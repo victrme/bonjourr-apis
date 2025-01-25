@@ -1,13 +1,11 @@
-//
-const COLLEC_IDS_PATH =
-	'https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis@refs/heads/backgrounds/assets/pixabay_collections.json'
+import type { Env } from '.'
 
-export async function getPixabay(url: URL, env: any): Promise<Response> {
+export async function getPixabay(url: URL, env: Env): Promise<Response> {
 	const collection = url.searchParams.get('collection') ?? ''
 	let result: any = {}
 
 	try {
-		result = await env.PIXABAY_KV.get(collection)
+		result = await env.PIXABAY_KV.get(collection, 'json')
 	} catch (e) {
 		return new Response(e.message, { status: 500 })
 	}
@@ -19,14 +17,14 @@ export async function getPixabay(url: URL, env: any): Promise<Response> {
 	})
 }
 
-export async function storePixabay(url: URL, env: any): Promise<Response> {
+export async function storePixabay(url: URL, env: Env): Promise<Response> {
 	const collection = url.searchParams.get('collection') ?? ''
 	const type = url.searchParams.get('type') ?? ''
 	const key = env.PIXABAY_KEY ?? ''
 
 	// 1. Get ids in specified collection
 
-	const resp = await fetch(COLLEC_IDS_PATH)
+	const resp = await fetch(env.COLLEC_IDS_PATH)
 	const json = (await resp.json()) as Record<string, string[]>
 	const ids = json[collection]
 

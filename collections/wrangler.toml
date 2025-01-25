@@ -3,9 +3,12 @@ main = "src/index.ts"
 compatibility_date = "2023-05-18"
 
 kv_namespaces = [
-  { binding = "UNSPLASH_KV", id = "04e7b6ccd910408fae64da4126647b46" },
+  { binding = "UNSPLASH_KV", id = "bb47866ec1d24c7db078d0a19c4bc6a1" },
   { binding = "PIXABAY_KV", id = "04e7b6ccd910408fae64da4126647b46" }
 ]
+
+[vars]
+COLLEC_IDS_PATH = "https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis@refs/heads/backgrounds/assets/pixabay_collections.json"
 
 [limits]
 cpu_ms = 30

@@ -43,7 +43,7 @@ async function unsplash(url: URL, key = '', headers: Headers): Promise<Response>
 }
 
 async function pixabay(url: URL, _key = '', headers: Headers): Promise<Response> {
-	const response = await fetch(`https://pixabay.bonjourr.workers.dev/videos/videos`)
+	const response = await fetch(`https://collections.bonjourr.fr/get/pixabay?collection=videos`)
 	const json = await response.json()
 
 	if (json.length === 0) {
