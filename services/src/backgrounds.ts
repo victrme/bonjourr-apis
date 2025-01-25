@@ -19,7 +19,8 @@ export default async function backgrounds(url: URL, env: any, headers: Headers):
 
 async function unsplash(url: URL, key = '', headers: Headers): Promise<Response> {
 	const h = { 'Accept-Version': 'v1', Authorization: `Client-ID ${key}` }
-	const resp = await fetch(`https://api.unsplash.com/photos/random/${url.search}`, { headers: h })
+	const u = `https://api.unsplash.com/photos/random/${url.search}`
+	const resp = await fetch(u, { headers: h })
 	const json = await resp.json()
 
 	let arr: Backgrounds.API.UnsplashImage[] = []
@@ -41,40 +42,50 @@ async function unsplash(url: URL, key = '', headers: Headers): Promise<Response>
 	return new Response(JSON.stringify(result), { headers })
 }
 
-async function pixabay(url: URL, key = '', headers: Headers): Promise<Response> {
-	const response = await fetch(`https://pixabay.com/api/videos/?key=${key}${url.search}`)
-	const json = (await response.json()) as Backgrounds.API.PixabayVideos
-	const video = json.hits[0]
+async function pixabay(url: URL, _key = '', headers: Headers): Promise<Response> {
+	const response = await fetch(`https://pixabay.bonjourr.workers.dev/videos/videos`)
+	const json = await response.json()
 
-	if (video === undefined) {
+	if (json.length === 0) {
 		throw new Error('Video could not be found with this search: ' + url.search)
 	}
 
-	const result: Backgrounds.Video[] = [
-		{
-			page: video.pageURL,
-			username: video.user,
-			duration: video.duration,
-			thumbnail: video.videos.large.thumbnail,
-			urls: {
-				large: video.videos.large.url,
-				medium: video.videos.medium.url,
-				small: video.videos.small.url,
-				tiny: video.videos.tiny.url,
-			},
-		},
-	]
+	if (json[0].type === 'film') {
+		const result: Backgrounds.Video[] = []
+		const list = json as Backgrounds.API.PixabayVideo[]
 
-	return new Response(JSON.stringify(result), { headers })
+		for (const video of list) {
+			result.push({
+				page: video.pageURL,
+				username: video.user,
+				duration: video.duration,
+				thumbnail: video.videos.large.thumbnail,
+				urls: {
+					large: video.videos.large.url,
+					medium: video.videos.medium.url,
+					small: video.videos.small.url,
+					tiny: video.videos.tiny.url,
+				},
+			})
+		}
+
+		return new Response(JSON.stringify(result), { headers })
+	}
+
+	if (json[0].type === 'photo') {
+		const result: Backgrounds.Image[] = []
+		const list = json as Backgrounds.API.PixabayImage[]
+
+		for (const image of list) {
+			result.push({
+				page: image.pageURL,
+				username: image.user,
+				url: image.largeImageURL,
+			})
+		}
+
+		return new Response(JSON.stringify(result), { headers })
+	}
+
+	throw new Error('Hits are neither photo or film')
 }
-
-// async function pixabay(url: URL, key = '') {
-// 	const search = url.search.replace('?', '&')
-// 	const query = `https://pixabay.com/api/?key=${key}${search}`
-
-// 	if (url.pathname.includes('videos')) {
-// 		return await pixabayVideos(search, key)
-// 	} else {
-// 		return await fetch(query)
-// 	}
-// }

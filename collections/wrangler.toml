@@ -1,0 +1,19 @@
+name = "bonjourr-collections"
+main = "src/index.ts"
+compatibility_date = "2023-05-18"
+
+kv_namespaces = [
+  { binding = "UNSPLASH_KV", id = "04e7b6ccd910408fae64da4126647b46" },
+  { binding = "PIXABAY_KV", id = "04e7b6ccd910408fae64da4126647b46" }
+]
+
+[limits]
+cpu_ms = 30
+
+[dev]
+ip = "127.0.0.1"
+port = 8787
+
+[placement]
+mode = "smart"
+
