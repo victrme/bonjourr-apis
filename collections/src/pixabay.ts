@@ -34,7 +34,9 @@ export async function storePixabay(env: Env): Promise<Response> {
 
 	for (const { name, ids, type } of collections) {
 		try {
-			const data = ids.map(async (id) => await getInfoFromId(type, id, key))
+			const promises = ids.map((id) => getInfoFromId(type, id, key))
+			const data = await Promise.all(promises)
+
 			await env.PIXABAY_KV.put(name, JSON.stringify(data))
 		} catch (e) {
 			console.log(e.message)
@@ -45,7 +47,7 @@ export async function storePixabay(env: Env): Promise<Response> {
 }
 
 /** This gets info from pixabay for a single id */
-async function getInfoFromId(type: 'film' | 'photo', id: string, key: string): Promise<unknown[]> {
+async function getInfoFromId(type: 'film' | 'photo', id: string, key: string): Promise<object> {
 	const noParams = !id || !key
 
 	if (noParams) {
@@ -60,5 +62,5 @@ async function getInfoFromId(type: 'film' | 'photo', id: string, key: string): P
 		return json.hits[0]
 	}
 
-	return []
+	throw new Error('Found nothing')
 }

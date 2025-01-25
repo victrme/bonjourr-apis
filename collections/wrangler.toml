@@ -8,7 +8,7 @@ kv_namespaces = [
 ]
 
 [vars]
-PIXABAY_COLLECTIONS = "https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis@refs/heads/backgrounds/assets/pixabay_collections.json"
+PIXABAY_COLLECTIONS = "https://raw.githubusercontent.com/victrme/bonjourr-apis/refs/heads/backgrounds/assets/pixabay_collections.json"
 
 [limits]
 cpu_ms = 30
