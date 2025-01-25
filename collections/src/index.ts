@@ -1,7 +1,13 @@
 import { getPixabay, storePixabay } from './pixabay'
 
+export interface PixabayCollection {
+	name: string
+	ids: string[]
+	type: 'film' | 'photo'
+}
+
 export interface Env {
-	COLLEC_IDS_PATH: string
+	PIXABAY_COLLECTIONS?: string
 	UNSPLASH_KEY?: string
 	PIXABAY_KEY?: string
 	UNSPLASH_KV?: any
@@ -13,7 +19,7 @@ export default {
 		const url = new URL(req.url)
 
 		if (url.pathname.includes('/store/pixabay')) {
-			return await storePixabay(url, env)
+			return await storePixabay(env)
 		}
 
 		if (url.pathname.includes('/get/pixabay')) {

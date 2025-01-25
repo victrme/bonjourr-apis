@@ -1,7 +1,7 @@
-import type { Env } from '.'
+import type { Env, PixabayCollection } from '.'
 
 export async function getPixabay(url: URL, env: Env): Promise<Response> {
-	const collection = url.searchParams.get('collection') ?? ''
+	const collection = url.pathname.replace('/get/pixabay/', '')
 	let result: any = {}
 
 	try {
@@ -17,62 +17,42 @@ export async function getPixabay(url: URL, env: Env): Promise<Response> {
 	})
 }
 
-export async function storePixabay(url: URL, env: Env): Promise<Response> {
-	const collection = url.searchParams.get('collection') ?? ''
-	const type = url.searchParams.get('type') ?? ''
+export async function storePixabay(env: Env): Promise<Response> {
 	const key = env.PIXABAY_KEY ?? ''
 
 	// 1. Get ids in specified collection
 
-	const resp = await fetch(env.COLLEC_IDS_PATH)
-	const json = (await resp.json()) as Record<string, string[]>
-	const ids = json[collection]
+	const resp = await fetch(env.PIXABAY_COLLECTIONS ?? '')
+	const collections = (await resp.json()) as PixabayCollection[]
 
-	if (ids === undefined) {
-		throw new Error(`Collection "${collection}" has not been found.`)
+	if (!collections || collections.length === 0) {
+		throw new Error(`Collections have not been found.`)
 	}
 
 	// 2. Get image info from Pixabay servers
+	// 3. Save info to our storage
 
-	const result: unknown[] = []
-
-	for (const id of ids) {
+	for (const { name, ids, type } of collections) {
 		try {
-			result.push(await getInfoFromId(type, id, key))
+			const data = ids.map(async (id) => await getInfoFromId(type, id, key))
+			await env.PIXABAY_KV.put(name, JSON.stringify(data))
 		} catch (e) {
 			console.log(e.message)
 		}
 	}
 
-	// 3. Save info to our storage
-
-	try {
-		await env.PIXABAY_KV.put(collection, JSON.stringify(result))
-	} catch (e) {
-		return new Response(e.message, {
-			status: 500,
-		})
-	}
-
-	return new Response('Successful write', {
-		status: 201,
-	})
+	return new Response('Done')
 }
 
 /** This gets info from pixabay for a single id */
-async function getInfoFromId(type: string, id: string, key: string): Promise<unknown[]> {
+async function getInfoFromId(type: 'film' | 'photo', id: string, key: string): Promise<unknown[]> {
 	const noParams = !id || !key
-	const wrongType = type !== 'videos' && type !== 'images'
 
 	if (noParams) {
 		throw new Error('No parameters. Endpoint is "/images/id" or "/videos/id"')
 	}
 
-	if (wrongType) {
-		throw new Error('Media type should be either "images" or "videos"')
-	}
-
-	const typepath = type === 'videos' ? 'videos' : ''
+	const typepath = type === 'film' ? 'videos' : ''
 	const resp = await fetch(`https://pixabay.com/api/${typepath}?key=${key}&id=${id}`)
 	const json = await resp.json()
 
