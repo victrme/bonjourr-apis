@@ -1,4 +1,4 @@
-import type { Env, PixabayCollection } from '.'
+import { Env, PixabayCollection } from '.'
 
 export async function getPixabay(url: URL, env: Env): Promise<Response> {
 	const collection = url.pathname.replace('/get/pixabay/', '')
