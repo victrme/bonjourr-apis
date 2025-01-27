@@ -14,6 +14,7 @@ const headers = new Headers({
 })
 
 export interface Env {
+	PIXABAY_COLLECTIONS?: string
 	UNSPLASH?: string
 	PIXABAY?: string
 	UNSPLASH_KV?: any

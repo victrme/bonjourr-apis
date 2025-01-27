@@ -1,16 +1,15 @@
-import { Env, UNSPLASH_COLLECTIONS } from '.'
+import { UNSPLASH_COLLECTIONS } from '.'
+import { Env } from '../..'
 
 export async function storeUnsplash(env: Env) {
 	const promises = Object.entries(UNSPLASH_COLLECTIONS).map(([name, id]) =>
-		storeUnsplashCollection(name, id, env)
+		storeCollection(name, id, env)
 	)
 
 	await Promise.all(promises)
-
-	return new Response('Done')
 }
 
-async function storeUnsplashCollection(name: string, id: string, env: Env): Promise<void> {
+async function storeCollection(name: string, id: string, env: Env): Promise<void> {
 	const result: unknown[] = []
 
 	for (let page = 1; page < 100; page++) {
@@ -33,7 +32,7 @@ async function storeUnsplashCollection(name: string, id: string, env: Env): Prom
 }
 
 async function retrieveCollectionPage(collection: string, page: number, env: Env) {
-	const Authorization = 'Client-ID ' + env.UNSPLASH_KEY
+	const Authorization = 'Client-ID ' + env.UNSPLASH
 	const headers = { 'Accept-Version': 'v1', Authorization }
 	const path = `https://api.unsplash.com/collections/${collection}/photos?per_page=30&page=${page}`
 	const resp = await fetch(path, { headers })

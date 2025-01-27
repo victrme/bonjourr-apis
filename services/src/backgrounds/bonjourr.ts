@@ -2,16 +2,19 @@ import type { Backgrounds } from '../types/backgrounds'
 import type { Env } from '..'
 
 export async function bonjourrCollections(url: URL, env: Env, headers: Headers): Promise<Response> {
-	if (url.pathname.includes('/backgrounds/bonjourr/unsplash')) {
+	headers.set('Content-Type', 'application/json')
+	headers.set('Cache-Control', 'public, max-age=10')
+
+	if (url.pathname.includes('/backgrounds/bonjourr/images/unsplash')) {
 		return await unsplashImages(url, env, headers)
 	}
 
-	if (url.pathname.includes('/backgrounds/bonjourr/pixabay/videos')) {
-		return await pixabayVideos(url, env, headers)
+	if (url.pathname.includes('/backgrounds/bonjourr/images/pixabay')) {
+		return await pixabayImages(url, env, headers)
 	}
 
-	if (url.pathname.includes('/backgrounds/bonjourr/pixabay/images')) {
-		// return await pixabayImages(url, env, headers)
+	if (url.pathname.includes('/backgrounds/bonjourr/videos/pixabay')) {
+		return await pixabayVideos(url, env, headers)
 	}
 
 	return new Response('No valid provider', {
@@ -40,8 +43,8 @@ export async function unsplashImages(url: URL, env: Env, headers: Headers): Prom
 			download: item.links.download,
 			username: item.user.username,
 			name: item.user.name,
-			city: item.location.city || undefined,
-			country: item.location.country || undefined,
+			city: item?.location?.city || undefined,
+			country: item?.location?.country || undefined,
 			color: item.color,
 			exif: item.exif,
 		})
@@ -81,7 +84,7 @@ async function pixabayVideos(url: URL, env: Env, headers: Headers): Promise<Resp
 	return new Response(JSON.stringify(result), { headers })
 }
 
-async function pixabayImages(url: URL, env: Env, headers: Headers): Promise<void> {
+async function pixabayImages(url: URL, env: Env, headers: Headers): Promise<Response> {
 	// const result: Backgrounds.Image[] = []
 	// const list = json as Backgrounds.API.PixabayImage[]
 	// for (const image of list) {
@@ -92,4 +95,6 @@ async function pixabayImages(url: URL, env: Env, headers: Headers): Promise<void
 	// 	})
 	// }
 	// return new Response(JSON.stringify(result), { headers })
+
+	return new Response('pixabay images', { headers })
 }

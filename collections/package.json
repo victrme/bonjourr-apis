@@ -1,7 +1,0 @@
-{
-	"name": "collections",
-	"type": "module",
-	"scripts": {
-		"dev": "npx wrangler dev"
-	}
-}
