@@ -5,16 +5,16 @@ export async function bonjourrCollections(url: URL, env: Env, headers: Headers):
 	headers.set('Content-Type', 'application/json')
 	headers.set('Cache-Control', 'public, max-age=10')
 
-	if (url.pathname.includes('/backgrounds/bonjourr/images/unsplash')) {
-		return await unsplashImages(url, env, headers)
+	if (url.pathname.includes('/backgrounds/bonjourr/unsplash')) {
+		return await unsplashImages(env, headers)
 	}
 
-	if (url.pathname.includes('/backgrounds/bonjourr/images/pixabay')) {
-		return await pixabayImages(url, env, headers)
+	if (url.pathname.includes('/backgrounds/bonjourr/pixabay/images')) {
+		return await pixabayImages(env, headers)
 	}
 
-	if (url.pathname.includes('/backgrounds/bonjourr/videos/pixabay')) {
-		return await pixabayVideos(url, env, headers)
+	if (url.pathname.includes('/backgrounds/bonjourr/pixabay/videos')) {
+		return await pixabayVideos(env, headers)
 	}
 
 	return new Response('No valid provider', {
@@ -22,42 +22,44 @@ export async function bonjourrCollections(url: URL, env: Env, headers: Headers):
 	})
 }
 
-export async function unsplashImages(url: URL, env: Env, headers: Headers): Promise<Response> {
-	let collection = 'day'
-	let result: Backgrounds.Image[] = []
-	let storage: Backgrounds.API.UnsplashImage[] = []
+export async function unsplashImages(env: Env, headers: Headers): Promise<Response> {
+	const result: Record<string, Backgrounds.Image[]> = {
+		night: [],
+		noon: [],
+		day: [],
+		evening: [],
+	}
 
-	if (url.pathname.includes('night')) collection = 'night'
-	if (url.pathname.includes('noon')) collection = 'noon'
-	if (url.pathname.includes('evening')) collection = 'evening'
+	for (const collection of ['night', 'noon', 'day', 'evening']) {
+		const storage: Backgrounds.API.UnsplashImage[] = await env.UNSPLASH_KV.get(
+			collection,
+			'json'
+		)
 
-	storage = await env.UNSPLASH_KV.get(collection, 'json')
+		for (let i = 0; i < 10; i++) {
+			const random = Math.floor(Math.random() * storage.length)
+			const item = storage[random]
 
-	for (let i = 0; i < 10; i++) {
-		const random = Math.floor(Math.random() * storage.length)
-		const item = storage[random]
-
-		result.push({
-			url: item.urls.raw,
-			page: item.links.html,
-			download: item.links.download,
-			username: item.user.username,
-			name: item.user.name,
-			city: item?.location?.city || undefined,
-			country: item?.location?.country || undefined,
-			color: item.color,
-			exif: item.exif,
-		})
+			result[collection].push({
+				url: item.urls.raw,
+				page: item.links.html,
+				download: item.links.download,
+				username: item.user.username,
+				name: item.user.name,
+				city: item?.location?.city || undefined,
+				country: item?.location?.country || undefined,
+				color: item.color,
+				exif: item.exif,
+			})
+		}
 	}
 
 	return new Response(JSON.stringify(result), { headers })
 }
 
-async function pixabayVideos(url: URL, env: Env, headers: Headers): Promise<Response> {
-	let storage: Backgrounds.API.PixabayVideo[] = []
+async function pixabayVideos(env: Env, headers: Headers): Promise<Response> {
+	const storage: Backgrounds.API.PixabayVideo[] = await env.PIXABAY_KV.get('videos', 'json')
 	let result: Backgrounds.Video[] = []
-
-	storage = await env.PIXABAY_KV.get('videos', 'json')
 
 	if (storage.length === 0) {
 		throw new Error('Videos could not be found')
@@ -84,7 +86,7 @@ async function pixabayVideos(url: URL, env: Env, headers: Headers): Promise<Resp
 	return new Response(JSON.stringify(result), { headers })
 }
 
-async function pixabayImages(url: URL, env: Env, headers: Headers): Promise<Response> {
+async function pixabayImages(env: Env, headers: Headers): Promise<Response> {
 	// const result: Backgrounds.Image[] = []
 	// const list = json as Backgrounds.API.PixabayImage[]
 	// for (const image of list) {

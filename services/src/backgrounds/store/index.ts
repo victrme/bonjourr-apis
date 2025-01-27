@@ -13,15 +13,15 @@ export const UNSPLASH_COLLECTIONS = {
 export async function storeCollections(url: URL, env: Env): Promise<Response> {
 	const isCorrectPath = url.pathname.includes('backgrounds/collections/store')
 
-	if (isCorrectPath) {
-		const promises = [storePixabay(env), storeUnsplash(env)]
-
-		await Promise.all(promises)
-
-		return new Response('Done')
+	if (!isCorrectPath) {
+		return new Response('Wrong path', { status: 400 })
 	}
 
-	return new Response('Wrong path', {
-		status: 400,
-	})
+	// 1. Check if storage is old enough to update
+
+	// 2. Update old or empty storage
+
+	await Promise.all([storePixabay(env), storeUnsplash(env)])
+
+	return new Response('Done')
 }
