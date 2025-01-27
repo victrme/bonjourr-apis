@@ -13,7 +13,8 @@
 		"init": "git submodule update --init",
 		"sync": "git submodule update --remote",
 		"weather": "pnpm --filter weather dev",
-		"services": "pnpm --filter services dev"
+		"services": "pnpm --filter services dev",
+		"collections": "pnpm --filter collections dev"
 	},
 	"devDependencies": {
 		"vitest": "^3.0.4",

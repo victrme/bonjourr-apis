@@ -1,10 +1,10 @@
 import proxy from './proxy.ts'
 import fonts from './fonts.ts'
-import pixabay from './pixabay.ts'
 import unsplash from './unsplash.ts'
 import quotes from './quotes/src/index.ts'
 import favicon from './favicon/package/src/index.ts'
 import suggestions from './suggestions/cloudflare/index.ts'
+import backgrounds from './backgrounds/backgrounds.ts'
 
 const headers = new Headers({
 	'Access-Control-Allow-Origin': '*',
@@ -13,9 +13,11 @@ const headers = new Headers({
 	'Access-Control-Max-Age': '3600',
 })
 
-interface Env {
+export interface Env {
 	UNSPLASH?: string
 	PIXABAY?: string
+	UNSPLASH_KV?: any
+	PIXABAY_KV?: any
 }
 
 export default {
@@ -42,9 +44,8 @@ export default {
 			case 'quotes':
 				return await quotes.fetch(req)
 
-			case 'pixabay': {
-				return await pixabay(url, env.PIXABAY)
-			}
+			case 'backgrounds':
+				return await backgrounds(url, env, headers)
 
 			case '': {
 				headers.set('Content-Type', 'text/html')
