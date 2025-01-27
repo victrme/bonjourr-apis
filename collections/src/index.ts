@@ -1,5 +1,5 @@
-import { getPixabay, storePixabay } from './pixabay'
-import { getUnsplash, storeUnsplash } from './unsplash'
+import { storePixabay } from './pixabay'
+import { storeUnsplash } from './unsplash'
 
 export interface PixabayCollection {
 	name: string
@@ -31,16 +31,8 @@ export default {
 			return await storePixabay(env)
 		}
 
-		if (url.pathname.includes('/get/pixabay')) {
-			return await getPixabay(url, env)
-		}
-
 		if (url.pathname.includes('/store/unsplash')) {
 			return await storeUnsplash(env)
-		}
-
-		if (url.pathname.includes('/get/unsplash')) {
-			return await getUnsplash(url, env)
 		}
 
 		return new Response('hello world')

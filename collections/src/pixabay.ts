@@ -1,22 +1,5 @@
 import { Env, PixabayCollection } from '.'
 
-export async function getPixabay(url: URL, env: Env): Promise<Response> {
-	const collection = url.pathname.replace('/get/pixabay/', '')
-	let result: any = {}
-
-	try {
-		result = await env.PIXABAY_KV.get(collection, 'json')
-	} catch (e) {
-		return new Response(e.message, { status: 500 })
-	}
-
-	return new Response(JSON.stringify(result), {
-		headers: {
-			'content-type': 'application/json',
-		},
-	})
-}
-
 export async function storePixabay(env: Env): Promise<Response> {
 	const key = env.PIXABAY_KEY ?? ''
 

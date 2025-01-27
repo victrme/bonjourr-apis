@@ -1,22 +1,5 @@
 import { Env, UNSPLASH_COLLECTIONS } from '.'
 
-export async function getUnsplash(url: URL, env: Env): Promise<Response> {
-	const collection = url.pathname.replace('/get/unsplash/', '')
-	let result: any = {}
-
-	try {
-		result = await env.UNSPLASH_KV.get(collection, 'json')
-	} catch (e) {
-		return new Response(e.message, { status: 500 })
-	}
-
-	return new Response(JSON.stringify(result), {
-		headers: {
-			'content-type': 'application/json',
-		},
-	})
-}
-
 export async function storeUnsplash(env: Env) {
 	const promises = Object.entries(UNSPLASH_COLLECTIONS).map(([name, id]) =>
 		storeUnsplashCollection(name, id, env)

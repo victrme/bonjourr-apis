@@ -2,6 +2,11 @@ name = "bonjourr-services"
 main = "src/index.ts"
 compatibility_date = "2023-05-18"
 
+kv_namespaces = [
+  { binding = "UNSPLASH_KV", id = "bb47866ec1d24c7db078d0a19c4bc6a1" },
+  { binding = "PIXABAY_KV", id = "04e7b6ccd910408fae64da4126647b46" }
+]
+
 [limits]
 cpu_ms = 30
 
