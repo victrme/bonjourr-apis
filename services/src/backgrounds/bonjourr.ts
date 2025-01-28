@@ -1,19 +1,19 @@
 import type { Backgrounds } from '../types/backgrounds'
 import type { Env } from '..'
 
-export async function bonjourrCollections(url: URL, env: Env, headers: Headers): Promise<Response> {
+export async function daylightCollections(url: URL, env: Env, headers: Headers): Promise<Response> {
 	headers.set('Content-Type', 'application/json')
 	headers.set('Cache-Control', 'public, max-age=10')
 
-	if (url.pathname.includes('/backgrounds/bonjourr/unsplash')) {
+	if (url.pathname.includes('/backgrounds/daylight/images/unsplash')) {
 		return await unsplashImages(env, headers)
 	}
 
-	if (url.pathname.includes('/backgrounds/bonjourr/pixabay/images')) {
+	if (url.pathname.includes('/backgrounds/daylight/images/pixabay')) {
 		return await pixabayImages(env, headers)
 	}
 
-	if (url.pathname.includes('/backgrounds/bonjourr/pixabay/videos')) {
+	if (url.pathname.includes('/backgrounds/daylight/videos/pixabay')) {
 		return await pixabayVideos(env, headers)
 	}
 

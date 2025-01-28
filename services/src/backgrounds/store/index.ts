@@ -11,7 +11,7 @@ export const UNSPLASH_COLLECTIONS = {
 }
 
 export async function storeCollections(url: URL, env: Env): Promise<Response> {
-	const isCorrectPath = url.pathname.includes('backgrounds/collections/store')
+	const isCorrectPath = url.pathname.includes('backgrounds/daylight/store')
 
 	if (!isCorrectPath) {
 		return new Response('Wrong path', { status: 400 })
