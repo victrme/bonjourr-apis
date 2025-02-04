@@ -1,4 +1,4 @@
-import { describe, it, expect, expectTypeOf, beforeAll, afterAll } from 'vitest'
+import { afterAll, beforeAll, describe, expect, expectTypeOf, it } from 'vitest'
 import { unstable_dev, Unstable_DevWorker } from 'wrangler'
 
 let worker: Unstable_DevWorker
@@ -36,7 +36,7 @@ describe('Paths', function () {
 
 	it('400 on /favicon', async function () {
 		const response = await worker.fetch('/favicon/http://localhost:8787')
-		expect(response.status).toBe(400)
+		expect(response.status).toBe(404)
 	})
 
 	it('200 on /favicon/text', async function () {

@@ -1,7 +1,7 @@
-import { it, expect, expectTypeOf, beforeAll, afterAll, describe } from 'vitest'
-import { unstable_dev, UnstableDevWorker } from 'wrangler'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { unstable_dev, Unstable_DevWorker } from 'wrangler'
 
-let worker: UnstableDevWorker
+let worker: Unstable_DevWorker
 let response: Awaited<ReturnType<typeof worker.fetch>>
 
 beforeAll(async () => {
