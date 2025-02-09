@@ -8,3 +8,10 @@ console.log(
 		.map((src) => src.slice(src.lastIndexOf('/') + 1, src.indexOf('-')).split('_')[0])
 		.join(', ')
 )
+
+console.log(
+	Object.values(document.querySelectorAll('div > a[class] > img'))
+		.map((image) => image.src)
+		.map((src) => src.slice(src.lastIndexOf('-') + 1, src.indexOf('_', src.lastIndexOf('-'))))
+		.join(', ')
+)
