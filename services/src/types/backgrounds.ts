@@ -6,9 +6,13 @@ export namespace Backgrounds {
 	 */
 	export interface Image {
 		/* All providers */
-		url: string
 		page: string
 		username: string
+		urls: {
+			full: string
+			medium: string
+			small: string
+		}
 
 		/* Unsplash only */
 		color?: string
@@ -35,10 +39,9 @@ export namespace Backgrounds {
 		duration: number
 		thumbnail: string
 		urls: {
-			large: string
+			full: string
 			medium: string
 			small: string
-			tiny: string
 		}
 	}
 
@@ -68,6 +71,8 @@ export namespace Backgrounds {
 			}
 			urls: {
 				raw: string
+				regular: string
+				small: string
 			}
 			links: {
 				html: string

@@ -22,7 +22,11 @@ async function unsplashTags(url: URL, env: Env, headers: Headers): Promise<Respo
 	if (!Array.isArray(json)) arr = [json as Backgrounds.API.UnsplashImage]
 
 	const result: Backgrounds.Image[] = arr.map((item) => ({
-		url: item.urls.raw,
+		urls: {
+			full: item.urls.raw,
+			medium: item.urls.regular,
+			small: item.urls.small,
+		},
 		page: item.links.html,
 		download: item.links.download,
 		username: item.user.username,

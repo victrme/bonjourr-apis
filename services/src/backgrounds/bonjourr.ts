@@ -41,7 +41,11 @@ export async function unsplashImages(env: Env, headers: Headers): Promise<Respon
 			const item = storage[random]
 
 			result[collection].push({
-				url: item.urls.raw,
+				urls: {
+					full: item.urls.raw,
+					medium: item.urls.regular,
+					small: item.urls.small,
+				},
 				page: item.links.html,
 				download: item.links.download,
 				username: item.user.username,
@@ -82,10 +86,9 @@ async function pixabayVideos(env: Env, headers: Headers): Promise<Response> {
 				duration: item.duration,
 				thumbnail: item.videos.large.thumbnail,
 				urls: {
-					large: item.videos.large.url,
+					full: item.videos.large.url,
 					medium: item.videos.medium.url,
-					small: item.videos.small.url,
-					tiny: item.videos.tiny.url,
+					small: item.videos.tiny.url,
 				},
 			})
 		}
