@@ -1,4 +1,4 @@
-import { UNSPLASH_COLLECTIONS } from '.'
+import { UNSPLASH_COLLECTIONS } from './store.ts'
 import { Env } from '../..'
 
 export async function storeUnsplash(env: Env) {

@@ -1,5 +1,5 @@
-import type { Backgrounds } from '../types/backgrounds'
-import type { Env } from '..'
+import type { Backgrounds } from '../types/backgrounds.ts'
+import type { Env } from '../index.ts'
 
 export async function daylightCollections(url: URL, env: Env, headers: Headers): Promise<Response> {
 	headers.set('Content-Type', 'application/json')
@@ -13,16 +13,12 @@ export async function daylightCollections(url: URL, env: Env, headers: Headers):
 		return await pixabayVideos(env, headers)
 	}
 
-	// if (url.pathname.includes('/backgrounds/daylight/images/pixabay')) {
-	// 	return await pixabayImages(env, headers)
-	// }
-
 	return new Response('No valid provider', {
 		status: 400,
 	})
 }
 
-export async function unsplashImages(env: Env, headers: Headers): Promise<Response> {
+async function unsplashImages(env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Backgrounds.Image[]> = {
 		night: [],
 		noon: [],
@@ -95,19 +91,4 @@ async function pixabayVideos(env: Env, headers: Headers): Promise<Response> {
 	}
 
 	return new Response(JSON.stringify(result), { headers })
-}
-
-async function pixabayImages(env: Env, headers: Headers): Promise<Response> {
-	// const result: Backgrounds.Image[] = []
-	// const list = json as Backgrounds.API.PixabayImage[]
-	// for (const image of list) {
-	// 	result.push({
-	// 		page: image.pageURL,
-	// 		username: image.user,
-	// 		url: image.largeImageURL,
-	// 	})
-	// }
-	// return new Response(JSON.stringify(result), { headers })
-
-	return new Response('pixabay images', { headers })
 }
