@@ -1,10 +1,11 @@
 import proxy from './proxy.ts'
 import fonts from './fonts.ts'
 import unsplash from './unsplash.ts'
+import backgrounds from './backgrounds.ts'
+
 import quotes from './quotes/src/index.ts'
 import favicon from './favicon/package/src/index.ts'
 import suggestions from './suggestions/cloudflare/index.ts'
-import backgrounds from './backgrounds/backgrounds.ts'
 
 const headers = new Headers({
 	'Access-Control-Allow-Origin': '*',

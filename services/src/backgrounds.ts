@@ -1,10 +1,18 @@
-import { unsplashImagesDaylight, unsplashImagesDaylightStore } from './unsplash/images/bonjourr'
-import { pixabayVideosDaylight, pixabayVideosDaylightStore } from './pixabay/videos/bonjourr'
-import { unsplashImagesUser } from './unsplash/images/user'
-import { pixabayVideosUser } from './pixabay/videos/user'
-import { pixabayImagesUser } from './pixabay/images/user'
+import {
+	unsplashImagesDaylight,
+	unsplashImagesDaylightStore,
+} from './backgrounds/unsplash/images/bonjourr.ts'
 
-import type { Env } from '..'
+import {
+	pixabayVideosDaylight,
+	pixabayVideosDaylightStore,
+} from './backgrounds/pixabay/videos/bonjourr.ts'
+
+import { unsplashImagesUser } from './backgrounds/unsplash/images/user.ts'
+import { pixabayVideosUser } from './backgrounds/pixabay/videos/user.ts'
+import { pixabayImagesUser } from './backgrounds/pixabay/images/user.ts'
+
+import type { Env } from './index.ts'
 
 export default async function backgrounds(url: URL, env: Env, headers: Headers): Promise<Response> {
 	//
