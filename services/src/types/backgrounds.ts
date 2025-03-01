@@ -6,6 +6,7 @@ export namespace Backgrounds {
 	 */
 	export interface Image {
 		/* All providers */
+		format: 'image'
 		page: string
 		username: string
 		urls: {
@@ -34,6 +35,7 @@ export namespace Backgrounds {
 	 * Unified schema returned for Bonjourr Videos
 	 */
 	export interface Video {
+		format: 'video'
 		page: string
 		username: string
 		duration: number

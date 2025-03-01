@@ -16,6 +16,7 @@ export async function pixabayVideosUser(url: URL, env: Env, headers: Headers): P
 
 	const arr = json.hits as Backgrounds.API.PixabayVideo[]
 	const result: Backgrounds.Video[] = arr.map((item) => ({
+		format: 'video',
 		page: item.pageURL,
 		username: item.user,
 		duration: item.duration,

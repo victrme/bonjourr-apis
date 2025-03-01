@@ -32,6 +32,7 @@ async function unsplashImagesDaylight(env: Env, headers: Headers): Promise<Respo
 			const item = storage[random]
 
 			result[collection].push({
+				format: 'image',
 				urls: {
 					full: item.urls.raw,
 					medium: item.urls.regular,

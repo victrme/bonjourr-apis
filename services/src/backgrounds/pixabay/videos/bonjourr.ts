@@ -31,6 +31,7 @@ async function pixabayVideosDaylight(env: Env, headers: Headers): Promise<Respon
 			const item = storage[random]
 
 			result[collection].push({
+				format: 'video',
 				page: item.pageURL,
 				username: item.user,
 				duration: item.duration,

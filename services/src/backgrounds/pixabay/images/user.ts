@@ -13,6 +13,7 @@ export async function pixabayImagesUser(url: URL, env: Env, headers: Headers): P
 
 	const arr = json.hits as Backgrounds.API.PixabayImage[]
 	const result: Backgrounds.Image[] = arr.map((item) => ({
+		format: 'image',
 		urls: {
 			full: item.largeImageURL,
 			medium: item.imageURL,

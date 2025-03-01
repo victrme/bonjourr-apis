@@ -39,15 +39,16 @@ export async function unsplashImagesUser(url: URL, env: Env, headers: Headers): 
 	}
 
 	const result: Backgrounds.Image[] = arr.map((item) => ({
+		format: 'image',
+		page: item.links.html,
+		download: item.links.download,
+		username: item.user.username,
+		name: item.user.name,
 		urls: {
 			full: item.urls.raw,
 			medium: item.urls.regular,
 			small: item.urls.small,
 		},
-		page: item.links.html,
-		download: item.links.download,
-		username: item.user.username,
-		name: item.user.name,
 	}))
 
 	return new Response(JSON.stringify(result), {
