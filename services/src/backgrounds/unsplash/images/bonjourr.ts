@@ -2,11 +2,14 @@ import type { Backgrounds } from '../../../types/backgrounds'
 import type { Env } from '../../..'
 
 export const UNSPLASH_COLLECTIONS = {
-	night: 'bHDh4Ae7O8o',
-	noon: 'GD4aOSg4yQE',
-	day: 'o8uX55RbBPs',
-	evening: '3M2rKTckZaQ',
-	winter: 'u0Kne8mFCQM',
+	// Daylight
+	'daylight-images-night': 'bHDh4Ae7O8o',
+	'daylight-images-noon': 'GD4aOSg4yQE',
+	'daylight-images-day': 'o8uX55RbBPs',
+	'daylight-images-evening': '3M2rKTckZaQ',
+
+	// Seasons
+	'seasons-images-winter': 'u0Kne8mFCQM',
 }
 
 export { unsplashImagesDaylight, unsplashImagesDaylightStore }
@@ -21,7 +24,7 @@ async function unsplashImagesDaylight(env: Env, headers: Headers): Promise<Respo
 		'daylight-images-evening': [],
 	}
 
-	for (const collection of ['night', 'noon', 'day', 'evening']) {
+	for (const collection of Object.keys(result)) {
 		const storage: Backgrounds.API.UnsplashImage[] = await env.UNSPLASH_KV.get(
 			collection,
 			'json'

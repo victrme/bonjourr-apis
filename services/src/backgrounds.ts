@@ -20,6 +20,7 @@ export default async function backgrounds(url: URL, env: Env, headers: Headers):
 
 	if (url.pathname.includes('/backgrounds/daylight/store')) {
 		await Promise.all([pixabayVideosDaylightStore(env), unsplashImagesDaylightStore(env)])
+		return new Response('Done')
 	}
 
 	//	Get Daylight

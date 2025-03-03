@@ -1,16 +1,16 @@
 [
 	{
-		"name": "night",
+		"name": "pixabay-videos-night",
 		"type": "film",
 		"ids": [3134, 74183, 28236, 169951, 22555]
 	},
 	{
-		"name": "noon",
+		"name": "pixabay-videos-noon",
 		"type": "film",
 		"ids": [83880, 122244, 57647, 204095]
 	},
 	{
-		"name": "day",
+		"name": "pixabay-videos-day",
 		"type": "film",
 		"ids": [
 			23881, 205553, 234930, 223461, 184972, 46026, 176303, 186195, 244871, 186405, 92994,
@@ -19,7 +19,7 @@
 		]
 	},
 	{
-		"name": "evening",
+		"name": "pixabay-videos-evening",
 		"type": "film",
 		"ids": [223459, 88207, 26790, 203196, 253472, 228447]
 	}

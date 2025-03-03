@@ -19,7 +19,7 @@ async function pixabayVideosDaylight(env: Env, headers: Headers): Promise<Respon
 		'daylight-videos-evening': [],
 	}
 
-	for (const collection of ['night', 'noon', 'day', 'evening']) {
+	for (const collection of Object.keys(result)) {
 		const storage: Backgrounds.API.PixabayVideo[] = await env.PIXABAY_KV.get(collection, 'json')
 
 		if (storage.length === 0) {
