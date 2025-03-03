@@ -13,10 +13,10 @@ export { pixabayVideosDaylight, pixabayVideosDaylightStore }
 
 async function pixabayVideosDaylight(env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Backgrounds.Video[]> = {
-		'bonjourr-daylight-videos-night': [],
-		'bonjourr-daylight-videos-noon': [],
-		'bonjourr-daylight-videos-day': [],
-		'bonjourr-daylight-videos-evening': [],
+		'bonjourr-videos-daylight-night': [],
+		'bonjourr-videos-daylight-noon': [],
+		'bonjourr-videos-daylight-day': [],
+		'bonjourr-videos-daylight-evening': [],
 	}
 
 	for (const collection of Object.keys(result)) {
