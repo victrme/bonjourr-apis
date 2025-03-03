@@ -3,13 +3,13 @@ import type { Env } from '../../..'
 
 export const UNSPLASH_COLLECTIONS = {
 	// Daylight
-	'daylight-images-night': 'bHDh4Ae7O8o',
-	'daylight-images-noon': 'GD4aOSg4yQE',
-	'daylight-images-day': 'o8uX55RbBPs',
-	'daylight-images-evening': '3M2rKTckZaQ',
+	'bonjourr-daylight-images-night': 'bHDh4Ae7O8o',
+	'bonjourr-daylight-images-noon': 'GD4aOSg4yQE',
+	'bonjourr-daylight-images-day': 'o8uX55RbBPs',
+	'bonjourr-daylight-images-evening': '3M2rKTckZaQ',
 
 	// Seasons
-	'seasons-images-winter': 'u0Kne8mFCQM',
+	'bonjourr-seasons-images-winter': 'u0Kne8mFCQM',
 }
 
 export { unsplashImagesDaylight, unsplashImagesDaylightStore }
@@ -18,10 +18,10 @@ export { unsplashImagesDaylight, unsplashImagesDaylightStore }
 
 async function unsplashImagesDaylight(env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Backgrounds.Image[]> = {
-		'daylight-images-night': [],
-		'daylight-images-noon': [],
-		'daylight-images-day': [],
-		'daylight-images-evening': [],
+		'bonjourr-daylight-images-night': [],
+		'bonjourr-daylight-images-noon': [],
+		'bonjourr-daylight-images-day': [],
+		'bonjourr-daylight-images-evening': [],
 	}
 
 	for (const collection of Object.keys(result)) {
