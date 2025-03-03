@@ -10,9 +10,8 @@
 ### Available endpoints
 
 -   backgrounds/daylight/store
--   backgrounds/daylight/images/unsplash
--   backgrounds/daylight/images/pixabay
--   backgrounds/daylight/videos/pixabay
+-   backgrounds/daylight/images
+-   backgrounds/daylight/videos
 -   backgrounds/user/images/unsplash/?tags=
 -   backgrounds/user/images/unsplash/?collections=
 -   backgrounds/user/images/pixabay/?tags=
