@@ -28,11 +28,11 @@ export default async function backgrounds(url: URL, env: Env, headers: Headers):
 	headers.set('Content-Type', 'application/json')
 	headers.set('Cache-Control', 'public, max-age=10')
 
-	if (url.pathname.includes('/backgrounds/daylight/images/unsplash')) {
+	if (url.pathname.includes('/backgrounds/daylight/images')) {
 		return await unsplashImagesDaylight(env, headers)
 	}
 
-	if (url.pathname.includes('/backgrounds/daylight/videos/pixabay')) {
+	if (url.pathname.includes('/backgrounds/daylight/videos')) {
 		return await pixabayVideosDaylight(env, headers)
 	}
 
