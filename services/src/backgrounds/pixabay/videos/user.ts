@@ -28,5 +28,5 @@ export async function pixabayVideosUser(url: URL, env: Env, headers: Headers): P
 		},
 	}))
 
-	return new Response(JSON.stringify(result), { headers })
+	return new Response(JSON.stringify({ 'pixabay-videos-user': result }), { headers })
 }

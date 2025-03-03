@@ -51,7 +51,7 @@ export async function unsplashImagesUser(url: URL, env: Env, headers: Headers): 
 		},
 	}))
 
-	return new Response(JSON.stringify(result), {
+	return new Response(JSON.stringify({ 'unsplash-images-user': result }), {
 		headers,
 	})
 }

@@ -15,10 +15,10 @@ export { unsplashImagesDaylight, unsplashImagesDaylightStore }
 
 async function unsplashImagesDaylight(env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Backgrounds.Image[]> = {
-		night: [],
-		noon: [],
-		day: [],
-		evening: [],
+		'daylight-images-night': [],
+		'daylight-images-noon': [],
+		'daylight-images-day': [],
+		'daylight-images-evening': [],
 	}
 
 	for (const collection of ['night', 'noon', 'day', 'evening']) {

@@ -23,5 +23,5 @@ export async function pixabayImagesUser(url: URL, env: Env, headers: Headers): P
 		username: item.user,
 	}))
 
-	return new Response(JSON.stringify(result), { headers })
+	return new Response(JSON.stringify({ 'pixabay-images-user': result }), { headers })
 }
