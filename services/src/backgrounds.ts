@@ -12,11 +12,18 @@ import unsplashImagesCollections from './backgrounds/unsplash/images/collections
 import unsplashImagesTags from './backgrounds/unsplash/images/tags.ts'
 import pixabayVideosTags from './backgrounds/pixabay/videos/tags.ts'
 import pixabayImagesTags from './backgrounds/pixabay/images/tags.ts'
+import { backgroundsProxy } from './proxy.ts'
 
 import type { Env } from './index.ts'
 
 export default async function backgrounds(url: URL, env: Env, headers: Headers): Promise<Response> {
 	//
+	//	Get URLs proxy
+
+	if (url.pathname.includes('/backgrounds/proxy/')) {
+		return backgroundsProxy(url, headers)
+	}
+
 	//	Store daylight
 
 	if (url.pathname.includes('/backgrounds/bonjourr/store')) {
