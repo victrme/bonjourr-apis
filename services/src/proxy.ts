@@ -25,16 +25,17 @@ export default async function proxy(req: Request, headers: Headers): Promise<Res
 export async function backgroundsProxy(url: URL, headers: Headers): Promise<Response> {
 	const query = url.pathname.replace('/backgrounds/proxy/', '')
 	const resp = await fetch(query)
-	const isImage = resp.headers.get('Content-Type')?.includes('image/')
+	const contenttype = resp.headers.get('Content-Type') || 'default'
+	const isImage = contenttype.includes('image/')
 
 	if (resp.status !== 200) {
 		return new Response(undefined, { status: resp.status })
 	}
 	if (!isImage) {
-		throw new Error(`Requested resource is of type ${resp.type}`)
+		throw new Error(`Requested resource is of type ${contenttype}`)
 	}
 
-	headers.set('content-type', resp.type)
+	headers.set('content-type', contenttype)
 	headers.set('cache-control', 'max-age=3600')
 
 	return new Response(resp.body, { headers })
