@@ -18,8 +18,8 @@ export interface Env {
 	PIXABAY_COLLECTIONS?: string
 	UNSPLASH?: string
 	PIXABAY?: string
-	UNSPLASH_KV?: any
-	PIXABAY_KV?: any
+	UNSPLASH_KV?: unknown
+	PIXABAY_KV?: unknown
 }
 
 export default {

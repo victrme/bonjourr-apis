@@ -1,4 +1,4 @@
-import { Fontsource } from './types/fonts'
+import type { Fontsource } from './types/fonts'
 
 type FontList = Pick<Fontsource, 'family' | 'subsets' | 'weights' | 'variable'>[]
 
@@ -24,11 +24,10 @@ export default async function fonts(headers: Headers): Promise<Response> {
 			font = fonts[familyOnly.indexOf(family)]
 
 			if (
-				font &&
-				font.subsets.includes('latin') &&
-				font.weights.includes(400) &&
-				font.category !== 'icons' &&
-				font.category !== 'other'
+				font?.subsets.includes('latin') &&
+				font?.weights.includes(400) &&
+				font?.category !== 'icons' &&
+				font?.category !== 'other'
 			) {
 				fontlist.push({
 					family: font.family,

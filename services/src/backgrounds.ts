@@ -37,7 +37,7 @@ export default async function backgrounds(url: URL, env: Env, headers: Headers):
 	headers.set('Cache-Control', 'public, max-age=10')
 
 	if (url.pathname.includes('/backgrounds/bonjourr/images/daylight')) {
-		return await unsplashImagesDaylight(env, headers)
+		return await unsplashImagesDaylight(url, env, headers)
 	}
 
 	if (url.pathname.includes('/backgrounds/bonjourr/videos/daylight')) {

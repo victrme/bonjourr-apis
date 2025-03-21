@@ -1,5 +1,5 @@
-import { Backgrounds } from '../../../types/backgrounds'
-import { Env } from '../../..'
+import type { Backgrounds } from '../../../types/backgrounds'
+import type { Env } from '../../..'
 
 async function unsplashImagesTags(url: URL, env: Env, headers: Headers): Promise<Response> {
 	const query = url.searchParams.get('query')
