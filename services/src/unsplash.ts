@@ -1,15 +1,11 @@
-import type { UnsplashPhoto } from './types/unsplash'
+import type { UnsplashPhoto } from "./types/unsplash"
 
-export default async function unsplash(
-	requrl: string,
-	key: string,
-	headers: Headers
-): Promise<Response> {
-	const endpoint = requrl.slice(requrl.indexOf('/unsplash') + 9)
+export async function unsplash(requrl: string, key: string, headers: Headers): Promise<Response> {
+	const endpoint = requrl.slice(requrl.indexOf("/unsplash") + 9)
 
 	// Narrow endpoint to /photos
-	if (!endpoint.startsWith('/photos')) {
-		return new Response('Forbidden', {
+	if (!endpoint.startsWith("/photos")) {
+		return new Response("Forbidden", {
 			status: 403,
 			headers,
 		})
@@ -17,8 +13,8 @@ export default async function unsplash(
 
 	const resp = await fetch(`https://api.unsplash.com${endpoint}`, {
 		headers: {
-			'Accept-Version': 'v1',
-			Authorization: `Client-ID ${key}`,
+			"accept-version": "v1",
+			authorization: `Client-ID ${key}`,
 		},
 	})
 
@@ -27,11 +23,11 @@ export default async function unsplash(
 	try {
 		result = (await resp.json()) as UnsplashPhoto[]
 	} catch (error) {
-		console.log(error)
+		console.warn(error)
 	}
 
-	headers.set('Content-Type', 'application/json')
-	headers.set('Cache-Control', 'no-cache')
+	headers.set("Content-Type", "application/json")
+	headers.set("Cache-Control", "no-cache")
 
 	return new Response(JSON.stringify(result), {
 		status: resp.status,

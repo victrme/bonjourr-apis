@@ -1,12 +1,12 @@
 export namespace Backgrounds {
-	export type Provider = 'pixabay' | 'unsplash'
+	export type Provider = "pixabay" | "unsplash"
 
 	/**
 	 * Unified schema returned for Bonjourr Images
 	 */
 	export interface Image {
 		/* All providers */
-		format: 'image'
+		format: "image"
 		page: string
 		username: string
 		urls: {
@@ -35,7 +35,7 @@ export namespace Backgrounds {
 	 * Unified schema returned for Bonjourr Videos
 	 */
 	export interface Video {
-		format: 'video'
+		format: "video"
 		page: string
 		username: string
 		duration: number
@@ -96,7 +96,7 @@ export namespace Backgrounds {
 		}
 
 		export interface PixabayImage {
-			type: 'photo'
+			type: "photo"
 			id: number
 			pageURL: string
 			tags: string
@@ -122,7 +122,7 @@ export namespace Backgrounds {
 		}
 
 		export interface PixabayVideo {
-			type: 'film'
+			type: "film"
 			id: number
 			pageURL: string
 			tags: string

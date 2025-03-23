@@ -6,5 +6,5 @@ export interface Fontsource {
 	variable: boolean
 	category: string
 	license: string
-	type: 'google' | 'other'
+	type: "google" | "other"
 }
