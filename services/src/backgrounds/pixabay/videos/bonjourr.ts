@@ -1,4 +1,4 @@
-import type { Backgrounds } from "../../../types/backgrounds"
+import type { Backgrounds } from "../../../../../types/backgrounds"
 import type { Env } from "../../.."
 
 interface PixabayCollection {
@@ -18,7 +18,7 @@ export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise
 	}
 
 	for (const collection of Object.keys(result)) {
-		const storage: Backgrounds.API.PixabayVideo[] = await env.PIXABAY_KV.get(collection, "json")
+		const storage: Backgrounds.API.PixabayVideo[] = await env.PIXABAY_KV?.get(collection, "json")
 
 		if (storage.length === 0) {
 			throw new Error("Collection could not be found")
@@ -54,7 +54,7 @@ export async function pixabayVideosDaylightStore(env: Env) {
 	for (const collection of collectionList) {
 		try {
 			const data = await getCollectionData(env, collection)
-			await env.PIXABAY_KV.put(collection.name, JSON.stringify(data))
+			await env.PIXABAY_KV?.put(collection.name, JSON.stringify(data))
 			console.warn("Saved ", collection.name)
 		} catch (e) {
 			console.warn(e.message)

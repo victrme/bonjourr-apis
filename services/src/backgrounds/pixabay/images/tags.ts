@@ -1,4 +1,4 @@
-import type { Backgrounds } from "../../../types/backgrounds"
+import type { Backgrounds } from "../../../../../types/backgrounds"
 import type { Env } from "../../.."
 
 export async function pixabayImagesTags(url: URL, env: Env, headers: Headers): Promise<Response> {

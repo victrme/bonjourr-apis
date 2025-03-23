@@ -1,6 +1,10 @@
 import { afterAll, beforeAll, describe, expect, expectTypeOf, it } from "vitest"
 import { unstable_dev, type Unstable_DevWorker } from "wrangler"
 
+import type { UnsplashPhoto } from "../types/unsplash"
+import type { Fontsource } from "../types/fonts"
+import type { Quote } from "../services/src/quotes/src"
+
 let worker: Unstable_DevWorker
 let response: Awaited<ReturnType<typeof worker.fetch>>
 
@@ -79,11 +83,11 @@ describe("Homepage", () => {
 })
 
 describe("Unsplash", () => {
-	let json: any
+	let json: UnsplashPhoto[]
 
 	beforeAll(async () => {
 		response = await worker.fetch("/unsplash/photos/random?collections=GD4aOSg4yQE&count=8")
-		json = (await response.json()) as any
+		json = (await response.json()) as UnsplashPhoto[]
 	})
 
 	it("returns correct amount of images", () => {
@@ -93,17 +97,17 @@ describe("Unsplash", () => {
 	it("has correct fields", async () => {
 		const { color, urls, links, exif, user } = json[0]
 		const exifkeys = ["make", "model", "exposure_time", "aperture", "focal_length", "iso"]
-		expectTypeOf(color).toBeString.result
-		expectTypeOf(urls.raw).toBeString.result
-		expectTypeOf(links.html).toBeString.result
-		expectTypeOf(user.username).toBeString.result
-		expectTypeOf(user.name).toBeString.result
+		expectTypeOf(color).toBeString()
+		expectTypeOf(urls.raw).toBeString()
+		expectTypeOf(links.html).toBeString()
+		expectTypeOf(user.username).toBeString()
+		expectTypeOf(user.name).toBeString()
 		expect(exifkeys.every(key => key in exif)).toBe(true)
 	})
 })
 
 describe("Quotes", () => {
-	let quotes: any[]
+	let quotes: Quote[]
 
 	it("has application/json as content-type", async () => {
 		const response = await worker.fetch("/quotes/classic")
@@ -119,7 +123,7 @@ describe("Quotes", () => {
 	describe("Classic", () => {
 		beforeAll(async () => {
 			response = await worker.fetch("/quotes/classic")
-			quotes = (await response?.json()) as any[]
+			quotes = (await response?.json()) as Quote[]
 		})
 
 		it("gives 20 quotes by default", () => {
@@ -127,22 +131,22 @@ describe("Quotes", () => {
 		})
 
 		it("has valid type", () => {
-			expectTypeOf(quotes[0].author).toBeString.result
-			expectTypeOf(quotes[0].content).toBeString.result
+			expectTypeOf(quotes[0].author).toBeString()
+			expectTypeOf(quotes[0].content).toBeString()
 		})
 
 		it("returns quotes with lang endpoint", async () => {
 			const response = await worker.fetch("/quotes/classic/fr")
-			const quotes = (await response.json()) as any
-			expectTypeOf(quotes[0].author).toBeString.result
-			expectTypeOf(quotes[0].content).toBeString.result
+			const quotes = (await response.json()) as Quote[]
+			expectTypeOf(quotes[0].author).toBeString()
+			expectTypeOf(quotes[0].content).toBeString()
 		})
 	})
 
 	describe("Kaamelott", async () => {
 		beforeAll(async () => {
 			response = await worker.fetch("/quotes/kaamelott")
-			quotes = (await response?.json()) as any[]
+			quotes = (await response?.json()) as Quote[]
 		})
 
 		it("gives 20 quotes by default", () => {
@@ -150,15 +154,15 @@ describe("Quotes", () => {
 		})
 
 		it("has valid type", () => {
-			expectTypeOf(quotes[0].author).toBeString.result
-			expectTypeOf(quotes[0].content).toBeString.result
+			expectTypeOf(quotes[0].author).toBeString()
+			expectTypeOf(quotes[0].content).toBeString()
 		})
 	})
 
 	describe("Inspirobot", async () => {
 		beforeAll(async () => {
 			response = await worker.fetch("/quotes/inspirobot")
-			quotes = (await response?.json()) as any[]
+			quotes = (await response?.json()) as Quote[]
 		})
 
 		it("gives 20 quotes", () => {
@@ -166,8 +170,8 @@ describe("Quotes", () => {
 		})
 
 		it("has valid type", () => {
-			expectTypeOf(quotes[0].author).toBeString.result
-			expectTypeOf(quotes[0].content).toBeString.result
+			expectTypeOf(quotes[0].author).toBeString()
+			expectTypeOf(quotes[0].content).toBeString()
 		})
 	})
 })
@@ -183,12 +187,12 @@ describe("Suggestions", () => {
 		})
 
 		it("has valid type", async () => {
-			const results = (await response?.clone().json()) as any[]
+			const results = (await response?.clone().json()) as Record<string, unknown>
 			const detailedResultIndex = results.findIndex(item => item.image)
 
 			expectTypeOf(results[0].text).toBeString.result
-			expectTypeOf(results[detailedResultIndex].desc).toBeString.result
-			expectTypeOf(results[detailedResultIndex].image).toBeString.result
+			expectTypeOf(results[detailedResultIndex].desc).toBeString()
+			expectTypeOf(results[detailedResultIndex].image).toBeString()
 		})
 	})
 
@@ -212,11 +216,11 @@ describe("Suggestions", () => {
 })
 
 describe("Fonts", () => {
-	let fontlist: Record<string, unknown>[]
+	let fontlist: Fontsource[]
 
 	beforeAll(async () => {
 		response = await worker.fetch("/fonts")
-		fontlist = (await response?.json()) as Record<string, unknown>[]
+		fontlist = (await response?.json()) as Fontsource[]
 	})
 
 	it("has application/json as content-type", () => {
@@ -224,10 +228,10 @@ describe("Fonts", () => {
 	})
 
 	it("has valid type", () => {
-		expectTypeOf(fontlist[0].family).toBeString.result
-		expectTypeOf(fontlist[0].subsets).toBeArray.result
-		expectTypeOf(fontlist[0].weights).toBeArray.result
-		expectTypeOf(fontlist[0].variable).toBeBoolean.result
+		expectTypeOf(fontlist[0].family).toBeString()
+		expectTypeOf(fontlist[0].subsets).toBeArray()
+		expectTypeOf(fontlist[0].weights).toBeArray()
+		expectTypeOf(fontlist[0].variable).toBeBoolean()
 	})
 
 	it('have all "latin" subset', async () => {

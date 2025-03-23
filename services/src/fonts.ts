@@ -1,4 +1,4 @@
-import type { Fontsource } from "./types/fonts"
+import type { Fontsource } from "../../types/fonts"
 
 type FontList = Pick<Fontsource, "family" | "subsets" | "weights" | "variable">[]
 

@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { unstable_dev, type Unstable_DevWorker } from "wrangler"
+import type { Simple } from "../weather/meteo/src/types"
 
 let worker: Unstable_DevWorker
 let response: Awaited<ReturnType<typeof worker.fetch>>
@@ -29,7 +30,7 @@ it("has correct headers", async () => {
 
 it("returns weather without query", async () => {
 	response = await worker.fetch("/?provider=auto")
-	const json = (await response.json()) as any
+	const json = (await response.json()) as Simple.Weather
 
 	expect(typeof json.now.temp).toBe("number")
 	expect(typeof json.sun.rise[0]).toBe("number")
@@ -46,7 +47,7 @@ describe("Geolocation", () => {
 		response = await worker.fetch("/?provider=auto&geo=true&query=Paris")
 		expect(response.status).toBe(200)
 
-		const json = (await response.json()) as any
+		const json = (await response.json()) as Simple.Locations
 		const { name, detail } = json[1]
 
 		expect(typeof name).toBe("string")

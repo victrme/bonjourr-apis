@@ -17,6 +17,7 @@
 		"collections": "pnpm --filter collections dev"
 	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250321.0",
 		"vitest": "^3.0.7",
 		"wrangler": "^3.110.0"
 	},
@@ -26,5 +27,12 @@
 		"tabWidth": 4,
 		"useTabs": true,
 		"singleQuote": true
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild",
+			"sharp",
+			"workerd"
+		]
 	}
 }
