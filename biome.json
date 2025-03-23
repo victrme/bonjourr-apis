@@ -1,0 +1,35 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"formatter": {
+		"enabled": true,
+		"lineWidth": 120,
+		"indentWidth": 4,
+		"indentStyle": "tab",
+		"include": ["services", "weather", "tests", "assets"],
+		"ignore": ["services/favicon", "services/quotes", "services/suggestions", "weather/meteo"]
+	},
+	"linter": {
+		"enabled": true,
+		"include": ["services", "weather", "tests", "assets"],
+		"ignore": ["services/favicon", "services/quotes", "services/suggestions", "weather/meteo"],
+		"rules": {
+			"all": true,
+			"style": { "noParameterAssign": "info" },
+			"suspicious": { "noConsole": "off" },
+			"correctness": { "useImportExtensions": "off" }
+		}
+	},
+	"organizeImports": {
+		"enabled": false
+	},
+	"javascript": {
+		"globals": [],
+		"formatter": {
+			"enabled": true,
+			"lineWidth": 120,
+			"quoteStyle": "double",
+			"semicolons": "asNeeded",
+			"arrowParentheses": "asNeeded"
+		}
+	}
+}
