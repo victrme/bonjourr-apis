@@ -28,12 +28,16 @@ async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Pro
 	const w = Number.parseInt(url.searchParams.get('w') ?? '1920')
 
 	for (const collection of Object.keys(result)) {
-		const storage: Backgrounds.API.UnsplashImage[] = await env.UNSPLASH_KV?.get(collection, 'json')
+		const randomStatement = `SELECT data FROM "${collection}" ORDER BY RANDOM() LIMIT 10`
+		const { results } = await env.DB.prepare(randomStatement).all()
 
-		for (let i = 0; i < 10; i++) {
-			const random = Math.floor(Math.random() * storage.length)
-			const item = storage[random]
+		if (results.length === 0) {
+			continue
+		}
 
+		for (const row of results) {
+			const data = row.data as string
+			const item: Backgrounds.API.UnsplashImage = JSON.parse(data)
 			const baseImgUrl = `${item.urls.raw}&auto=format&fit=crop&crop=entropy`
 			const paramsFull = `&h=${h}&w=${w}&q=80`
 			const paramsMedium = `&h=${Math.round(h / 3)}&w=${Math.round(w / 3)}&q=60`
@@ -64,34 +68,46 @@ async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Pro
 //  Save to storage
 
 async function unsplashImagesDaylightStore(env: Env) {
-	const promises = Object.entries(UNSPLASH_COLLECTIONS).map(([name, id]) => storeCollection(name, id, env))
-
-	await Promise.all(promises)
+	const entries = Object.entries(UNSPLASH_COLLECTIONS)
+	const storeActions = entries.map(([name, id]) => storeSingleCollection(name, id, env))
+	await Promise.all(storeActions)
 }
 
-async function storeCollection(name: string, id: string, env: Env): Promise<void> {
-	const result: unknown[] = []
+async function storeSingleCollection(name: string, id: string, env: Env): Promise<void> {
+	const createStatement = `
+		CREATE TABLE IF NOT EXISTS "${name}" (
+			url TEXT PRIMARY KEY,
+			data JSON NOT NULL
+		);
+	`
+
+	await env.DB.prepare(createStatement).run()
+	const images: Backgrounds.API.UnsplashImage[] = []
 
 	for (let page = 1; page < 100; page++) {
 		const pageImages = await retrieveCollectionPage(id, page, env)
-		const isLastPage = pageImages.length < 30
-
-		result.push(...pageImages)
-
-		if (isLastPage) {
-			continue
-		}
+		images.push(...pageImages)
 	}
 
 	try {
-		await env.UNSPLASH_KV?.put(name, JSON.stringify(result))
-		console.warn('Saved', name)
+		for (const image of images) {
+			const url = image.urls.raw
+			const data = JSON.stringify(image)
+			const insertStatement = `INSERT INTO "${name}" (url, data) VALUES (?, ?)`
+			await env.DB.prepare(insertStatement).bind(url, data).run()
+		}
+
+		console.warn("Stored ", name)
 	} catch (e) {
 		console.warn(e.message)
 	}
 }
 
-async function retrieveCollectionPage(collection: string, page: number, env: Env) {
+async function retrieveCollectionPage(
+	collection: string,
+	page: number,
+	env: Env,
+): Promise<Backgrounds.API.UnsplashImage[]> {
 	const Authorization = `Client-ID ${env.UNSPLASH}`
 	const headers = { 'Accept-Version': 'v1', Authorization }
 	const path = `https://api.unsplash.com/collections/${collection}/photos?per_page=30&page=${page}`
