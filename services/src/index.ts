@@ -1,11 +1,12 @@
-import proxy from './proxy.ts'
-import fonts from './fonts.ts'
-import unsplash from './unsplash.ts'
-import backgrounds from './backgrounds.ts'
+import { backgrounds } from './backgrounds.ts'
+import { unsplash } from './unsplash.ts'
+import { fonts } from './fonts.ts'
+import { proxy } from './proxy.ts'
 
-import quotes from './quotes/src/index.ts'
-import favicon from './favicon/package/src/index.ts'
 import suggestions from './suggestions/cloudflare/index.ts'
+import favicon from './favicon/package/src/index.ts'
+import quotes from './quotes/src/index.ts'
+import { KVNamespace } from '@cloudflare/workers-types/experimental/index.ts'
 
 const headers = new Headers({
 	'Access-Control-Allow-Origin': '*',
@@ -18,8 +19,8 @@ export interface Env {
 	PIXABAY_COLLECTIONS?: string
 	UNSPLASH?: string
 	PIXABAY?: string
-	UNSPLASH_KV?: unknown
-	PIXABAY_KV?: unknown
+	UNSPLASH_KV?: KVNamespace
+	PIXABAY_KV?: KVNamespace
 }
 
 export default {

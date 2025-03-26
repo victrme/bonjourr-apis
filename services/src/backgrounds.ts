@@ -1,22 +1,14 @@
-import {
-	unsplashImagesDaylight,
-	unsplashImagesDaylightStore,
-} from './backgrounds/unsplash/images/bonjourr.ts'
-
-import {
-	pixabayVideosDaylight,
-	pixabayVideosDaylightStore,
-} from './backgrounds/pixabay/videos/bonjourr.ts'
-
-import unsplashImagesCollections from './backgrounds/unsplash/images/collections.ts'
-import unsplashImagesTags from './backgrounds/unsplash/images/tags.ts'
-import pixabayVideosTags from './backgrounds/pixabay/videos/tags.ts'
-import pixabayImagesTags from './backgrounds/pixabay/images/tags.ts'
+import { unsplashImagesDaylight, unsplashImagesDaylightStore } from './backgrounds/unsplash/images/bonjourr.ts'
+import { pixabayVideosDaylight, pixabayVideosDaylightStore } from './backgrounds/pixabay/videos/bonjourr.ts'
+import { unsplashImagesCollections } from './backgrounds/unsplash/images/collections.ts'
+import { unsplashImagesTags } from './backgrounds/unsplash/images/tags.ts'
+import { pixabayVideosTags } from './backgrounds/pixabay/videos/tags.ts'
+import { pixabayImagesTags } from './backgrounds/pixabay/images/tags.ts'
 import { backgroundsProxy } from './proxy.ts'
 
 import type { Env } from './index.ts'
 
-export default async function backgrounds(url: URL, env: Env, headers: Headers): Promise<Response> {
+export async function backgrounds(url: URL, env: Env, headers: Headers): Promise<Response> {
 	//
 	//	Get URLs proxy
 

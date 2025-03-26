@@ -1,4 +1,4 @@
-export default async function proxy(req: Request, headers: Headers): Promise<Response> {
+export async function proxy(req: Request, headers: Headers): Promise<Response> {
 	if (req.method !== 'POST') {
 		return new Response(undefined, {
 			status: 405,

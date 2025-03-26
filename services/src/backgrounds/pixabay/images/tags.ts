@@ -1,18 +1,18 @@
-import type { Backgrounds } from '../../../types/backgrounds'
+import type { Backgrounds } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
 
-async function pixabayImagesTags(url: URL, env: Env, headers: Headers): Promise<Response> {
+export async function pixabayImagesTags(url: URL, env: Env, headers: Headers): Promise<Response> {
 	const key = env.PIXABAY ?? ''
 	const query = url.searchParams.get('query') ?? ''
 	const orientation = url.searchParams.get('orientation') ?? 'all'
 
-	const path = `https://pixabay.com/api`
+	const path = 'https://pixabay.com/api'
 	const search = `?key=${key}&q=${query}&orientation=${orientation}&safesearch=true`
 	const resp = await fetch(path + search)
 	const json = await resp.json()
 
 	const arr = json.hits as Backgrounds.API.PixabayImage[]
-	const result: Backgrounds.Image[] = arr.map((item) => ({
+	const result: Backgrounds.Image[] = arr.map(item => ({
 		format: 'image',
 		urls: {
 			full: item.largeImageURL,
@@ -23,7 +23,7 @@ async function pixabayImagesTags(url: URL, env: Env, headers: Headers): Promise<
 		username: item.user,
 	}))
 
-	return new Response(JSON.stringify({ 'pixabay-images-user': result }), { headers })
+	return new Response(JSON.stringify({ 'pixabay-images-user': result }), {
+		headers,
+	})
 }
-
-export default pixabayImagesTags

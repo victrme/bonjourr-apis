@@ -1,8 +1,8 @@
-import type { Fontsource } from './types/fonts'
+import type { Fontsource } from '../../types/fonts'
 
 type FontList = Pick<Fontsource, 'family' | 'subsets' | 'weights' | 'variable'>[]
 
-export default async function fonts(headers: Headers): Promise<Response> {
+export async function fonts(headers: Headers): Promise<Response> {
 	headers.set('Cache-Control', 'public, max-age=604800, immutable')
 	headers.set('Content-Type', 'application/json')
 
@@ -15,12 +15,13 @@ export default async function fonts(headers: Headers): Promise<Response> {
 		])
 
 		const fonts = (await responses[0]?.json()) as Fontsource[]
-		const popularity = (await responses[1]?.text()).split(',')
-		const familyOnly = fonts.map((font) => font.family)
+		const popularFonts = (await responses[1]?.text()) ?? ''
+		const popularFontsArr = popularFonts.split(',')
+		const familyOnly = fonts.map(font => font.family)
 
 		let font: Fontsource | undefined
 
-		for (const family of popularity) {
+		for (const family of popularFontsArr) {
 			font = fonts[familyOnly.indexOf(family)]
 
 			if (

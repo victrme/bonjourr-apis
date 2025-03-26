@@ -1,5 +1,5 @@
-import { Backgrounds } from '../../../types/backgrounds'
-import { Env } from '../../..'
+import type { Backgrounds } from '../../../../../types/backgrounds'
+import type { Env } from '../../..'
 
 interface PixabayCollection {
 	name: string
@@ -7,11 +7,9 @@ interface PixabayCollection {
 	type: 'film'
 }
 
-export { pixabayVideosDaylight, pixabayVideosDaylightStore }
-
 //	Get from storage
 
-async function pixabayVideosDaylight(env: Env, headers: Headers): Promise<Response> {
+export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Backgrounds.Video[]> = {
 		'bonjourr-videos-daylight-night': [],
 		'bonjourr-videos-daylight-noon': [],
@@ -20,7 +18,7 @@ async function pixabayVideosDaylight(env: Env, headers: Headers): Promise<Respon
 	}
 
 	for (const collection of Object.keys(result)) {
-		const storage: Backgrounds.API.PixabayVideo[] = await env.PIXABAY_KV.get(collection, 'json')
+		const storage: Backgrounds.API.PixabayVideo[] = await env.PIXABAY_KV?.get(collection, 'json')
 
 		if (storage.length === 0) {
 			throw new Error('Collection could not be found')
@@ -50,16 +48,16 @@ async function pixabayVideosDaylight(env: Env, headers: Headers): Promise<Respon
 
 //	Save to storage
 
-async function pixabayVideosDaylightStore(env: Env) {
+export async function pixabayVideosDaylightStore(env: Env) {
 	const collectionList = await listCollections(env)
 
 	for (const collection of collectionList) {
 		try {
 			const data = await getCollectionData(env, collection)
-			await env.PIXABAY_KV.put(collection.name, JSON.stringify(data))
-			console.log('Saved ', collection.name)
+			await env.PIXABAY_KV?.put(collection.name, JSON.stringify(data))
+			console.warn('Saved ', collection.name)
 		} catch (e) {
-			console.log(e.message)
+			console.warn(e.message)
 		}
 	}
 }
@@ -69,7 +67,7 @@ async function listCollections(env: Env): Promise<PixabayCollection[]> {
 	const collections = (await resp.json()) as PixabayCollection[]
 
 	if (!collections || collections.length === 0) {
-		throw new Error(`Collections have not been found.`)
+		throw new Error('Collections have not been found.')
 	}
 
 	return collections
@@ -77,14 +75,14 @@ async function listCollections(env: Env): Promise<PixabayCollection[]> {
 
 async function getCollectionData(env: Env, collection: PixabayCollection) {
 	const { ids } = collection
-	const promises = ids.map((id) => getDataFromId(id, env.PIXABAY ?? ''))
+	const promises = ids.map(id => getDataFromId(id, env.PIXABAY ?? ''))
 	const data = await Promise.all(promises)
 
 	return data
 }
 
 async function getDataFromId(id: string, key = ''): Promise<object> {
-	const noParams = !id || !key
+	const noParams = !(id && key)
 
 	if (noParams) {
 		throw new Error('No parameters. Endpoint is "/videos/id"')

@@ -1,4 +1,4 @@
-import type { Backgrounds } from '../../../types/backgrounds'
+import type { Backgrounds } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
 
 export const UNSPLASH_COLLECTIONS = {
@@ -28,10 +28,7 @@ async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Pro
 	const w = Number.parseInt(url.searchParams.get('w') ?? '1920')
 
 	for (const collection of Object.keys(result)) {
-		const storage: Backgrounds.API.UnsplashImage[] = await env.UNSPLASH_KV.get(
-			collection,
-			'json',
-		)
+		const storage: Backgrounds.API.UnsplashImage[] = await env.UNSPLASH_KV?.get(collection, 'json')
 
 		for (let i = 0; i < 10; i++) {
 			const random = Math.floor(Math.random() * storage.length)
@@ -67,9 +64,7 @@ async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Pro
 //  Save to storage
 
 async function unsplashImagesDaylightStore(env: Env) {
-	const promises = Object.entries(UNSPLASH_COLLECTIONS).map(([name, id]) =>
-		storeCollection(name, id, env),
-	)
+	const promises = Object.entries(UNSPLASH_COLLECTIONS).map(([name, id]) => storeCollection(name, id, env))
 
 	await Promise.all(promises)
 }
@@ -89,10 +84,10 @@ async function storeCollection(name: string, id: string, env: Env): Promise<void
 	}
 
 	try {
-		await env.UNSPLASH_KV.put(name, JSON.stringify(result))
-		console.log('Saved', name)
+		await env.UNSPLASH_KV?.put(name, JSON.stringify(result))
+		console.warn('Saved', name)
 	} catch (e) {
-		console.log(e.message)
+		console.warn(e.message)
 	}
 }
 
