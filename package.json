@@ -18,15 +18,8 @@
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250321.0",
-		"vitest": "^3.0.7",
-		"wrangler": "^3.110.0"
-	},
-	"prettier": {
-		"printWidth": 100,
-		"semi": false,
-		"tabWidth": 4,
-		"useTabs": true,
-		"singleQuote": true
+		"vitest": "^3.0.9",
+		"wrangler": "^4.4.1"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": ["esbuild", "sharp", "workerd"]
