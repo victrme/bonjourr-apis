@@ -29,10 +29,6 @@
 		"singleQuote": true
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": [
-			"esbuild",
-			"sharp",
-			"workerd"
-		]
+		"onlyBuiltDependencies": ["esbuild", "sharp", "workerd"]
 	}
 }

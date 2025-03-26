@@ -1,22 +1,22 @@
-import type { Backgrounds } from "../../../../../types/backgrounds"
-import type { Env } from "../../.."
+import type { Backgrounds } from '../../../../../types/backgrounds'
+import type { Env } from '../../..'
 
 export async function pixabayVideosTags(url: URL, env: Env, headers: Headers): Promise<Response> {
-	headers.set("content-type", "application/json")
-	headers.set("cache-control", "max-age=10")
+	headers.set('content-type', 'application/json')
+	headers.set('cache-control', 'max-age=10')
 
-	const key = env.PIXABAY ?? ""
-	const query = url.searchParams.get("query")
-	const orientation = url.searchParams.get("orientation") ?? "all"
+	const key = env.PIXABAY ?? ''
+	const query = url.searchParams.get('query')
+	const orientation = url.searchParams.get('orientation') ?? 'all'
 
-	const path = "https://pixabay.com/api/videos"
+	const path = 'https://pixabay.com/api/videos'
 	const search = `?key=${key}&q=${query}&orientation=${orientation}&safesearch=true`
 	const resp = await fetch(path + search)
 	const json = await resp.json()
 
 	const arr = json.hits as Backgrounds.API.PixabayVideo[]
 	const result: Backgrounds.Video[] = arr.map(item => ({
-		format: "video",
+		format: 'video',
 		page: item.pageURL,
 		username: item.user,
 		duration: item.duration,
@@ -28,5 +28,5 @@ export async function pixabayVideosTags(url: URL, env: Env, headers: Headers): P
 		},
 	}))
 
-	return new Response(JSON.stringify({ "pixabay-videos-user": result }), { headers })
+	return new Response(JSON.stringify({ 'pixabay-videos-user': result }), { headers })
 }
