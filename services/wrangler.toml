@@ -2,10 +2,10 @@ name = "bonjourr-services"
 main = "src/index.ts"
 compatibility_date = "2023-05-18"
 
-kv_namespaces = [
-  { binding = "UNSPLASH_KV", id = "bb47866ec1d24c7db078d0a19c4bc6a1" },
-  { binding = "PIXABAY_KV", id = "04e7b6ccd910408fae64da4126647b46" }
-]
+[[d1_databases]]
+binding = "DB"
+database_name = "bonjourr_collections"
+database_id = "3a8dccd9-7f53-480b-bc7d-701cbb97b014"
 
 [vars]
 PIXABAY_COLLECTIONS = "https://raw.githubusercontent.com/victrme/bonjourr-apis/refs/heads/main/assets/pixabay_collections.json"

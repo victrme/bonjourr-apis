@@ -6,7 +6,8 @@ import { proxy } from "./proxy.ts"
 import suggestions from "./suggestions/cloudflare/index.ts"
 import favicon from "./favicon/package/src/index.ts"
 import quotes from "./quotes/src/index.ts"
-import { KVNamespace } from "@cloudflare/workers-types/experimental/index.ts"
+
+import type { D1Database } from "@cloudflare/workers-types"
 
 const headers = new Headers({
 	"Access-Control-Allow-Origin": "*",
@@ -19,8 +20,7 @@ export interface Env {
 	PIXABAY_COLLECTIONS?: string
 	UNSPLASH?: string
 	PIXABAY?: string
-	UNSPLASH_KV?: KVNamespace
-	PIXABAY_KV?: KVNamespace
+	DB: D1Database
 }
 
 export default {

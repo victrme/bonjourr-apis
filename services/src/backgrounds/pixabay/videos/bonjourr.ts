@@ -18,15 +18,16 @@ export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise
 	}
 
 	for (const collection of Object.keys(result)) {
-		const storage: Backgrounds.API.PixabayVideo[] = await env.PIXABAY_KV?.get(collection, "json")
+		const randomStatement = `SELECT data FROM "${collection}" ORDER BY RANDOM() LIMIT 10`
+		const { results } = await env.DB.prepare(randomStatement).all()
 
-		if (storage.length === 0) {
+		if (results.length === 0) {
 			throw new Error("Collection could not be found")
 		}
 
-		for (let i = 0; i < 10; i++) {
-			const random = Math.floor(Math.random() * storage.length)
-			const item = storage[random]
+		for (const row of results) {
+			const data = row.data as string
+			const item: Backgrounds.API.PixabayVideo = JSON.parse(data)
 
 			result[collection].push({
 				format: "video",
@@ -51,14 +52,28 @@ export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise
 export async function pixabayVideosDaylightStore(env: Env) {
 	const collectionList = await listCollections(env)
 
-	for (const collection of collectionList) {
-		try {
-			const data = await getCollectionData(env, collection)
-			await env.PIXABAY_KV?.put(collection.name, JSON.stringify(data))
-			console.warn("Saved ", collection.name)
-		} catch (e) {
-			console.warn(e.message)
+	try {
+		for (const collection of collectionList) {
+			const createStatement = `
+			CREATE TABLE IF NOT EXISTS "${collection.name}" (
+				url TEXT PRIMARY KEY,
+				data JSON NOT NULL
+			);`
+
+			await env.DB.prepare(createStatement).run()
+			const videos = await getApiCollectionData(env, collection)
+
+			for (const video of videos) {
+				const url = video.videos.large.url
+				const data = JSON.stringify(video)
+				const insertStatement = `INSERT INTO "${collection.name}" (url, data) VALUES (?, ?)`
+				await env.DB.prepare(insertStatement).bind(url, data).run()
+			}
+
+			console.warn("Stored ", collection.name)
 		}
+	} catch (e) {
+		console.warn(e.message)
 	}
 }
 
@@ -73,15 +88,15 @@ async function listCollections(env: Env): Promise<PixabayCollection[]> {
 	return collections
 }
 
-async function getCollectionData(env: Env, collection: PixabayCollection) {
+async function getApiCollectionData(env: Env, collection: PixabayCollection): Promise<Backgrounds.API.PixabayVideo[]> {
 	const { ids } = collection
-	const promises = ids.map(id => getDataFromId(id, env.PIXABAY ?? ""))
+	const promises = ids.map(id => getApiDataFromId(id, env.PIXABAY ?? ""))
 	const data = await Promise.all(promises)
 
 	return data
 }
 
-async function getDataFromId(id: string, key = ""): Promise<object> {
+async function getApiDataFromId(id: string, key = ""): Promise<Backgrounds.API.PixabayVideo> {
 	const noParams = !(id && key)
 
 	if (noParams) {
@@ -92,7 +107,7 @@ async function getDataFromId(id: string, key = ""): Promise<object> {
 	const json = await resp.json()
 
 	if (json.hits.length === 1) {
-		return json.hits[0]
+		return json.hits[0] as Backgrounds.API.PixabayVideo
 	}
 
 	throw new Error("Found nothing")
