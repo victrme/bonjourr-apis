@@ -1,15 +1,15 @@
-import type { Backgrounds } from "../../../../../types/backgrounds"
-import type { Env } from "../../.."
+import type { Backgrounds } from '../../../../../types/backgrounds'
+import type { Env } from '../../..'
 
 export const UNSPLASH_COLLECTIONS = {
 	// Daylight
-	"bonjourr-images-daylight-night": "bHDh4Ae7O8o",
-	"bonjourr-images-daylight-noon": "GD4aOSg4yQE",
-	"bonjourr-images-daylight-day": "o8uX55RbBPs",
-	"bonjourr-images-daylight-evening": "3M2rKTckZaQ",
+	'bonjourr-images-daylight-night': 'bHDh4Ae7O8o',
+	'bonjourr-images-daylight-noon': 'GD4aOSg4yQE',
+	'bonjourr-images-daylight-day': 'o8uX55RbBPs',
+	'bonjourr-images-daylight-evening': '3M2rKTckZaQ',
 
 	// Seasons
-	"bonjourr-images-seasons-winter": "u0Kne8mFCQM",
+	'bonjourr-images-seasons-winter': 'u0Kne8mFCQM',
 }
 
 export { unsplashImagesDaylight, unsplashImagesDaylightStore }
@@ -18,14 +18,14 @@ export { unsplashImagesDaylight, unsplashImagesDaylightStore }
 
 async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Backgrounds.Image[]> = {
-		"bonjourr-images-daylight-night": [],
-		"bonjourr-images-daylight-noon": [],
-		"bonjourr-images-daylight-day": [],
-		"bonjourr-images-daylight-evening": [],
+		'bonjourr-images-daylight-night': [],
+		'bonjourr-images-daylight-noon': [],
+		'bonjourr-images-daylight-day': [],
+		'bonjourr-images-daylight-evening': [],
 	}
 
-	const h = Number.parseInt(url.searchParams.get("h") ?? "1080")
-	const w = Number.parseInt(url.searchParams.get("w") ?? "1920")
+	const h = Number.parseInt(url.searchParams.get('h') ?? '1080')
+	const w = Number.parseInt(url.searchParams.get('w') ?? '1920')
 
 	for (const collection of Object.keys(result)) {
 		const randomStatement = `SELECT data FROM "${collection}" ORDER BY RANDOM() LIMIT 10`
@@ -44,7 +44,7 @@ async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Pro
 			const paramsSmall = `&h=${Math.round(h / 10)}&w=${Math.round(w / 10)}&q=60`
 
 			result[collection].push({
-				format: "image",
+				format: 'image',
 				urls: {
 					full: baseImgUrl + paramsFull,
 					medium: baseImgUrl + paramsMedium,
@@ -109,7 +109,7 @@ async function retrieveCollectionPage(
 	env: Env,
 ): Promise<Backgrounds.API.UnsplashImage[]> {
 	const Authorization = `Client-ID ${env.UNSPLASH}`
-	const headers = { "Accept-Version": "v1", Authorization }
+	const headers = { 'Accept-Version': 'v1', Authorization }
 	const path = `https://api.unsplash.com/collections/${collection}/photos?per_page=30&page=${page}`
 	const resp = await fetch(path, { headers })
 	const json = await resp.json()

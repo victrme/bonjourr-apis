@@ -31,7 +31,7 @@
 		"formatter": {
 			"enabled": true,
 			"lineWidth": 120,
-			"quoteStyle": "double",
+			"quoteStyle": "single",
 			"semicolons": "asNeeded",
 			"arrowParentheses": "asNeeded"
 		}

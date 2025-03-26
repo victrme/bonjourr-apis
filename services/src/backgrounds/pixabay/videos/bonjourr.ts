@@ -1,20 +1,20 @@
-import type { Backgrounds } from "../../../../../types/backgrounds"
-import type { Env } from "../../.."
+import type { Backgrounds } from '../../../../../types/backgrounds'
+import type { Env } from '../../..'
 
 interface PixabayCollection {
 	name: string
 	ids: string[]
-	type: "film"
+	type: 'film'
 }
 
 //	Get from storage
 
 export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Backgrounds.Video[]> = {
-		"bonjourr-videos-daylight-night": [],
-		"bonjourr-videos-daylight-noon": [],
-		"bonjourr-videos-daylight-day": [],
-		"bonjourr-videos-daylight-evening": [],
+		'bonjourr-videos-daylight-night': [],
+		'bonjourr-videos-daylight-noon': [],
+		'bonjourr-videos-daylight-day': [],
+		'bonjourr-videos-daylight-evening': [],
 	}
 
 	for (const collection of Object.keys(result)) {
@@ -30,7 +30,7 @@ export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise
 			const item: Backgrounds.API.PixabayVideo = JSON.parse(data)
 
 			result[collection].push({
-				format: "video",
+				format: 'video',
 				page: item.pageURL,
 				username: item.user,
 				duration: item.duration,
@@ -78,11 +78,11 @@ export async function pixabayVideosDaylightStore(env: Env) {
 }
 
 async function listCollections(env: Env): Promise<PixabayCollection[]> {
-	const resp = await fetch(env.PIXABAY_COLLECTIONS ?? "")
+	const resp = await fetch(env.PIXABAY_COLLECTIONS ?? '')
 	const collections = (await resp.json()) as PixabayCollection[]
 
 	if (!collections || collections.length === 0) {
-		throw new Error("Collections have not been found.")
+		throw new Error('Collections have not been found.')
 	}
 
 	return collections
@@ -95,6 +95,7 @@ async function getApiCollectionData(env: Env, collection: PixabayCollection): Pr
 
 	return data
 }
+
 
 async function getApiDataFromId(id: string, key = ""): Promise<Backgrounds.API.PixabayVideo> {
 	const noParams = !(id && key)
@@ -110,5 +111,5 @@ async function getApiDataFromId(id: string, key = ""): Promise<Backgrounds.API.P
 		return json.hits[0] as Backgrounds.API.PixabayVideo
 	}
 
-	throw new Error("Found nothing")
+	throw new Error('Found nothing')
 }
