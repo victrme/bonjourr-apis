@@ -1,4 +1,4 @@
-import type { Backgrounds } from '../../../../../types/backgrounds'
+import type { Video, PixabayVideo } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
 
 interface PixabayCollection {
@@ -10,7 +10,7 @@ interface PixabayCollection {
 //	Get from storage
 
 export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise<Response> {
-	const result: Record<string, Backgrounds.Video[]> = {
+	const result: Record<string, Video[]> = {
 		'bonjourr-videos-daylight-night': [],
 		'bonjourr-videos-daylight-noon': [],
 		'bonjourr-videos-daylight-day': [],
@@ -22,12 +22,12 @@ export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise
 		const { results } = await env.DB.prepare(randomStatement).all()
 
 		if (results.length === 0) {
-			throw new Error("Collection could not be found")
+			throw new Error('Collection could not be found')
 		}
 
 		for (const row of results) {
 			const data = row.data as string
-			const item: Backgrounds.API.PixabayVideo = JSON.parse(data)
+			const item: PixabayVideo = JSON.parse(data)
 
 			result[collection].push({
 				format: 'video',
@@ -70,7 +70,7 @@ export async function pixabayVideosDaylightStore(env: Env) {
 				await env.DB.prepare(insertStatement).bind(url, data).run()
 			}
 
-			console.warn("Stored ", collection.name)
+			console.warn('Stored ', collection.name)
 		}
 	} catch (e) {
 		console.warn(e.message)
@@ -88,16 +88,15 @@ async function listCollections(env: Env): Promise<PixabayCollection[]> {
 	return collections
 }
 
-async function getApiCollectionData(env: Env, collection: PixabayCollection): Promise<Backgrounds.API.PixabayVideo[]> {
+async function getApiCollectionData(env: Env, collection: PixabayCollection): Promise<PixabayVideo[]> {
 	const { ids } = collection
-	const promises = ids.map(id => getApiDataFromId(id, env.PIXABAY ?? ""))
+	const promises = ids.map(id => getApiDataFromId(id, env.PIXABAY ?? ''))
 	const data = await Promise.all(promises)
 
 	return data
 }
 
-
-async function getApiDataFromId(id: string, key = ""): Promise<Backgrounds.API.PixabayVideo> {
+async function getApiDataFromId(id: string, key = ''): Promise<PixabayVideo> {
 	const noParams = !(id && key)
 
 	if (noParams) {
@@ -108,7 +107,7 @@ async function getApiDataFromId(id: string, key = ""): Promise<Backgrounds.API.P
 	const json = await resp.json()
 
 	if (json.hits.length === 1) {
-		return json.hits[0] as Backgrounds.API.PixabayVideo
+		return json.hits[0] as PixabayVideo
 	}
 
 	throw new Error('Found nothing')

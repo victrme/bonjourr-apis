@@ -1,4 +1,4 @@
-import type { Backgrounds } from '../../../../../types/backgrounds'
+import type { PixabayVideo, Video } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
 
 export async function pixabayVideosTags(url: URL, env: Env, headers: Headers): Promise<Response> {
@@ -14,8 +14,8 @@ export async function pixabayVideosTags(url: URL, env: Env, headers: Headers): P
 	const resp = await fetch(path + search)
 	const json = await resp.json()
 
-	const arr = json.hits as Backgrounds.API.PixabayVideo[]
-	const result: Backgrounds.Video[] = arr.map(item => ({
+	const arr = json.hits as PixabayVideo[]
+	const result: Video[] = arr.map(item => ({
 		format: 'video',
 		page: item.pageURL,
 		username: item.user,

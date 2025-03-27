@@ -1,4 +1,4 @@
-import type { Backgrounds } from '../../../../../types/backgrounds'
+import type { UnsplashImage, Image } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
 
 export async function unsplashImagesCollections(url: URL, env: Env, headers: Headers): Promise<Response> {
@@ -9,16 +9,16 @@ export async function unsplashImagesCollections(url: URL, env: Env, headers: Hea
 	const resp = await fetch(apiurl, { headers: apiheaders })
 	const json = await resp.json()
 
-	let arr: Backgrounds.API.UnsplashImage[] = []
+	let arr: UnsplashImage[] = []
 
 	if (Array.isArray(json)) {
-		arr = json as Backgrounds.API.UnsplashImage[]
+		arr = json as UnsplashImage[]
 	}
 	if (!Array.isArray(json)) {
-		arr = [json as Backgrounds.API.UnsplashImage]
+		arr = [json as UnsplashImage]
 	}
 
-	const result: Backgrounds.Image[] = arr.map(item => ({
+	const result: Image[] = arr.map(item => ({
 		format: 'image',
 		page: item.links.html,
 		download: item.links.download,

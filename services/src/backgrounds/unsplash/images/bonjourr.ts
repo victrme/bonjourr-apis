@@ -1,4 +1,4 @@
-import type { Backgrounds } from '../../../../../types/backgrounds'
+import type { UnsplashImage, Image } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
 
 export const UNSPLASH_COLLECTIONS = {
@@ -17,7 +17,7 @@ export { unsplashImagesDaylight, unsplashImagesDaylightStore }
 //  Get from storage
 
 async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Promise<Response> {
-	const result: Record<string, Backgrounds.Image[]> = {
+	const result: Record<string, Image[]> = {
 		'bonjourr-images-daylight-night': [],
 		'bonjourr-images-daylight-noon': [],
 		'bonjourr-images-daylight-day': [],
@@ -29,15 +29,15 @@ async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Pro
 
 	for (const collection of Object.keys(result)) {
 		const randomStatement = `SELECT data FROM "${collection}" ORDER BY RANDOM() LIMIT 10`
-		const { results } = await env.DB.prepare(randomStatement).all()
+		const d1Result = await env.DB.prepare(randomStatement).all()
 
-		if (results.length === 0) {
+		if (d1Result.results.length === 0) {
 			continue
 		}
 
-		for (const row of results) {
+		for (const row of d1Result.results) {
 			const data = row.data as string
-			const item: Backgrounds.API.UnsplashImage = JSON.parse(data)
+			const item: UnsplashImage = JSON.parse(data)
 			const baseImgUrl = `${item.urls.raw}&auto=format&fit=crop&crop=entropy`
 			const paramsFull = `&h=${h}&w=${w}&q=80`
 			const paramsMedium = `&h=${Math.round(h / 3)}&w=${Math.round(w / 3)}&q=60`
@@ -76,43 +76,71 @@ async function unsplashImagesDaylightStore(env: Env) {
 async function storeSingleCollection(name: string, id: string, env: Env): Promise<void> {
 	const createStatement = `
 		CREATE TABLE IF NOT EXISTS "${name}" (
-			url TEXT PRIMARY KEY,
+			id TEXT PRIMARY KEY,
 			data JSON NOT NULL
 		);
 	`
 
 	await env.DB.prepare(createStatement).run()
-	const images: Backgrounds.API.UnsplashImage[] = []
 
-	for (let page = 1; page < 100; page++) {
-		const pageImages = await retrieveCollectionPage(id, page, env)
-		images.push(...pageImages)
-	}
+	const ids = await retrievePhotosIdsFromCollection(id, env)
+	const images = await retrievePhotosDataFromIds(ids, env)
+
+	const promises = images.map(async image => {
+		const id = image.id
+		const data = JSON.stringify(image)
+		const insertStatement = `INSERT INTO "${name}" (id, data) VALUES (?, ?)`
+		await env.DB.prepare(insertStatement).bind(id, data).run()
+
+		console.info(`Stored ${id} on ${name}`)
+	})
 
 	try {
-		for (const image of images) {
-			const url = image.urls.raw
-			const data = JSON.stringify(image)
-			const insertStatement = `INSERT INTO "${name}" (url, data) VALUES (?, ?)`
-			await env.DB.prepare(insertStatement).bind(url, data).run()
-		}
-
-		console.warn("Stored ", name)
-	} catch (e) {
-		console.warn(e.message)
+		await Promise.all(promises)
+	} catch (_) {
+		// ...
 	}
 }
 
-async function retrieveCollectionPage(
-	collection: string,
-	page: number,
-	env: Env,
-): Promise<Backgrounds.API.UnsplashImage[]> {
+async function retrievePhotosDataFromIds(ids: string[], env: Env): Promise<UnsplashImage[]> {
 	const Authorization = `Client-ID ${env.UNSPLASH}`
 	const headers = { 'Accept-Version': 'v1', Authorization }
-	const path = `https://api.unsplash.com/collections/${collection}/photos?per_page=30&page=${page}`
-	const resp = await fetch(path, { headers })
-	const json = await resp.json()
+	const result: UnsplashImage[] = []
 
-	return json
+	const promises = ids.map(async id => {
+		try {
+			const path = `https://api.unsplash.com/photos/${id}`
+			const resp = await fetch(path, { headers })
+			const json = (await resp.json()) as UnsplashImage
+			result.push(json)
+		} catch (error) {
+			console.warn(error)
+		}
+	})
+
+	await Promise.all(promises)
+
+	return result
+}
+
+async function retrievePhotosIdsFromCollection(collection: string, env: Env): Promise<string[]> {
+	const Authorization = `Client-ID ${env.UNSPLASH}`
+	const headers = { 'Accept-Version': 'v1', Authorization }
+	const base = 'https://api.unsplash.com/collections'
+	const result: string[] = []
+
+	for (let page = 1; page < 100; page++) {
+		try {
+			const path = `${base}/${collection}/photos?per_page=30&page=${page}`
+			const resp = await fetch(path, { headers })
+			const json = (await resp.json()) as UnsplashImage[]
+			const ids = json.map(image => image.id)
+
+			result.push(...ids)
+		} catch (error) {
+			console.warn(error)
+		}
+	}
+
+	return result
 }
