@@ -1,8 +1,8 @@
 import { unsplashImagesDaylight, unsplashImagesDaylightStore } from './backgrounds/unsplash/images/bonjourr.ts'
 import { pixabayVideosDaylight, pixabayVideosDaylightStore } from './backgrounds/pixabay/videos/bonjourr.ts'
 import { unsplashImagesCollections, unsplashImagesSearch } from './backgrounds/unsplash/images/user.ts'
-import { pixabayVideosSearch } from './backgrounds/pixabay/videos/tags.ts'
-import { pixabayImagesSearch } from './backgrounds/pixabay/images/tags.ts'
+import { pixabayVideosSearch } from './backgrounds/pixabay/videos/search.ts'
+import { pixabayImagesSearch } from './backgrounds/pixabay/images/search.ts'
 import { initUnsplashAuth } from './backgrounds/unsplash/shared.ts'
 import { backgroundsProxy } from './proxy.ts'
 
