@@ -1,15 +1,16 @@
 import { unsplashImagesDaylight, unsplashImagesDaylightStore } from './backgrounds/unsplash/images/bonjourr.ts'
 import { pixabayVideosDaylight, pixabayVideosDaylightStore } from './backgrounds/pixabay/videos/bonjourr.ts'
-import { unsplashImagesCollections } from './backgrounds/unsplash/images/collections.ts'
-import { unsplashImagesTags } from './backgrounds/unsplash/images/tags.ts'
+import { unsplashImagesCollections, unsplashImagesTags } from './backgrounds/unsplash/images/user.ts'
 import { pixabayVideosTags } from './backgrounds/pixabay/videos/tags.ts'
 import { pixabayImagesTags } from './backgrounds/pixabay/images/tags.ts'
+import { initUnsplashAuth } from './backgrounds/unsplash/shared.ts'
 import { backgroundsProxy } from './proxy.ts'
 
 import type { Env } from './index.ts'
 
 export async function backgrounds(url: URL, env: Env, headers: Headers): Promise<Response> {
-	//
+	initUnsplashAuth(env)
+
 	//	Get URLs proxy
 
 	if (url.pathname.includes('/backgrounds/proxy/')) {
@@ -39,11 +40,11 @@ export async function backgrounds(url: URL, env: Env, headers: Headers): Promise
 	//	Get Unsplash
 
 	if (url.pathname.includes('/backgrounds/unsplash/images/collections')) {
-		return unsplashImagesCollections(url, env, headers)
+		return unsplashImagesCollections(url, headers)
 	}
 
 	if (url.pathname.includes('/backgrounds/unsplash/images/tags')) {
-		return unsplashImagesTags(url, env, headers)
+		return unsplashImagesTags(url, headers)
 	}
 
 	//	Get Pixabay
