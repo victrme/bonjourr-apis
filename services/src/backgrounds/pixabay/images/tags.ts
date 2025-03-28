@@ -16,7 +16,7 @@ export async function pixabayImagesTags(url: URL, env: Env, headers: Headers): P
 		format: 'image',
 		urls: {
 			full: item.largeImageURL,
-			medium: item.imageURL,
+			medium: item.webformatURL,
 			small: item.previewURL,
 		},
 		page: item.pageURL,
