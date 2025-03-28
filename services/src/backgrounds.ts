@@ -1,8 +1,8 @@
 import { unsplashImagesDaylight, unsplashImagesDaylightStore } from './backgrounds/unsplash/images/bonjourr.ts'
 import { pixabayVideosDaylight, pixabayVideosDaylightStore } from './backgrounds/pixabay/videos/bonjourr.ts'
-import { unsplashImagesCollections, unsplashImagesTags } from './backgrounds/unsplash/images/user.ts'
-import { pixabayVideosTags } from './backgrounds/pixabay/videos/tags.ts'
-import { pixabayImagesTags } from './backgrounds/pixabay/images/tags.ts'
+import { unsplashImagesCollections, unsplashImagesSearch } from './backgrounds/unsplash/images/user.ts'
+import { pixabayVideosSearch } from './backgrounds/pixabay/videos/tags.ts'
+import { pixabayImagesSearch } from './backgrounds/pixabay/images/tags.ts'
 import { initUnsplashAuth } from './backgrounds/unsplash/shared.ts'
 import { backgroundsProxy } from './proxy.ts'
 
@@ -43,18 +43,18 @@ export async function backgrounds(url: URL, env: Env, headers: Headers): Promise
 		return unsplashImagesCollections(url, headers)
 	}
 
-	if (url.pathname.includes('/backgrounds/unsplash/images/tags')) {
-		return unsplashImagesTags(url, headers)
+	if (url.pathname.includes('/backgrounds/unsplash/images/search')) {
+		return unsplashImagesSearch(url, headers)
 	}
 
 	//	Get Pixabay
 
-	if (url.pathname.includes('/backgrounds/pixabay/images/tags')) {
-		return await pixabayImagesTags(url, env, headers)
+	if (url.pathname.includes('/backgrounds/pixabay/images/search')) {
+		return await pixabayImagesSearch(url, env, headers)
 	}
 
-	if (url.pathname.includes('/backgrounds/pixabay/videos/tags')) {
-		return await pixabayVideosTags(url, env, headers)
+	if (url.pathname.includes('/backgrounds/pixabay/videos/search')) {
+		return await pixabayVideosSearch(url, env, headers)
 	}
 
 	//	Get <some other provider>

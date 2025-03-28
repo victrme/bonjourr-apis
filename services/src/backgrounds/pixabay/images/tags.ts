@@ -1,7 +1,7 @@
 import type { PixabayImage, Image } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
 
-export async function pixabayImagesTags(url: URL, env: Env, headers: Headers): Promise<Response> {
+export async function pixabayImagesSearch(url: URL, env: Env, headers: Headers): Promise<Response> {
 	const key = env.PIXABAY ?? ''
 	const query = url.searchParams.get('query') ?? ''
 	const orientation = url.searchParams.get('orientation') ?? 'all'
@@ -23,7 +23,7 @@ export async function pixabayImagesTags(url: URL, env: Env, headers: Headers): P
 		username: item.user,
 	}))
 
-	return new Response(JSON.stringify({ 'pixabay-images-user': result }), {
+	return new Response(JSON.stringify({ 'pixabay-images-search': result }), {
 		headers,
 	})
 }

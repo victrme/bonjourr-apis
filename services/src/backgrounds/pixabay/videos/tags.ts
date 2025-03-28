@@ -1,7 +1,7 @@
 import type { PixabayVideo, Video } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
 
-export async function pixabayVideosTags(url: URL, env: Env, headers: Headers): Promise<Response> {
+export async function pixabayVideosSearch(url: URL, env: Env, headers: Headers): Promise<Response> {
 	headers.set('content-type', 'application/json')
 	headers.set('cache-control', 'max-age=10')
 
@@ -28,5 +28,5 @@ export async function pixabayVideosTags(url: URL, env: Env, headers: Headers): P
 		},
 	}))
 
-	return new Response(JSON.stringify({ 'pixabay-videos-user': result }), { headers })
+	return new Response(JSON.stringify({ 'pixabay-videos-search': result }), { headers })
 }
