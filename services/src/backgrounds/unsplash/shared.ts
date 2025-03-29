@@ -19,7 +19,11 @@ export async function fetchUnsplash(search: string): Promise<UnsplashImage[]> {
 	return json
 }
 
-export function convertToBonjourr(images: UnsplashImage[]): Image[] {
+export function convertToBonjourr(images: UnsplashImage[], w: string, h: string): Image[] {
+	const paramsMedium = `&h=${Math.round(Number.parseInt(h) / 3)}&w=${Math.round(Number.parseInt(w) / 3)}&q=60`
+	const paramsSmall = `&h=${Math.round(Number.parseInt(h) / 10)}&w=${Math.round(Number.parseInt(w) / 10)}&q=60`
+	const paramsFull = `&h=${h}&w=${w}&q=80`
+
 	return images.map(item => ({
 		format: 'image',
 		page: item.links.html,
@@ -31,9 +35,9 @@ export function convertToBonjourr(images: UnsplashImage[]): Image[] {
 		color: item.color,
 		exif: item.exif,
 		urls: {
-			full: item.urls.raw,
-			medium: item.urls.regular,
-			small: item.urls.small,
+			full: `${item.urls.raw}&auto=format&fit=crop&crop=entropy${paramsFull}`,
+			medium: `${item.urls.raw}&auto=format&fit=crop&crop=entropy${paramsMedium}`,
+			small: `${item.urls.raw}&auto=format&fit=crop&crop=entropy${paramsSmall}`,
 		},
 	}))
 }

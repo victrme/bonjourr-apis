@@ -1,5 +1,6 @@
 import type { UnsplashImage, Image } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
+import { convertToBonjourr } from '../shared'
 
 export const UNSPLASH_COLLECTIONS = {
 	// Daylight
@@ -24,8 +25,8 @@ async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Pro
 		'bonjourr-images-daylight-evening': [],
 	}
 
-	const h = Number.parseInt(url.searchParams.get('h') ?? '1080')
-	const w = Number.parseInt(url.searchParams.get('w') ?? '1920')
+	const w = url.searchParams.get('w') ?? '1920'
+	const h = url.searchParams.get('h') ?? '1080'
 
 	for (const collection of Object.keys(result)) {
 		const randomStatement = `SELECT data FROM "${collection}" ORDER BY RANDOM() LIMIT 10`
@@ -35,31 +36,10 @@ async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Pro
 			continue
 		}
 
-		for (const row of d1Result.results) {
-			const data = row.data as string
-			const item: UnsplashImage = JSON.parse(data)
-			const baseImgUrl = `${item.urls.raw}&auto=format&fit=crop&crop=entropy`
-			const paramsFull = `&h=${h}&w=${w}&q=80`
-			const paramsMedium = `&h=${Math.round(h / 3)}&w=${Math.round(w / 3)}&q=60`
-			const paramsSmall = `&h=${Math.round(h / 10)}&w=${Math.round(w / 10)}&q=60`
+		const data = d1Result.results.map(row => JSON.parse(row.data as string) as UnsplashImage)
+		const images = convertToBonjourr(data, w, h)
 
-			result[collection].push({
-				format: 'image',
-				urls: {
-					full: baseImgUrl + paramsFull,
-					medium: baseImgUrl + paramsMedium,
-					small: baseImgUrl + paramsSmall,
-				},
-				page: item.links.html,
-				download: item.links.download,
-				username: item.user.username,
-				name: item.user.name,
-				city: item?.location?.city || undefined,
-				country: item?.location?.country || undefined,
-				color: item.color,
-				exif: item.exif,
-			})
-		}
+		result[collection].push(...images)
 	}
 
 	return new Response(JSON.stringify(result), { headers })
