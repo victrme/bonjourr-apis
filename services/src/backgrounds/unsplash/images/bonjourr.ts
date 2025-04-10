@@ -1,6 +1,6 @@
 import type { UnsplashImage, Image } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
-import { convertToBonjourr } from '../shared'
+import { toBonjourrImages } from '../shared'
 
 export const UNSPLASH_COLLECTIONS = {
 	// Daylight
@@ -37,7 +37,7 @@ async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Pro
 		}
 
 		const data = d1Result.results.map(row => JSON.parse(row.data as string) as UnsplashImage)
-		const images = convertToBonjourr(data, w, h)
+		const images = toBonjourrImages(data, w, h)
 
 		result[collection].push(...images)
 	}
