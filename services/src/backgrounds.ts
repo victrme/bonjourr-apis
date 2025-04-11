@@ -3,9 +3,10 @@ import { pixabayVideosDaylight, pixabayVideosDaylightStore } from './backgrounds
 import { unsplashImagesCollections, unsplashImagesSearch } from './backgrounds/unsplash/images/user.ts'
 import { pixabayVideosSearch } from './backgrounds/pixabay/videos/search.ts'
 import { pixabayImagesSearch } from './backgrounds/pixabay/images/search.ts'
-import { metMuseumPaintings } from './backgrounds/metmuseum/images/random.ts'
+import { metMuseumPaintings } from './backgrounds/metmuseum/images/paintings.ts'
 import { initUnsplashAuth } from './backgrounds/unsplash/shared.ts'
 import { backgroundsProxy } from './proxy.ts'
+import { metMuseumSearch } from './backgrounds/metmuseum/images/search.ts'
 import { filterPaintings } from './backgrounds/metmuseum/filter.ts'
 
 import type { Env } from './index.ts'
@@ -67,6 +68,10 @@ export async function backgrounds(url: URL, env: Env, headers: Headers): Promise
 
 	if (url.pathname.includes('/backgrounds/metmuseum/images/random')) {
 		return await metMuseumPaintings(url, headers)
+	}
+
+	if (url.pathname.includes('/backgrounds/metmuseum/images/search')) {
+		return await metMuseumSearch(url, headers)
 	}
 
 	//	Get <some other provider>

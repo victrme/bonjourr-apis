@@ -2,7 +2,7 @@ import { fetchSingleObject, metObjectToBonjourr } from '../shared'
 import type { MetObject } from '../shared'
 
 export async function metMuseumPaintings(url: URL, headers: Headers): Promise<Response> {
-	const amount = Math.min(Number.parseInt(url.searchParams.get('amount') ?? '20'), 40)
+	const amount = Math.min(Number.parseInt(url.searchParams.get('amount') ?? '10'), 40)
 
 	const basegit = 'https://raw.githubusercontent.com/victrme/bonjourr-apis'
 	const pathgit = '/refs/heads/main/assets/metmuseum_paintings.txt'
