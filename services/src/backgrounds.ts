@@ -6,6 +6,7 @@ import { pixabayVideosSearch } from './backgrounds/pixabay/videos/search.ts'
 import { pixabayImagesSearch } from './backgrounds/pixabay/images/search.ts'
 import { initUnsplashAuth } from './backgrounds/unsplash/shared.ts'
 import { backgroundsProxy } from './proxy.ts'
+import { filterPaintings } from './backgrounds/metmuseum/filter.ts'
 
 import type { Env } from './index.ts'
 
@@ -59,6 +60,10 @@ export async function backgrounds(url: URL, env: Env, headers: Headers): Promise
 	}
 
 	// Get MET Museum
+
+	if (url.pathname.includes('/backgrounds/metmuseum/images/filter')) {
+		return await filterPaintings()
+	}
 
 	if (url.pathname.includes('/backgrounds/metmuseum/images/random')) {
 		return await randomMuseumObjects(url, headers)

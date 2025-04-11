@@ -1,25 +1,24 @@
-import { fetchDepartmentObjectIds, fetchSingleObject, metObjectToBonjourr } from '../shared'
-import type { Image } from '../../../../../types/backgrounds'
+import { fetchSingleObject, metObjectToBonjourr } from '../shared'
+import type { MetObject } from '../shared'
 
 export async function randomMuseumObjects(url: URL, headers: Headers): Promise<Response> {
-	const amount = Number.parseInt(url.searchParams.get('amount') ?? '20')
-	const deps = url.searchParams.get('department') ?? '3|5|6|12|13|14|17'
+	const amount = Math.min(Number.parseInt(url.searchParams.get('amount') ?? '20'), 40)
 
-	const departments = await fetchDepartmentObjectIds(deps)
-	const results: Image[] = []
-	let failAmount = 0
+	const path = 'https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis@refs/heads/main/assets/metmuseum_paintings.txt?r=1'
+	const idsResp = await fetch(path)
+	const idsString = await idsResp.text()
+	const ids = idsString.split(',')
 
-	while (results.length < amount || failAmount > 20) {
-		const rand = Math.floor(Math.random() * departments.objectIDs.length)
-		const id = departments.objectIDs[rand]
-		const item = await fetchSingleObject(id)
+	const promises: Promise<MetObject>[] = []
 
-		if (item) {
-			results.push(metObjectToBonjourr(item))
-		} else {
-			failAmount++
-		}
+	for (let i = 0; i < amount; i++) {
+		const rand = Math.floor(Math.random() * ids.length)
+		const id = ids[rand]
+		promises.push(fetchSingleObject(id))
 	}
+
+	const responses = await Promise.all(promises)
+	const results = responses.map(item => metObjectToBonjourr(item))
 
 	return new Response(JSON.stringify(results), {
 		headers: headers,
