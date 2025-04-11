@@ -4,8 +4,9 @@ import type { MetObject } from '../shared'
 export async function randomMuseumObjects(url: URL, headers: Headers): Promise<Response> {
 	const amount = Math.min(Number.parseInt(url.searchParams.get('amount') ?? '20'), 40)
 
-	const path = 'https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis@refs/heads/main/assets/metmuseum_paintings.txt?r=1'
-	const idsResp = await fetch(path)
+	const basegit = 'https://raw.githubusercontent.com/victrme/bonjourr-apis'
+	const pathgit = '/refs/heads/main/assets/metmuseum_paintings.txt'
+	const idsResp = await fetch(basegit + pathgit)
 	const idsString = await idsResp.text()
 	const ids = idsString.split(',')
 
