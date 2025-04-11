@@ -1,7 +1,7 @@
 import { fetchSingleObject, metObjectToBonjourr } from '../shared'
 import type { MetObject } from '../shared'
 
-export async function randomMuseumObjects(url: URL, headers: Headers): Promise<Response> {
+export async function metMuseumPaintings(url: URL, headers: Headers): Promise<Response> {
 	const amount = Math.min(Number.parseInt(url.searchParams.get('amount') ?? '20'), 40)
 
 	const basegit = 'https://raw.githubusercontent.com/victrme/bonjourr-apis'
@@ -21,7 +21,7 @@ export async function randomMuseumObjects(url: URL, headers: Headers): Promise<R
 	const responses = await Promise.all(promises)
 	const results = responses.map(item => metObjectToBonjourr(item))
 
-	return new Response(JSON.stringify(results), {
+	return new Response(JSON.stringify({ 'metmuseum-images-paintings': results }), {
 		headers: headers,
 	})
 }
