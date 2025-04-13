@@ -6,6 +6,7 @@ import { pixabayImagesSearch } from './backgrounds/pixabay/images/search.ts'
 import { metMuseumPaintings } from './backgrounds/metmuseum/images/paintings.ts'
 import { initUnsplashAuth } from './backgrounds/unsplash/shared.ts'
 import { backgroundsProxy } from './proxy.ts'
+import { pictureOfTheDay } from './backgrounds/apod/images/index.ts'
 import { metMuseumSearch } from './backgrounds/metmuseum/images/search.ts'
 import { filterPaintings } from './backgrounds/metmuseum/filter.ts'
 
@@ -72,6 +73,12 @@ export async function backgrounds(url: URL, env: Env, headers: Headers): Promise
 
 	if (url.pathname.includes('/backgrounds/metmuseum/images/search')) {
 		return await metMuseumSearch(url, headers)
+	}
+
+	// Get Astronomy picture of the day
+
+	if (url.pathname.includes('/backgrounds/apod/images/picture')) {
+		return await pictureOfTheDay()
 	}
 
 	//	Get <some other provider>
