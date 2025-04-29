@@ -66,7 +66,7 @@ export async function backgrounds(url: URL, env: Env, headers: Headers): Promise
 		return await filterPaintings()
 	}
 
-	if (url.pathname.includes('/backgrounds/metmuseum/images/random')) {
+	if (url.pathname.includes('/backgrounds/metmuseum/images/paintings')) {
 		return await metMuseumPaintings(url, headers)
 	}
 
