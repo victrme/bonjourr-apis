@@ -22,7 +22,7 @@ export async function fetchUnsplash(search: string): Promise<UnsplashImage[]> {
 export function toBonjourrImages(images: UnsplashImage[], w: string, h: string): Image[] {
 	const width = Number.parseInt(w)
 	const height = Number.parseInt(h)
-	const paramsMedium = `&h=${Math.round(height / 3)}&w=${Math.round(width / 3)}&q=60`
+	const paramsMedium = `&h=${Math.round(height / 2)}&w=${Math.round(width / 2)}&q=50`
 	const paramsSmall = `&h=${Math.round(height / 10)}&w=${Math.round(width / 10)}&q=60`
 	const paramsFull = `&h=${h}&w=${w}&q=80`
 
