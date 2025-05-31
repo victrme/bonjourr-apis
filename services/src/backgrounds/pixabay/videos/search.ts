@@ -1,3 +1,5 @@
+import { resolutionBasedUrls } from '../shared'
+
 import type { PixabayVideo, Video } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
 
@@ -15,18 +17,24 @@ export async function pixabayVideosSearch(url: URL, env: Env, headers: Headers):
 	const json = await resp.json()
 
 	const arr = json.hits as PixabayVideo[]
-	const result: Video[] = arr.map(item => ({
-		format: 'video',
-		page: item.pageURL,
-		username: item.user,
-		duration: item.duration,
-		thumbnail: item.videos.large.thumbnail,
-		urls: {
-			full: item.videos.large.url,
-			medium: item.videos.medium.url,
-			small: item.videos.tiny.url,
-		},
-	}))
+	const result: Video[] = []
+
+	for (const item of arr) {
+		const urls = resolutionBasedUrls(item)
+
+		result.push({
+			format: 'video',
+			page: item.pageURL,
+			username: item.user,
+			duration: item.duration,
+			thumbnail: item.videos.large.thumbnail,
+			urls: {
+				full: urls.large,
+				medium: urls.medium,
+				small: urls.small,
+			},
+		})
+	}
 
 	return new Response(JSON.stringify({ 'pixabay-videos-search': result }), { headers })
 }
