@@ -6,23 +6,23 @@ export function resolutionBasedUrls(video: PixabayVideo) {
 
 	if (heights.includes(2160)) {
 		return {
-			large: medium.url,
-			medium: small.url,
-			small: tiny.url,
+			large: small.url, // 1080
+			medium: small.url, // 1080
+			small: tiny.url, // 720
 		}
 	}
 
 	if (heights.includes(1440)) {
 		return {
-			large: large.url,
-			medium: medium.url,
-			small: small.url,
+			large: medium.url, // 1080
+			medium: small.url, // 720
+			small: tiny.url, // 540
 		}
 	}
 
 	return {
-		large: large.url,
-		medium: large.url,
-		small: small.url,
+		large: large.url, // 1080
+		medium: medium.url, // 720
+		small: small.url, // 540
 	}
 }
