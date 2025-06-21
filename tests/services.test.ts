@@ -1,4 +1,3 @@
-import { afterAll, beforeAll, describe, expect, expectTypeOf, it } from 'vitest'
 import { unstable_dev, type Unstable_DevWorker } from 'wrangler'
 
 import type { UnsplashPhoto } from '../types/unsplash'
@@ -102,7 +101,7 @@ describe('Unsplash', () => {
 		expectTypeOf(links.html).toBeString()
 		expectTypeOf(user.username).toBeString()
 		expectTypeOf(user.name).toBeString()
-		expect(exifkeys.every(key => key in exif)).toBe(true)
+		expect(exifkeys.every((key) => key in exif)).toBe(true)
 	})
 })
 
@@ -188,7 +187,7 @@ describe('Suggestions', () => {
 
 		it('has valid type', async () => {
 			const results = (await response?.clone().json()) as Record<string, unknown>
-			const detailedResultIndex = results.findIndex(item => item.image)
+			const detailedResultIndex = results.findIndex((item) => item.image)
 
 			expectTypeOf(results[0].text).toBeString.result
 			expectTypeOf(results[detailedResultIndex].desc).toBeString()
@@ -235,10 +234,10 @@ describe('Fonts', () => {
 	})
 
 	it('have all "latin" subset', async () => {
-		expect(fontlist.every(font => font.subsets.includes('latin'))).toBe(true)
+		expect(fontlist.every((font) => font.subsets.includes('latin'))).toBe(true)
 	})
 
 	it('have at least "400" weight', async () => {
-		expect(fontlist.every(font => font.weights.includes(400))).toBe(true)
+		expect(fontlist.every((font) => font.weights.includes(400))).toBe(true)
 	})
 })

@@ -1,4 +1,3 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { unstable_dev, type Unstable_DevWorker } from 'wrangler'
 import type { Simple } from '../weather/meteo/src/types'
 

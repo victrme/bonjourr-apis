@@ -1,7 +1,6 @@
 {
-	"name": "services",
-	"type": "module",
-	"scripts": {
-		"dev": "npx wrangler dev"
-	}
+    "name": "services",
+    "scripts": {
+        "dev": "npx wrangler dev"
+    }
 }

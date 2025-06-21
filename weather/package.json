@@ -1,10 +1,10 @@
 {
-	"name": "weather",
-	"type": "module",
-	"scripts": {
-		"dev": "npx wrangler dev"
-	},
-	"dependencies": {
-		"htmlparser2": "10.0.0"
-	}
+    "name": "weather",
+    "type": "module",
+    "scripts": {
+        "dev": "npx wrangler dev"
+    },
+    "dependencies": {
+        "htmlparser2": "10.0.0"
+    }
 }

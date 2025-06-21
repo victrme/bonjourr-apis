@@ -1,0 +1,34 @@
+{
+    "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+    "tasks": {
+        "test": "vitest run ./tests/**",
+        "init": "git submodule update --init",
+        "sync": "git submodule update --remote",
+        "weather": "# pnpm --filter weather dev",
+        "services": "# pnpm --filter services dev",
+        "collections": "# pnpm --filter collections dev"
+    },
+    "lint": {
+        "rules": {
+            "tags": ["recommended"],
+            "include": [
+                "eqeqeq",
+                "verbatim-module-syntax",
+                "single-var-declarator",
+                "no-sparse-arrays",
+                "no-inferrable-types",
+                "no-external-import",
+                "no-const-assign",
+                "default-param-last"
+            ]
+        }
+    },
+    "fmt": {
+        "indentWidth": 4,
+        "lineWidth": 120,
+        "useTabs": true,
+        "semiColons": false,
+        "singleQuote": true,
+        "include": ["**/*.ts", "**/*.js"]
+    }
+}
