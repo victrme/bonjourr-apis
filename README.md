@@ -4,10 +4,10 @@ This is Bonjourr API system.
 
 ## Install
 
--   First [Install pnpm](https://pnpm.io/installation) on your system
--   Fork this repository. (future me can skip this step)
--   Install quotes, favicon, and suggestions
--   Add your secrets to a `.dev.vars` for local dev to work
+- First [Install pnpm](https://pnpm.io/installation) on your system
+- Fork this repository. (future me can skip this step)
+- Install quotes, favicon, and suggestions
+- Add your secrets to a `.dev.vars` for local dev to work
 
 ```yaml
 # .dev.vars
@@ -54,13 +54,13 @@ This is what your terminal should look like:
 
 ## Update
 
-For skill issue reasons, bonjourr-apis does not automatically deploy remote apis updates.  
+For skill issue reasons, bonjourr-apis does not automatically deploy remote apis updates.\
 To deploy a new update:
 
--   Make sure remote apis are initialized using `git submodule update --init`
--   Once added to your device, update with `git submodule update --remote`
--   A submodule file should update showing the latest commit hash from the remote api
--   Push a new commit with that file
+- Make sure remote apis are initialized using `git submodule update --init`
+- Once added to your device, update with `git submodule update --remote`
+- A submodule file should update showing the latest commit hash from the remote api
+- Push a new commit with that file
 
 ```bash
 > git submodule update --init
@@ -77,8 +77,9 @@ To deploy a new update:
 
 ### With Github Actions
 
-Add repository secrets for Github Action in [Settings > Secrets and Variables > Actions](https://github.com/victrme/bonjourr-apis/settings/secrets/actions):
+Add repository secrets for Github Action in
+[Settings > Secrets and Variables > Actions](https://github.com/victrme/bonjourr-apis/settings/secrets/actions):
 
--   `CF_API_TOKEN` (the single api token for all accounts that you forgot)
--   `CF_MAIN_ACCOUNT_ID`
--   `UNSPLASH`
+- `CF_API_TOKEN` (the single api token for all accounts that you forgot)
+- `CF_MAIN_ACCOUNT_ID`
+- `UNSPLASH`
