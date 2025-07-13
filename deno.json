@@ -3,9 +3,10 @@
 	"tasks": {
 		"init": "git submodule update --init",
 		"sync": "git submodule update --remote",
-		"test": "deno test --allow-net tests/**",
 		"weather": "npx wrangler dev --cwd weather",
-		"services": "npx wrangler dev --cwd services"
+		"services": "npx wrangler dev --cwd services",
+		"test:weather": "deno test --allow-net ./weather/*.test.ts",
+		"test:services": "deno test --allow-net ./services/*.test.ts"
 	},
 	"lint": {
 		"rules": {
