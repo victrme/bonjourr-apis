@@ -19,7 +19,7 @@ export async function metMuseumPaintings(url: URL, headers: Headers): Promise<Re
 	}
 
 	const responses = await Promise.all(promises)
-	const results = responses.map(item => metObjectToBonjourr(item))
+	const results = responses.map((item) => metObjectToBonjourr(item))
 
 	return new Response(JSON.stringify({ 'metmuseum-images-paintings': results }), {
 		headers: headers,

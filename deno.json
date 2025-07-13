@@ -1,34 +1,37 @@
 {
-    "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
-    "tasks": {
-        "test": "vitest run ./tests/**",
-        "init": "git submodule update --init",
-        "sync": "git submodule update --remote",
-        "weather": "# pnpm --filter weather dev",
-        "services": "# pnpm --filter services dev",
-        "collections": "# pnpm --filter collections dev"
-    },
-    "lint": {
-        "rules": {
-            "tags": ["recommended"],
-            "include": [
-                "eqeqeq",
-                "verbatim-module-syntax",
-                "single-var-declarator",
-                "no-sparse-arrays",
-                "no-inferrable-types",
-                "no-external-import",
-                "no-const-assign",
-                "default-param-last"
-            ]
-        }
-    },
-    "fmt": {
-        "indentWidth": 4,
-        "lineWidth": 120,
-        "useTabs": true,
-        "semiColons": false,
-        "singleQuote": true,
-        "include": ["**/*.ts", "**/*.js"]
-    }
+	"$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+	"tasks": {
+		"test": "vitest run ./tests/**",
+		"init": "git submodule update --init",
+		"sync": "git submodule update --remote",
+		"weather": "npx wrangler dev --cwd weather",
+		"services": "npx wrangler dev --cwd services"
+	},
+	"lint": {
+		"rules": {
+			"tags": ["recommended"],
+			"exclude": ["no-sloppy-imports"],
+			"include": [
+				"eqeqeq",
+				"verbatim-module-syntax",
+				"single-var-declarator",
+				"no-sparse-arrays",
+				"no-inferrable-types",
+				"no-external-import",
+				"no-const-assign",
+				"default-param-last"
+			]
+		}
+	},
+	"fmt": {
+		"indentWidth": 4,
+		"lineWidth": 120,
+		"useTabs": true,
+		"semiColons": false,
+		"singleQuote": true,
+		"include": ["**/*.ts", "**/*.js"]
+	},
+	"imports": {
+		"@cloudflare/workers-types": "npm:@cloudflare/workers-types@^4.20250712.0"
+	}
 }

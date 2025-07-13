@@ -1,5 +1,5 @@
-import type { Video, PixabayVideo } from '../../../../../types/backgrounds'
-import type { Env } from '../../..'
+import type { Pixabay, PixabayVideo, Video } from '../../../../../types/backgrounds.ts'
+import type { Env } from '../../../index.ts'
 
 interface PixabayCollection {
 	name: string
@@ -72,8 +72,8 @@ export async function pixabayVideosDaylightStore(env: Env) {
 
 			console.warn('Stored ', collection.name)
 		}
-	} catch (e) {
-		console.warn(e.message)
+	} catch (err) {
+		console.warn(err)
 	}
 }
 
@@ -90,7 +90,7 @@ async function listCollections(env: Env): Promise<PixabayCollection[]> {
 
 async function getApiCollectionData(env: Env, collection: PixabayCollection): Promise<PixabayVideo[]> {
 	const { ids } = collection
-	const promises = ids.map(id => getApiDataFromId(id, env.PIXABAY ?? ''))
+	const promises = ids.map((id) => getApiDataFromId(id, env.PIXABAY ?? ''))
 	const data = await Promise.all(promises)
 
 	return data
@@ -104,7 +104,7 @@ async function getApiDataFromId(id: string, key = ''): Promise<PixabayVideo> {
 	}
 
 	const resp = await fetch(`https://pixabay.com/api/videos?key=${key}&id=${id}`)
-	const json = await resp.json()
+	const json = await resp.json<Pixabay>()
 
 	if (json.hits.length === 1) {
 		return json.hits[0] as PixabayVideo

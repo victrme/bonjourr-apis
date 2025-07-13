@@ -20,7 +20,7 @@ export async function metMuseumSearch(url: URL, headers: Headers): Promise<Respo
 		}
 
 		if (list.length === amount) {
-			const images = list.map(item => metObjectToBonjourr(item))
+			const images = list.map((item) => metObjectToBonjourr(item))
 			const body = JSON.stringify({ 'metmuseum-images-search': images })
 
 			return new Response(body, { headers })

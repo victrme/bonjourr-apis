@@ -1,5 +1,5 @@
-import type { UnsplashImage, Image } from '../../../../types/backgrounds'
-import type { Env } from '../..'
+import type { Image, UnsplashImage } from '../../../../types/backgrounds.ts'
+import type { Env } from '../../index.ts'
 
 let clientId = ''
 
@@ -14,7 +14,7 @@ export async function fetchUnsplash(search: string): Promise<UnsplashImage[]> {
 	}
 
 	const resp = await fetch(`https://api.unsplash.com/photos/random${search}`, { headers })
-	const json = await resp.json()
+	const json = await resp.json<UnsplashImage[]>()
 
 	return json
 }
@@ -26,7 +26,7 @@ export function toBonjourrImages(images: UnsplashImage[], w: string, h: string):
 	const paramsSmall = `&h=${Math.round(height / 10)}&w=${Math.round(width / 10)}&q=60`
 	const paramsFull = `&h=${h}&w=${w}&q=80`
 
-	return images.map(item => ({
+	return images.map((item) => ({
 		format: 'image',
 		page: item.links.html,
 		download: item.links.download,

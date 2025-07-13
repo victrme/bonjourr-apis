@@ -1,6 +1,0 @@
-{
-    "name": "services",
-    "scripts": {
-        "dev": "npx wrangler dev"
-    }
-}

@@ -1,4 +1,4 @@
-import { toBonjourrImages, fetchUnsplash } from '../shared'
+import { fetchUnsplash, toBonjourrImages } from '../shared.ts'
 
 export async function unsplashImagesSearch(url: URL, headers: Headers): Promise<Response> {
 	const orientation = url.searchParams.get('orientation') ?? 'landscape'

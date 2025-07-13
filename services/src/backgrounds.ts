@@ -11,7 +11,11 @@ import { filterPaintings } from './backgrounds/metmuseum/filter.ts'
 
 import type { Env } from './index.ts'
 
-export async function backgrounds(url: URL, env: Env, headers: Headers): Promise<Response> {
+export async function backgrounds(
+	url: URL,
+	env: Env,
+	headers: Headers,
+): Promise<Response> {
 	initUnsplashAuth(env)
 
 	//	Get URLs proxy
@@ -23,7 +27,10 @@ export async function backgrounds(url: URL, env: Env, headers: Headers): Promise
 	//	Store daylight
 
 	if (url.pathname.includes('/backgrounds/bonjourr/store')) {
-		await Promise.all([pixabayVideosDaylightStore(env), unsplashImagesDaylightStore(env)])
+		await Promise.all([
+			pixabayVideosDaylightStore(env),
+			unsplashImagesDaylightStore(env),
+		])
 		return new Response('Done')
 	}
 
