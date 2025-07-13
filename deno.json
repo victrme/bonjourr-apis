@@ -21,7 +21,8 @@
 				"no-const-assign",
 				"default-param-last"
 			]
-		}
+		},
+		"exclude": ["suggestions", "favicon", "quotes", "weather/meteo"]
 	},
 	"fmt": {
 		"indentWidth": 4,
@@ -31,10 +32,10 @@
 		"singleQuote": true,
 		"include": ["**/*.ts"],
 		"exclude": [
-			"services/src/suggestions/**/*.ts",
-			"services/src/favicon/**/*.ts",
-			"services/src/quotes/**/*.ts",
-			"weather/meteo/**/*.ts"
+			"services/src/suggestions",
+			"services/src/favicon",
+			"services/src/quotes",
+			"weather/meteo"
 		]
 	},
 	"imports": {

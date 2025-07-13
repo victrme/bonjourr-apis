@@ -1,4 +1,4 @@
-import type { Pixabay, PixabayVideo, Video } from '../../../../../types/backgrounds.ts'
+import type { Pixabay, PixabayVideo, Video } from '../../../../types/backgrounds.ts'
 import type { Env } from '../../../index.ts'
 
 export async function pixabayVideosSearch(url: URL, env: Env, headers: Headers): Promise<Response> {

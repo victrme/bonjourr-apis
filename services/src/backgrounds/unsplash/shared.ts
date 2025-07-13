@@ -1,4 +1,4 @@
-import type { Image, UnsplashImage } from '../../../../types/backgrounds.ts'
+import type { Image, UnsplashImage } from '../../../types/backgrounds.ts'
 import type { Env } from '../../index.ts'
 
 let clientId = ''

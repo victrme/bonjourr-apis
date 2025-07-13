@@ -1,6 +1,6 @@
 import { toBonjourrImages } from '../shared.ts'
 
-import type { Image, UnsplashImage } from '../../../../../types/backgrounds.ts'
+import type { Image, UnsplashImage } from '../../../../types/backgrounds.ts'
 import type { Env } from '../../../index.ts'
 
 export const UNSPLASH_COLLECTIONS = {

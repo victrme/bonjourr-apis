@@ -1,6 +1,6 @@
 import { expect } from '@std/expect'
 
-import type { Simple } from '../../weather/meteo/src/types.ts'
+import type { Simple } from './meteo/src/types.ts'
 
 Deno.test('200 on /', async () => {
 	const response = await fetch('http://0.0.0.0:8787/')

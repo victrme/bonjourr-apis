@@ -1,4 +1,4 @@
-import type { Image, Pixabay, PixabayImage } from '../../../../../types/backgrounds.ts'
+import type { Image, Pixabay, PixabayImage } from '../../../../types/backgrounds.ts'
 import type { Env } from '../../../index.ts'
 
 export async function pixabayImagesSearch(url: URL, env: Env, headers: Headers): Promise<Response> {
