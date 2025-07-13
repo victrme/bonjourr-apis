@@ -9,12 +9,8 @@
 	},
 	"lint": {
 		"rules": {
-			"tags": [
-				"recommended"
-			],
-			"exclude": [
-				"no-sloppy-imports"
-			],
+			"tags": ["recommended"],
+			"exclude": ["no-sloppy-imports"],
 			"include": [
 				"eqeqeq",
 				"verbatim-module-syntax",
@@ -33,9 +29,7 @@
 		"useTabs": true,
 		"semiColons": false,
 		"singleQuote": true,
-		"include": [
-			"**/*.ts"
-		],
+		"include": ["**/*.ts"],
 		"exclude": [
 			"services/src/suggestions/**/*.ts",
 			"services/src/favicon/**/*.ts",
