@@ -1,11 +1,12 @@
 import { expect } from '@std/expect'
-import type { Quote } from '../../services/src/quotes/src/index.ts'
+import type { Quote } from '../src/quotes/src/index.ts'
 
 let quotes: Quote[]
 let response: Response
 
 Deno.test('has application/json as content-type', async () => {
 	const response = await fetch('http://0.0.0.0:8787/quotes/classic')
+	await response.text() // Consume response to avoid "error: Leaks detected"
 	expect(response.headers.get('content-type')).toBe('application/json')
 })
 

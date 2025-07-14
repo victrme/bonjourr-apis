@@ -1,5 +1,5 @@
 import { expect } from '@std/expect'
-import type { Fontsource } from '../../types/fonts.ts'
+import type { Fontsource } from '../types/fonts.ts'
 
 const response = await fetch('http://0.0.0.0:8787/fonts')
 const fontlist = (await response?.json()) as Fontsource[]

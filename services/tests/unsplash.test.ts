@@ -1,7 +1,8 @@
 import { expect } from '@std/expect'
-import type { UnsplashPhoto } from '../../types/unsplash.ts'
+import type { UnsplashPhoto } from '../types/unsplash.ts'
 
-const response = await fetch('http://0.0.0.0:8787/unsplash/photos/random?collections=GD4aOSg4yQE&count=8')
+const url = 'http://0.0.0.0:8787/unsplash/photos/random?collections=GD4aOSg4yQE&count=8'
+const response = await fetch(url)
 const json = (await response.json()) as UnsplashPhoto[]
 
 Deno.test('returns correct amount of images', () => {
