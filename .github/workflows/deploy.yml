@@ -23,7 +23,7 @@ jobs:
               run: echo "UNSPLASH=${UNSPLASH}" > ./services/.dev.vars
 
             - run: |
-                  npx wrangler &
+                  npx wrangler &&
                   nohup \
                      deno task services & \
                      sleep 3 && deno task test:services
