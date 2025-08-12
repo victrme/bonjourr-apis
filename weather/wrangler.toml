@@ -8,3 +8,7 @@ cpu_ms = 30
 [dev]
 ip = "127.0.0.1"
 port = 8888
+
+[observability]
+enabled = true
+head_sampling_rate = 0.1
