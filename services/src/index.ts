@@ -3,7 +3,7 @@ import { unsplash } from './unsplash.ts'
 import { fonts } from './fonts.ts'
 import { proxy } from './proxy.ts'
 
-import suggestions from './suggestions/cloudflare/index.ts'
+import suggestions from './suggestions/src/worker.ts'
 import favicon from './favicon/package/src/index.ts'
 import quotes from './quotes/src/index.ts'
 
