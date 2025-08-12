@@ -5,8 +5,8 @@
 		"sync": "git submodule update --remote",
 		"weather": "npx wrangler dev --cwd weather",
 		"services": "npx wrangler dev --cwd services",
-		"test:weather": "deno test --allow-net ./weather/*.test.ts",
-		"test:services": "deno test --allow-net ./services/*.test.ts"
+		"test:weather": "deno test --allow-net weather/index.test.ts",
+		"test:services": "deno test --allow-net services/tests/*.test.ts"
 	},
 	"lint": {
 		"rules": {
