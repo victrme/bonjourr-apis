@@ -3,10 +3,10 @@ name: CI
 on:
     push:
         branches:
-            - main
+            - use-deno
 
 jobs:
-    test:
+    test-services:
         runs-on: ubuntu-latest
 
         env:
@@ -15,8 +15,6 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - uses: denoland/setup-deno@v2
-              with:
-                  deno-version: v2.x
 
             - name: Init submodules
               run: git submodule update --init
@@ -24,12 +22,26 @@ jobs:
             - name: Create .dev.vars file
               run: echo "UNSPLASH=${UNSPLASH}" > ./services/.dev.vars
 
-            - run: |
-                  deno task test:services
-                  deno task test:weather
+            - run: deno task ci:services
+
+    test-weather:
+        needs: test-services
+        runs-on: ubuntu-latest
+
+        env:
+            UNSPLASH: ${{ secrets.UNSPLASH }}
+
+        steps:
+            - uses: actions/checkout@v3
+            - uses: denoland/setup-deno@v2
+
+            - name: Init submodules
+              run: git submodule update --init
+
+            - run: deno task ci:weather
 
     deploy:
-        needs: test
+        needs: test-weather
         runs-on: ubuntu-latest
 
         steps:
