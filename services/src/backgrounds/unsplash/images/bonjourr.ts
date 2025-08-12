@@ -1,6 +1,7 @@
-import type { UnsplashImage, Image } from '../../../../../types/backgrounds'
-import type { Env } from '../../..'
-import { toBonjourrImages } from '../shared'
+import { toBonjourrImages } from '../shared.ts'
+
+import type { Image, UnsplashImage } from '../../../../types/backgrounds.ts'
+import type { Env } from '../../../index.ts'
 
 export const UNSPLASH_COLLECTIONS = {
 	// Daylight
@@ -30,13 +31,13 @@ async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Pro
 
 	for (const collection of Object.keys(result)) {
 		const randomStatement = `SELECT data FROM "${collection}" ORDER BY RANDOM() LIMIT 10`
-		const d1Result = await env.DB.prepare(randomStatement).all()
+		const d1Result = await env.DB.prepare(randomStatement).all() as D1Result<Record<string, string>>
 
 		if (d1Result.results.length === 0) {
 			continue
 		}
 
-		const data = d1Result.results.map(row => JSON.parse(row.data as string) as UnsplashImage)
+		const data = d1Result.results.map((row) => JSON.parse(row.data) as UnsplashImage)
 		const images = toBonjourrImages(data, w, h)
 
 		result[collection].push(...images)
@@ -66,7 +67,7 @@ async function storeSingleCollection(name: string, id: string, env: Env): Promis
 	const ids = await retrievePhotosIdsFromCollection(id, env)
 	const images = await retrievePhotosDataFromIds(ids, env)
 
-	const promises = images.map(async image => {
+	const promises = images.map(async (image) => {
 		const id = image.id
 		const data = JSON.stringify(image)
 		const insertStatement = `INSERT INTO "${name}" (id, data) VALUES (?, ?)`
@@ -87,7 +88,7 @@ async function retrievePhotosDataFromIds(ids: string[], env: Env): Promise<Unspl
 	const headers = { 'Accept-Version': 'v1', Authorization }
 	const result: UnsplashImage[] = []
 
-	const promises = ids.map(async id => {
+	const promises = ids.map(async (id) => {
 		try {
 			const path = `https://api.unsplash.com/photos/${id}`
 			const resp = await fetch(path, { headers })
@@ -114,7 +115,7 @@ async function retrievePhotosIdsFromCollection(collection: string, env: Env): Pr
 			const path = `${base}/${collection}/photos?per_page=30&page=${page}`
 			const resp = await fetch(path, { headers })
 			const json = (await resp.json()) as UnsplashImage[]
-			const ids = json.map(image => image.id)
+			const ids = json.map((image) => image.id)
 
 			result.push(...ids)
 		} catch (error) {

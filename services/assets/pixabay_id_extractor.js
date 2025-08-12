@@ -6,7 +6,7 @@
 
 console.log(
 	Object.values(document.querySelectorAll('div > a[data-id]'))
-		.map(a => a.dataset.id)
+		.map((a) => a.dataset.id)
 		.join(', '),
 )
 
@@ -14,7 +14,7 @@ console.log(
 
 console.log(
 	Object.values(document.querySelectorAll('div > a[class] > img'))
-		.map(image => image.src)
-		.map(src => src.slice(src.lastIndexOf('/') + 1, src.indexOf('-')).split('_')[0])
+		.map((image) => image.src)
+		.map((src) => src.slice(src.lastIndexOf('/') + 1, src.indexOf('-')).split('_')[0])
 		.join(', '),
 )

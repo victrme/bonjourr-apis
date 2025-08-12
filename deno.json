@@ -1,0 +1,46 @@
+{
+	"$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+	"tasks": {
+		"init": "git submodule update --init",
+		"sync": "git submodule update --remote",
+		"weather": "npx wrangler dev --cwd weather",
+		"services": "npx wrangler dev --cwd services",
+		"test:weather": "deno test --allow-net weather/index.test.ts",
+		"test:services": "deno test --allow-net services/tests/*.test.ts"
+	},
+	"lint": {
+		"rules": {
+			"tags": ["recommended"],
+			"exclude": ["no-sloppy-imports"],
+			"include": [
+				"eqeqeq",
+				"verbatim-module-syntax",
+				"single-var-declarator",
+				"no-sparse-arrays",
+				"no-inferrable-types",
+				"no-external-import",
+				"no-const-assign",
+				"default-param-last"
+			]
+		},
+		"exclude": ["suggestions", "favicon", "quotes", "weather/meteo"]
+	},
+	"fmt": {
+		"indentWidth": 4,
+		"lineWidth": 120,
+		"useTabs": true,
+		"semiColons": false,
+		"singleQuote": true,
+		"include": ["**/*.ts"],
+		"exclude": [
+			"services/src/suggestions",
+			"services/src/favicon",
+			"services/src/quotes",
+			"weather/meteo"
+		]
+	},
+	"imports": {
+		"@cloudflare/workers-types": "npm:@cloudflare/workers-types@^4.20250712.0",
+		"@std/expect": "jsr:@std/expect@^1.0.16"
+	}
+}

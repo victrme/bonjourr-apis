@@ -3,11 +3,11 @@ import { unsplash } from './unsplash.ts'
 import { fonts } from './fonts.ts'
 import { proxy } from './proxy.ts'
 
-import suggestions from "./suggestions/cloudflare/index.ts"
-import favicon from "./favicon/package/src/index.ts"
-import quotes from "./quotes/src/index.ts"
+import suggestions from './suggestions/src/worker.ts'
+import favicon from './favicon/package/src/index.ts'
+import quotes from './quotes/src/index.ts'
 
-import type { D1Database } from "@cloudflare/workers-types"
+import type { D1Database } from '@cloudflare/workers-types'
 
 const headers = new Headers({
 	'Access-Control-Allow-Origin': '*',
@@ -52,7 +52,10 @@ export default {
 
 			case '': {
 				headers.set('Content-Type', 'text/html')
-				return new Response("Hello world, this is Bonjourr's services !", { headers })
+				return new Response(
+					"Hello world, this is Bonjourr's services !",
+					{ headers },
+				)
 			}
 
 			default:

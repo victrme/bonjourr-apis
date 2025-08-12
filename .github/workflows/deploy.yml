@@ -3,7 +3,7 @@ name: CI
 on:
     push:
         branches:
-            - main
+            - use-deno
 
 jobs:
     test:
@@ -13,28 +13,18 @@ jobs:
             UNSPLASH: ${{ secrets.UNSPLASH }}
 
         steps:
-            - uses: actions/checkout@v4
-            - uses: pnpm/action-setup@v3
-              with:
-                  version: latest
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: latest
-                  cache: 'pnpm'
+            - uses: actions/checkout@v3
+            - uses: denoland/setup-deno@v2
 
             - name: Init submodules
               run: git submodule update --init
 
-            - name: Install dependencies
-              run: |
-                  pnpm install
-                  pnpm --filter weather install
-
             - name: Create .dev.vars file
               run: echo "UNSPLASH=${UNSPLASH}" > ./services/.dev.vars
 
-            - name: Run tests
-              run: pnpm run test
+            - run: npx wrangler
+            - run: nohup npx wrangler dev --cwd services & sleep 3 && deno task test:services
+            - run: nohup npx wrangler dev --cwd weather & sleep 3 && deno task test:weather
 
     deploy:
         needs: test
@@ -42,13 +32,6 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
-            - uses: pnpm/action-setup@v3
-              with:
-                  version: latest
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: latest
-                  cache: 'pnpm'
 
             - name: Init submodules
               run: git submodule update --init
@@ -56,13 +39,13 @@ jobs:
             - name: Deploy Services
               uses: cloudflare/wrangler-action@v3
               with:
-                  workingDirectory: 'services'
+                  workingDirectory: "services"
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
 
             - name: Deploy Weather
               uses: cloudflare/wrangler-action@v3
               with:
-                  workingDirectory: 'weather'
+                  workingDirectory: "weather"
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}

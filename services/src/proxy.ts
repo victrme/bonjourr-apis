@@ -22,7 +22,10 @@ export async function proxy(req: Request, headers: Headers): Promise<Response> {
 	}
 }
 
-export async function backgroundsProxy(url: URL, headers: Headers): Promise<Response> {
+export async function backgroundsProxy(
+	url: URL,
+	headers: Headers,
+): Promise<Response> {
 	const query = url.pathname.replace('/backgrounds/proxy/', '')
 	const resp = await fetch(query)
 	const contenttype = resp.headers.get('Content-Type') || 'default'

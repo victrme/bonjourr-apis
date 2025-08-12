@@ -1,5 +1,5 @@
-import { fetchSingleObject, metObjectToBonjourr } from '../shared'
-import type { MetObject } from '../shared'
+import { fetchSingleObject, metObjectToBonjourr } from '../shared.ts'
+import type { MetObject } from '../shared.ts'
 
 export async function metMuseumPaintings(url: URL, headers: Headers): Promise<Response> {
 	const amount = Math.min(Number.parseInt(url.searchParams.get('amount') ?? '10'), 40)
@@ -19,7 +19,7 @@ export async function metMuseumPaintings(url: URL, headers: Headers): Promise<Re
 	}
 
 	const responses = await Promise.all(promises)
-	const results = responses.map(item => metObjectToBonjourr(item))
+	const results = responses.map((item) => metObjectToBonjourr(item))
 
 	return new Response(JSON.stringify({ 'metmuseum-images-paintings': results }), {
 		headers: headers,
