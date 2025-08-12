@@ -1,5 +1,7 @@
-import type { Pixabay, PixabayVideo, Video } from '../../../../types/backgrounds.ts'
-import type { Env } from '../../../index.ts'
+import { resolutionBasedUrls } from '../shared.ts'
+
+import type { PixabayVideo, Video } from '../../../../../types/backgrounds'
+import type { Env } from '../../..'
 
 interface PixabayCollection {
 	name: string
@@ -28,6 +30,7 @@ export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise
 		for (const row of results) {
 			const data = row.data as string
 			const item: PixabayVideo = JSON.parse(data)
+			const urls = resolutionBasedUrls(item)
 
 			result[collection].push({
 				format: 'video',
@@ -36,9 +39,9 @@ export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise
 				duration: item.duration,
 				thumbnail: item.videos.large.thumbnail,
 				urls: {
-					full: item.videos.large.url,
-					medium: item.videos.medium.url,
-					small: item.videos.tiny.url,
+					full: urls.large,
+					medium: urls.medium,
+					small: urls.small,
 				},
 			})
 		}
