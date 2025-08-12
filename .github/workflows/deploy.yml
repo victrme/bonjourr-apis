@@ -22,14 +22,9 @@ jobs:
             - name: Create .dev.vars file
               run: echo "UNSPLASH=${UNSPLASH}" > ./services/.dev.vars
 
-            - run: |
-                  npx wrangler &&
-                  nohup \
-                     deno task services & \
-                     sleep 3 && deno task test:services
-                  nohup \
-                     deno task weather & \
-                     sleep 3 && deno task test:weather
+            - run: npx wrangler
+            - run: nohup npx wrangler dev --cwd services & sleep 3 && deno task test:services
+            - run: nohup npx wrangler dev --cwd weather & sleep 3 && deno task test:weather
 
     deploy:
         needs: test
