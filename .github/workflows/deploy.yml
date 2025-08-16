@@ -39,6 +39,7 @@ jobs:
             - name: Deploy Services
               uses: cloudflare/wrangler-action@v3
               with:
+                  wranglerVersion: "4.30.0"
                   workingDirectory: "services"
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
@@ -46,6 +47,7 @@ jobs:
             - name: Deploy Weather
               uses: cloudflare/wrangler-action@v3
               with:
+                  wranglerVersion: "4.30.0"
                   workingDirectory: "weather"
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_MAIN_ACCOUNT_ID }}
