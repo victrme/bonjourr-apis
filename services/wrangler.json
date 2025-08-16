@@ -1,0 +1,27 @@
+{
+	"name": "bonjourr-services",
+	"main": "src/index.ts",
+	"compatibility_date": "2023-05-18",
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "bonjourr_collections",
+			"database_id": "3a8dccd9-7f53-480b-bc7d-701cbb97b014"
+		}
+	],
+	"vars": {
+		"FONT_LIST": "https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis/services/assets/font_popularity.txt",
+		"PIXABAY_COLLECTIONS": "https://raw.githubusercontent.com/victrme/bonjourr-apis/refs/heads/main/assets/pixabay_collections.json"
+	},
+	"limits": {
+		"cpu_ms": 30
+	},
+	"dev": {
+		"ip": "127.0.0.1",
+		"port": 8787
+	},
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 0.1
+	}
+}
