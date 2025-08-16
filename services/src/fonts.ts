@@ -1,11 +1,7 @@
-import type { Fontsource } from '../../types/fonts.ts'
+import type { FontList, Fontsource } from '../types/fonts.ts'
+import type { Env } from './index.ts'
 
-type FontList = Pick<
-	Fontsource,
-	'family' | 'subsets' | 'weights' | 'variable'
->[]
-
-export async function fonts(headers: Headers): Promise<Response> {
+export async function fonts(headers: Headers, env: Env): Promise<Response> {
 	headers.set('Cache-Control', 'public, max-age=604800, immutable')
 	headers.set('Content-Type', 'application/json')
 
@@ -14,9 +10,7 @@ export async function fonts(headers: Headers): Promise<Response> {
 	try {
 		const responses = await Promise.all([
 			fetch('https://api.fontsource.org/v1/fonts'),
-			fetch(
-				'https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis/assets/font_popularity.txt',
-			),
+			fetch(env.FONT_LIST ?? ''),
 		])
 
 		const fonts = (await responses[0]?.json()) as Fontsource[]

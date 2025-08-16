@@ -18,6 +18,7 @@ const headers = new Headers({
 
 export interface Env {
 	PIXABAY_COLLECTIONS?: string
+	FONT_LIST?: string
 	UNSPLASH?: string
 	PIXABAY?: string
 	DB: D1Database
@@ -36,7 +37,7 @@ export default {
 				return await proxy(req, headers)
 
 			case 'fonts':
-				return await fonts(headers)
+				return await fonts(headers, env)
 
 			case 'suggestions':
 				return await suggestions.fetch(req)

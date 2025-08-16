@@ -8,3 +8,5 @@ export interface Fontsource {
 	license: string
 	type: 'google' | 'other'
 }
+
+export type FontList = Pick<Fontsource, 'family' | 'subsets' | 'weights' | 'variable'>[]

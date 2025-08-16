@@ -1,4 +1,4 @@
-import type { UnsplashPhoto } from '../../types/unsplash.ts'
+import type { UnsplashPhoto } from '../types/unsplash.ts'
 
 export async function unsplash(requrl: string, key: string, headers: Headers): Promise<Response> {
 	const endpoint = requrl.slice(requrl.indexOf('/unsplash') + 9)
