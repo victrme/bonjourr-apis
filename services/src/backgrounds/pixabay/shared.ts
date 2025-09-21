@@ -1,4 +1,4 @@
-import type { PixabayVideo } from '../../../../types/backgrounds'
+import type { Pixabay, PixabayVideo } from '../../../types/backgrounds.ts'
 
 export function resolutionBasedUrls(video: PixabayVideo) {
 	const { large, medium, small, tiny } = video.videos
@@ -25,4 +25,21 @@ export function resolutionBasedUrls(video: PixabayVideo) {
 		medium: medium.url, // 720
 		small: small.url, // 540
 	}
+}
+
+export async function getApiDataFromId(id: string, key = ''): Promise<PixabayVideo> {
+	const noParams = !(id && key)
+
+	if (noParams) {
+		throw new Error('No parameters. Endpoint is "/videos/id"')
+	}
+
+	const resp = await fetch(`https://pixabay.com/api/videos?key=${key}&id=${id}`)
+	const json = await resp.json<Pixabay>()
+
+	if (json.hits.length === 1) {
+		return json.hits[0] as PixabayVideo
+	}
+
+	throw new Error('Found nothing')
 }

@@ -16,71 +16,12 @@ export const UNSPLASH_COLLECTIONS = {
 
 export { unsplashImagesDaylight, unsplashImagesDaylightStore }
 
-//  Get from storage
-
-async function unsplashImagesDaylight(url: URL, env: Env, headers: Headers): Promise<Response> {
-	const result: Record<string, Image[]> = {
-		'bonjourr-images-daylight-night': [],
-		'bonjourr-images-daylight-noon': [],
-		'bonjourr-images-daylight-day': [],
-		'bonjourr-images-daylight-evening': [],
-	}
-
-	const w = url.searchParams.get('w') ?? '1920'
-	const h = url.searchParams.get('h') ?? '1080'
-
-	for (const collection of Object.keys(result)) {
-		const randomStatement = `SELECT data FROM "${collection}" ORDER BY RANDOM() LIMIT 10`
-		const d1Result = await env.DB.prepare(randomStatement).all() as D1Result<Record<string, string>>
-
-		if (d1Result.results.length === 0) {
-			continue
-		}
-
-		const data = d1Result.results.map((row) => JSON.parse(row.data) as UnsplashImage)
-		const images = toBonjourrImages(data, w, h)
-
-		result[collection].push(...images)
-	}
-
-	return new Response(JSON.stringify(result), { headers })
-}
-
 //  Save to storage
 
 async function unsplashImagesDaylightStore(env: Env) {
 	const entries = Object.entries(UNSPLASH_COLLECTIONS)
 	const storeActions = entries.map(([name, id]) => storeSingleCollection(name, id, env))
 	await Promise.all(storeActions)
-}
-
-async function storeSingleCollection(name: string, id: string, env: Env): Promise<void> {
-	const createStatement = `
-		CREATE TABLE IF NOT EXISTS "${name}" (
-			id TEXT PRIMARY KEY,
-			data JSON NOT NULL
-		);
-	`
-
-	await env.DB.prepare(createStatement).run()
-
-	const ids = await retrievePhotosIdsFromCollection(id, env)
-	const images = await retrievePhotosDataFromIds(ids, env)
-
-	const promises = images.map(async (image) => {
-		const id = image.id
-		const data = JSON.stringify(image)
-		const insertStatement = `INSERT INTO "${name}" (id, data) VALUES (?, ?)`
-		await env.DB.prepare(insertStatement).bind(id, data).run()
-
-		console.info(`Stored ${id} on ${name}`)
-	})
-
-	try {
-		await Promise.all(promises)
-	} catch (_) {
-		// ...
-	}
 }
 
 async function retrievePhotosDataFromIds(ids: string[], env: Env): Promise<UnsplashImage[]> {

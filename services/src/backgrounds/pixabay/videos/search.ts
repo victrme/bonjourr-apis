@@ -1,7 +1,7 @@
-import { resolutionBasedUrls } from '../shared'
+import { pixabayVideoToGeneric } from '../convert.ts'
 
-import type { PixabayVideo, Video } from '../../../../../types/backgrounds'
-import type { Env } from '../../..'
+import type { Pixabay, PixabayVideo, Video } from '../../../../types/backgrounds.ts'
+import type { Env } from '../../../index.ts'
 
 export async function pixabayVideosSearch(url: URL, env: Env, headers: Headers): Promise<Response> {
 	headers.set('content-type', 'application/json')
@@ -20,20 +20,7 @@ export async function pixabayVideosSearch(url: URL, env: Env, headers: Headers):
 	const result: Video[] = []
 
 	for (const item of arr) {
-		const urls = resolutionBasedUrls(item)
-
-		result.push({
-			format: 'video',
-			page: item.pageURL,
-			username: item.user,
-			duration: item.duration,
-			thumbnail: item.videos.large.thumbnail,
-			urls: {
-				full: urls.large,
-				medium: urls.medium,
-				small: urls.small,
-			},
-		})
+		result.push(pixabayVideoToGeneric(item))
 	}
 
 	return new Response(JSON.stringify({ 'pixabay-videos-search': result }), { headers })

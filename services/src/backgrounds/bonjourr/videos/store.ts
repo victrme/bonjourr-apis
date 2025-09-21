@@ -2,6 +2,7 @@ import { resolutionBasedUrls } from '../shared.ts'
 
 import type { PixabayVideo, Video } from '../../../../../types/backgrounds'
 import type { Env } from '../../..'
+import { getApiDataFromId } from '../../pixabay/shared.ts'
 
 interface PixabayCollection {
 	name: string
@@ -9,46 +10,8 @@ interface PixabayCollection {
 	type: 'film'
 }
 
-//	Get from storage
-
-export async function pixabayVideosDaylight(env: Env, headers: Headers): Promise<Response> {
-	const result: Record<string, Video[]> = {
-		'bonjourr-videos-daylight-night': [],
-		'bonjourr-videos-daylight-noon': [],
-		'bonjourr-videos-daylight-day': [],
-		'bonjourr-videos-daylight-evening': [],
-	}
-
-	for (const collection of Object.keys(result)) {
-		const randomStatement = `SELECT data FROM "${collection}" ORDER BY RANDOM() LIMIT 10`
-		const { results } = await env.DB.prepare(randomStatement).all()
-
-		if (results.length === 0) {
-			throw new Error('Collection could not be found')
-		}
-
-		for (const row of results) {
-			const data = row.data as string
-			const item: PixabayVideo = JSON.parse(data)
-			const urls = resolutionBasedUrls(item)
-
-			result[collection].push({
-				format: 'video',
-				page: item.pageURL,
-				username: item.user,
-				duration: item.duration,
-				thumbnail: item.videos.large.thumbnail,
-				urls: {
-					full: urls.large,
-					medium: urls.medium,
-					small: urls.small,
-				},
-			})
-		}
-	}
-
-	return new Response(JSON.stringify(result), { headers })
-}
+const ids = await retrievePhotosIdsFromCollection(id, env)
+const images = await retrievePhotosDataFromIds(ids, env)
 
 //	Save to storage
 
@@ -95,23 +58,5 @@ async function getApiCollectionData(env: Env, collection: PixabayCollection): Pr
 	const { ids } = collection
 	const promises = ids.map((id) => getApiDataFromId(id, env.PIXABAY ?? ''))
 	const data = await Promise.all(promises)
-
 	return data
-}
-
-async function getApiDataFromId(id: string, key = ''): Promise<PixabayVideo> {
-	const noParams = !(id && key)
-
-	if (noParams) {
-		throw new Error('No parameters. Endpoint is "/videos/id"')
-	}
-
-	const resp = await fetch(`https://pixabay.com/api/videos?key=${key}&id=${id}`)
-	const json = await resp.json<Pixabay>()
-
-	if (json.hits.length === 1) {
-		return json.hits[0] as PixabayVideo
-	}
-
-	throw new Error('Found nothing')
 }
