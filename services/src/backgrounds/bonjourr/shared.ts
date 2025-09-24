@@ -1,9 +1,10 @@
 import type { Image, Video } from '../../../types/backgrounds.ts'
 import type { Env } from '../../index.ts'
 
-type Collection = Record<string, JSON>
+export type Media = Image | Video
+export type CollectionList = Record<string, Media[]>
 
-export async function storeCollection(name: string, env: Env, collection: Collection[]): Promise<void> {
+export async function storeCollection(env: Env, name: string, collection: Media[]): Promise<void> {
 	const createStatement = `
 		CREATE TABLE IF NOT EXISTS "${name}" (
 			id TEXT PRIMARY KEY,
@@ -13,7 +14,8 @@ export async function storeCollection(name: string, env: Env, collection: Collec
 
 	await env.DB.prepare(createStatement).run()
 
-	const promises = collection.map(async ({ key, json }) => {
+	const promises = collection.map(async (json) => {
+		const key = json.urls.full
 		const data = JSON.stringify(json)
 		const insertStatement = `INSERT INTO "${name}" (id, data) VALUES (?, ?)`
 		await env.DB.prepare(insertStatement).bind(key, data).run()

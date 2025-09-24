@@ -1,6 +1,5 @@
-import { unsplashImagesDaylight, unsplashImagesDaylightStore } from './backgrounds/unsplash/images/bonjourr.ts'
-import { pixabayVideosDaylight, pixabayVideosDaylightStore } from './backgrounds/pixabay/videos/bonjourr.ts'
 import { unsplashImagesCollections, unsplashImagesSearch } from './backgrounds/unsplash/images/user.ts'
+import { storeDaylightVideos } from './backgrounds/bonjourr/videos/store.ts'
 import { pixabayVideosSearch } from './backgrounds/pixabay/videos/search.ts'
 import { pixabayImagesSearch } from './backgrounds/pixabay/images/search.ts'
 import { metMuseumPaintings } from './backgrounds/metmuseum/images/paintings.ts'
@@ -10,6 +9,7 @@ import { metMuseumSearch } from './backgrounds/metmuseum/images/search.ts'
 import { filterPaintings } from './backgrounds/metmuseum/filter.ts'
 
 import type { Env } from './index.ts'
+import { getDaylightVideos } from './backgrounds/bonjourr/videos/get.ts'
 
 export async function backgrounds(
 	url: URL,
@@ -26,12 +26,8 @@ export async function backgrounds(
 
 	//	Store daylight
 
-	if (url.pathname.includes('/backgrounds/bonjourr/store')) {
-		await Promise.all([
-			pixabayVideosDaylightStore(env),
-			unsplashImagesDaylightStore(env),
-		])
-		return new Response('Done')
+	if (url.pathname.includes('/backgrounds/bonjourr/videos/daylight/store')) {
+		return await storeDaylightVideos(env, headers)
 	}
 
 	//	Get Daylight
@@ -39,12 +35,12 @@ export async function backgrounds(
 	headers.set('Content-Type', 'application/json')
 	headers.set('Cache-Control', 'public, max-age=10')
 
-	if (url.pathname.includes('/backgrounds/bonjourr/images/daylight')) {
-		return await unsplashImagesDaylight(url, env, headers)
-	}
+	// if (url.pathname.includes('/backgrounds/bonjourr/images/daylight')) {
+	// 	return await unsplashImagesDaylight(url, env, headers)
+	// }
 
 	if (url.pathname.includes('/backgrounds/bonjourr/videos/daylight')) {
-		return await pixabayVideosDaylight(env, headers)
+		return await getDaylightVideos(env, headers)
 	}
 
 	//	Get Unsplash

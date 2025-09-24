@@ -1,62 +1,48 @@
-import { resolutionBasedUrls } from '../shared.ts'
+import { pixabayMetadataStore } from './store-pixabay.ts'
+import { storeCollection } from '../shared.ts'
 
-import type { PixabayVideo, Video } from '../../../../../types/backgrounds'
-import type { Env } from '../../..'
-import { getApiDataFromId } from '../../pixabay/shared.ts'
+import type { CollectionList } from '../shared.ts'
+import type { Video } from '../../../../types/backgrounds.ts'
+import type { Env } from '../../../index.ts'
 
-interface PixabayCollection {
-	name: string
-	ids: string[]
-	type: 'film'
-}
+export async function storeDaylightVideos(env: Env, headers: Headers): Promise<Response> {
+	const result: Record<string, Video[]> = {
+		'bonjourr-videos-daylight-night': [],
+		'bonjourr-videos-daylight-noon': [],
+		'bonjourr-videos-daylight-day': [],
+		'bonjourr-videos-daylight-evening': [],
+	}
+	const names = Object.keys(result)
 
-const ids = await retrievePhotosIdsFromCollection(id, env)
-const images = await retrievePhotosDataFromIds(ids, env)
+	// 1. Get videos from different providers (for now pixabay only)
 
-//	Save to storage
+	const pixabayVideoCollections: CollectionList = await pixabayMetadataStore(env)
 
-export async function pixabayVideosDaylightStore(env: Env) {
-	const collectionList = await listCollections(env)
+	for (const [name, medias] of Object.entries(pixabayVideoCollections)) {
+		const wrongName = names.includes(name) === false
+		const notVideos = medias.some((media) => media.format !== 'video')
 
-	try {
-		for (const collection of collectionList) {
-			const createStatement = `
-			CREATE TABLE IF NOT EXISTS "${collection.name}" (
-				url TEXT PRIMARY KEY,
-				data JSON NOT NULL
-			);`
-
-			await env.DB.prepare(createStatement).run()
-			const videos = await getApiCollectionData(env, collection)
-
-			for (const video of videos) {
-				const url = video.videos.large.url
-				const data = JSON.stringify(video)
-				const insertStatement = `INSERT INTO "${collection.name}" (url, data) VALUES (?, ?)`
-				await env.DB.prepare(insertStatement).bind(url, data).run()
-			}
-
-			console.warn('Stored ', collection.name)
+		if (wrongName) {
+			console.error(`Collection ${name} is not valid`)
+			continue
 		}
-	} catch (err) {
-		console.warn(err)
-	}
-}
+		if (notVideos) {
+			console.error(`Medias are not videos`)
+			continue
+		}
 
-async function listCollections(env: Env): Promise<PixabayCollection[]> {
-	const resp = await fetch(env.PIXABAY_COLLECTIONS ?? '')
-	const collections = (await resp.json()) as PixabayCollection[]
-
-	if (!collections || collections.length === 0) {
-		throw new Error('Collections have not been found.')
+		result[name].push(...medias as Video[])
 	}
 
-	return collections
-}
+	// 2. Store collection to SQL database
 
-async function getApiCollectionData(env: Env, collection: PixabayCollection): Promise<PixabayVideo[]> {
-	const { ids } = collection
-	const promises = ids.map((id) => getApiDataFromId(id, env.PIXABAY ?? ''))
-	const data = await Promise.all(promises)
-	return data
+	for (const [name, videos] of Object.entries(result)) {
+		await storeCollection(env, name, videos)
+	}
+
+	// 3. Return stored medias
+
+	headers.set('content-type', 'application/json')
+
+	return new Response(JSON.stringify(result), { headers })
 }

@@ -11,7 +11,7 @@
 	],
 	"vars": {
 		"FONT_LIST": "https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis/services/assets/font_popularity.txt",
-		"PIXABAY_COLLECTIONS": "https://raw.githubusercontent.com/victrme/bonjourr-apis/refs/heads/main/assets/pixabay_collections.json"
+		"PIXABAY_COLLECTIONS": "https://raw.githubusercontent.com/victrme/bonjourr-apis/refs/heads/main/services/assets/pixabay_collections.json"
 	},
 	"limits": {
 		"cpu_ms": 30
