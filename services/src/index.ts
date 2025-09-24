@@ -21,6 +21,7 @@ export interface Env {
 	FONT_LIST?: string
 	UNSPLASH?: string
 	PIXABAY?: string
+	PEXELS?: string
 	DB: D1Database
 }
 

@@ -4,6 +4,7 @@ import { storeCollection } from '../shared.ts'
 import type { CollectionList } from '../shared.ts'
 import type { Video } from '../../../../types/backgrounds.ts'
 import type { Env } from '../../../index.ts'
+import { pexelsMetadataStore } from './store-pexels.ts'
 
 export async function storeDaylightVideos(env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Video[]> = {
@@ -15,6 +16,10 @@ export async function storeDaylightVideos(env: Env, headers: Headers): Promise<R
 	const names = Object.keys(result)
 
 	// 1. Get videos from different providers (for now pixabay only)
+
+	const pexelsVideoCollections = await pexelsMetadataStore(env)
+
+	return new Response('caca')
 
 	const pixabayVideoCollections: CollectionList = await pixabayMetadataStore(env)
 
