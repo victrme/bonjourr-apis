@@ -1,14 +1,33 @@
+import { pexelsToGeneric } from '../../pexels/convert.ts'
+
+import type { PexelsCollection } from '../../pexels/types.ts'
 import type { CollectionList } from '../shared.ts'
+import type { Video } from '../../../../types/backgrounds.ts'
 import type { Env } from '../../../index.ts'
 
-export async function pexelsMetadataStore(env: Env): Promise<unknown> {
-	const auth = env.PEXELS ?? ''
-	const url = 'https://api.pexels.com/v1/collections/zcxjbgh'
-	const headers = { 'Authorization': auth }
-	const resp = await fetch(url, { headers })
-	const json = await resp.json()
+export const PEXELS_COLLECTIONS = {
+	'bonjourr-videos-daylight-night': 'ohpcuko',
+	'bonjourr-videos-daylight-noon': 'mri42tl',
+	'bonjourr-videos-daylight-day': 'zcxjbgh',
+	'bonjourr-videos-daylight-evening': 'emh7vgv',
+}
 
-	console.log(json)
+export async function pexelsMetadataStore(env: Env): Promise<CollectionList> {
+	const baseUrl = 'https://api.pexels.com/v1/collections/'
+	const headers = { 'Authorization': env.PEXELS ?? '' }
+	const collectionList: CollectionList = {}
 
-	return '??'
+	for (const [bonjourr, pexels] of Object.entries(PEXELS_COLLECTIONS)) {
+		const resp = await fetch(baseUrl + pexels, { headers })
+		const json = await resp.json<PexelsCollection>()
+		const collection: Video[] = []
+
+		for (const video of json.media) {
+			collection.push(pexelsToGeneric(video))
+		}
+
+		collectionList[bonjourr] = collection
+	}
+
+	return collectionList
 }

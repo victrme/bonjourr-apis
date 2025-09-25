@@ -1,6 +1,6 @@
 import { pixabayVideoToGeneric } from '../../pixabay/convert.ts'
 
-import type { Pixabay, PixabayVideo } from '../../../../types/backgrounds.ts'
+import type { Pixabay, PixabayVideo } from '../../pixabay/types.ts'
 import type { CollectionList } from '../shared.ts'
 import type { Env } from '../../../index.ts'
 
