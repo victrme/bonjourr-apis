@@ -36,7 +36,5 @@ export async function storeDaylightVideos(env: Env, headers: Headers): Promise<R
 
 	// 3. Return stored medias
 
-	headers.set('content-type', 'application/json')
-
 	return new Response(JSON.stringify(result), { headers })
 }

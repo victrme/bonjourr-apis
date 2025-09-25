@@ -1,5 +1,5 @@
-import { backgrounds } from './backgrounds.ts'
-import { unsplash } from './unsplash.ts'
+import { backgrounds } from './backgrounds/backgrounds.ts'
+import { unsplash } from './backgrounds/unsplash/old.ts'
 import { fonts } from './fonts.ts'
 import { proxy } from './proxy.ts'
 

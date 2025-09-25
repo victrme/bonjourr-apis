@@ -1,4 +1,3 @@
-import type { FontList, Fontsource } from '../types/fonts.ts'
 import type { Env } from './index.ts'
 
 export async function fonts(headers: Headers, env: Env): Promise<Response> {
@@ -46,3 +45,18 @@ export async function fonts(headers: Headers, env: Env): Promise<Response> {
 		headers,
 	})
 }
+
+// Types
+
+interface Fontsource {
+	id: string
+	family: string
+	subsets: string[]
+	weights: number[]
+	variable: boolean
+	category: string
+	license: string
+	type: 'google' | 'other'
+}
+
+type FontList = Pick<Fontsource, 'family' | 'subsets' | 'weights' | 'variable'>[]
