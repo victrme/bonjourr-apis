@@ -2,6 +2,7 @@ import { unsplashImagesCollections, unsplashImagesSearch } from './unsplash/imag
 import { storeDaylightVideos } from './bonjourr/videos/store.ts'
 import { pixabayVideosSearch } from './pixabay/videos/search.ts'
 import { pixabayImagesSearch } from './pixabay/images/search.ts'
+import { storeDaylightImages } from './bonjourr/images/store.ts'
 import { metMuseumPaintings } from './metmuseum/images/paintings.ts'
 import { getDaylightVideos } from './bonjourr/videos/get.ts'
 import { initUnsplashAuth } from './unsplash/shared.ts'
@@ -10,6 +11,7 @@ import { metMuseumSearch } from './metmuseum/images/search.ts'
 import { filterPaintings } from './metmuseum/filter.ts'
 
 import type { Env } from '../index.ts'
+import { getDaylightImages } from './bonjourr/images/get.ts'
 
 export async function backgrounds(url: URL, env: Env, headers: Headers): Promise<Response> {
 	initUnsplashAuth(env)
@@ -25,15 +27,18 @@ export async function backgrounds(url: URL, env: Env, headers: Headers): Promise
 
 	//	Store daylight
 
+	if (url.pathname.includes('/backgrounds/bonjourr/images/daylight/store')) {
+		return await storeDaylightImages(env, headers)
+	}
 	if (url.pathname.includes('/backgrounds/bonjourr/videos/daylight/store')) {
 		return await storeDaylightVideos(env, headers)
 	}
 
 	//	Get Daylight
 
-	// if (url.pathname.includes('/backgrounds/bonjourr/images/daylight')) {
-	// 	return await unsplashImagesDaylight(url, env, headers)
-	// }
+	if (url.pathname.includes('/backgrounds/bonjourr/images/daylight')) {
+		return await getDaylightImages(env, headers)
+	}
 	if (url.pathname.includes('/backgrounds/bonjourr/videos/daylight')) {
 		return await getDaylightVideos(env, headers)
 	}

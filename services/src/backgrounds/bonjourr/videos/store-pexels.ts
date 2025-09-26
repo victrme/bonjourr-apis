@@ -2,7 +2,7 @@ import { pexelsToGeneric } from '../../pexels/convert.ts'
 
 import type { PexelsCollection } from '../../pexels/types.ts'
 import type { CollectionList } from '../shared.ts'
-import type { Video } from '../../../../types/backgrounds.ts'
+import type { Video } from '../../types.ts'
 import type { Env } from '../../../index.ts'
 
 export const PEXELS_COLLECTIONS = {

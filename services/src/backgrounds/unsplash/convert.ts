@@ -1,4 +1,5 @@
-import type { Image, UnsplashImage } from '../../../types/backgrounds.ts'
+import type { UnsplashImage } from '../unsplash/types.ts'
+import type { Image } from '../types.ts'
 
 export function unsplashToGeneric(image: UnsplashImage, w = '1920', h = '1080'): Image {
 	const width = Number.parseInt(w)

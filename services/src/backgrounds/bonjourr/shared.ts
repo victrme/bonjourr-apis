@@ -1,4 +1,4 @@
-import type { Image, Video } from '../../../types/backgrounds.ts'
+import type { Image, Video } from '../types.ts'
 import type { Env } from '../../index.ts'
 
 export type Media = Image | Video
