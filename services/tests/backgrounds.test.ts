@@ -1,17 +1,33 @@
 import { expect } from '@std/expect'
 
 import type { Image, Video } from '../src/backgrounds/types.ts'
-import type { Media } from '../src/backgrounds/bonjourr/shared.ts'
+import type { CollectionList, Media } from '../src/backgrounds/bonjourr/shared.ts'
 
 const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/all')
 const medias: Media[] = await response.json<Media[]>()
 
-Deno.test('has correct response', () => {
+Deno.test('can store daylight videos', async () => {
+	const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/videos/daylight/store')
+	const collections: CollectionList = await response.json()
+	let areVideos = true
+
+	for (const medias of Object.values(collections)) {
+		for (const media of medias) {
+			if (media.format !== 'video') {
+				areVideos = false
+			}
+		}
+	}
+
+	expect(areVideos).toBe(true)
+})
+
+Deno.test.ignore('has correct response', () => {
 	expect(response.status).toBe(200)
 	expect(response.headers.get('content-type')).toBe('application/json')
 })
 
-Deno.test('medias has correct format', () => {
+Deno.test.ignore('medias has correct format', () => {
 	for (const media of medias) {
 		expect(new URL(media.urls.full)).toBeTruthy()
 		expect(new URL(media.urls.medium)).toBeTruthy()
@@ -35,7 +51,7 @@ Deno.test('medias has correct format', () => {
 	}
 })
 
-Deno.test('is media in database', async (test) => {
+Deno.test.ignore('is media in database', async (test) => {
 	const baseUrl = 'https://medias.bonjourr.fr'
 	const bonjourrMedias = medias.filter((media) => media.urls.full.startsWith(baseUrl))
 

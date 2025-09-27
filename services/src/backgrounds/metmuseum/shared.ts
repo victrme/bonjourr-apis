@@ -1,4 +1,4 @@
-import type { Image } from '../../../types/backgrounds.ts'
+import type { Image } from '../types.ts'
 
 // https://metmuseum.github.io/#object
 

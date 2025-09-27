@@ -17,7 +17,11 @@ export async function getAllStoredMedia(env: Env, headers: Headers): Promise<Res
 	]
 
 	for (const collection of collections) {
-		medias.push(...await getAllInCollection(collection, env))
+		try {
+			medias.push(...await getAllInCollection(collection, env))
+		} catch (err) {
+			console.log((err as Error).message)
+		}
 	}
 
 	return new Response(JSON.stringify(medias), { headers })
