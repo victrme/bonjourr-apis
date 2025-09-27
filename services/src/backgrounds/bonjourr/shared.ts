@@ -45,3 +45,19 @@ export async function getCollection<Media extends Image | Video>(name: string, e
 
 	return list
 }
+
+export async function getAllInCollection(name: string, env: Env): Promise<Media[]> {
+	const randomStatement = `SELECT data FROM "${name}"`
+	const { results } = await env.DB.prepare(randomStatement).all()
+	const list: Media[] = []
+
+	if (results.length === 0) {
+		throw new Error('Collection could not be found')
+	}
+
+	for (const row of results) {
+		list.push(JSON.parse(row.data))
+	}
+
+	return list
+}

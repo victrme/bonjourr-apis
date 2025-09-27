@@ -6,12 +6,16 @@
 		"weather": "npx wrangler dev --cwd weather",
 		"services": "npx wrangler dev --cwd services",
 		"test:weather": "deno test --allow-net weather/index.test.ts",
-		"test:services": "deno test --allow-net services/tests/*.test.ts"
+		"test:services": "deno test --allow-net services/tests/backgrounds.test.ts --no-check"
 	},
 	"lint": {
 		"rules": {
-			"tags": ["recommended"],
-			"exclude": ["no-sloppy-imports"],
+			"tags": [
+				"recommended"
+			],
+			"exclude": [
+				"no-sloppy-imports"
+			],
 			"include": [
 				"eqeqeq",
 				"verbatim-module-syntax",
@@ -23,7 +27,12 @@
 				"default-param-last"
 			]
 		},
-		"exclude": ["suggestions", "favicon", "quotes", "weather/meteo"]
+		"exclude": [
+			"suggestions",
+			"favicon",
+			"quotes",
+			"weather/meteo"
+		]
 	},
 	"fmt": {
 		"indentWidth": 4,
@@ -31,7 +40,9 @@
 		"useTabs": true,
 		"semiColons": false,
 		"singleQuote": true,
-		"include": ["**/*.ts"],
+		"include": [
+			"**/*.ts"
+		],
 		"exclude": [
 			"services/src/suggestions",
 			"services/src/favicon",

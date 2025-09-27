@@ -48,7 +48,7 @@ export async function fonts(headers: Headers, env: Env): Promise<Response> {
 
 // Types
 
-interface Fontsource {
+export interface Fontsource {
 	id: string
 	family: string
 	subsets: string[]
