@@ -5,7 +5,7 @@ import type { CollectionList } from '../shared.ts'
 import type { Image } from '../../types.ts'
 import type { Env } from '../../../index.ts'
 
-export async function storeDaylightImages(env: Env, headers: Headers): Promise<Response> {
+export async function storeDaylightImages(env: Env, headers: Headers, isTest?: 'test'): Promise<Response> {
 	const result: Record<string, Image[]> = {
 		'bonjourr-images-daylight-night': [],
 		'bonjourr-images-daylight-noon': [],
@@ -15,7 +15,7 @@ export async function storeDaylightImages(env: Env, headers: Headers): Promise<R
 
 	// 1. Get medias from different providers
 
-	const unsplashCollection: CollectionList = await unsplashMetadataStore(env)
+	const unsplashCollection: CollectionList = await unsplashMetadataStore(env, isTest)
 
 	for (const name of Object.keys(result)) {
 		if (unsplashCollection[name]) {

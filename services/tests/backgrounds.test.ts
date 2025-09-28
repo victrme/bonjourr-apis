@@ -6,28 +6,46 @@ import type { CollectionList, Media } from '../src/backgrounds/bonjourr/shared.t
 const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/all')
 const medias: Media[] = await response.json<Media[]>()
 
-Deno.test('can store daylight videos', async () => {
-	const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/videos/daylight/store')
-	const collections: CollectionList = await response.json()
-	let areVideos = true
+Deno.test('can store daylight', async (test) => {
+	await test.step('videos', async () => {
+		const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/videos/daylight/store')
+		const collections: CollectionList = await response.json()
+		let areCorrectFormat = true
 
-	for (const medias of Object.values(collections)) {
-		for (const media of medias) {
-			if (media.format !== 'video') {
-				areVideos = false
+		for (const medias of Object.values(collections)) {
+			for (const media of medias) {
+				if (media.format !== 'video') {
+					areCorrectFormat = false
+				}
 			}
 		}
-	}
 
-	expect(areVideos).toBe(true)
+		expect(areCorrectFormat).toBe(true)
+	})
+
+	await test.step('images', async () => {
+		const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/images/daylight/store/test')
+		const collections: CollectionList = await response.json()
+		let areCorrectFormat = true
+
+		for (const medias of Object.values(collections)) {
+			for (const media of medias) {
+				if (media.format !== 'image') {
+					areCorrectFormat = false
+				}
+			}
+		}
+
+		expect(areCorrectFormat).toBe(true)
+	})
 })
 
-Deno.test.ignore('has correct response', () => {
+Deno.test('has correct response', () => {
 	expect(response.status).toBe(200)
 	expect(response.headers.get('content-type')).toBe('application/json')
 })
 
-Deno.test.ignore('medias has correct format', () => {
+Deno.test('medias has correct format', () => {
 	for (const media of medias) {
 		expect(new URL(media.urls.full)).toBeTruthy()
 		expect(new URL(media.urls.medium)).toBeTruthy()
@@ -51,7 +69,7 @@ Deno.test.ignore('medias has correct format', () => {
 	}
 })
 
-Deno.test.ignore('is media in database', async (test) => {
+Deno.test('is media in database', async (test) => {
 	const baseUrl = 'https://medias.bonjourr.fr'
 	const bonjourrMedias = medias.filter((media) => media.urls.full.startsWith(baseUrl))
 
@@ -68,6 +86,8 @@ Deno.test.ignore('is media in database', async (test) => {
 			if (media.format === 'video') {
 				expect(contentType).toBe('video/webm')
 			}
+
+			await resp.body?.cancel()
 		})
 	}
 })

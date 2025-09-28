@@ -3,6 +3,7 @@ import { unsplashToGeneric } from '../../unsplash/convert.ts'
 
 import type { CollectionList } from '../shared.ts'
 import type { UnsplashImage } from '../../unsplash/types.ts'
+import type { Image } from '../../types.ts'
 import type { Env } from '../../../index.ts'
 
 export const UNSPLASH_COLLECTIONS = {
@@ -19,7 +20,7 @@ export const UNSPLASH_COLLECTIONS = {
 	'bonjourr-images-seasons-winter': 'u0Kne8mFCQM',
 }
 
-export async function unsplashMetadataStore(env: Env): Promise<CollectionList> {
+export async function unsplashMetadataStore(env: Env, isTest?: 'test'): Promise<CollectionList> {
 	const collectionList: CollectionList = {}
 	const collectionListPhotoIds: Record<string, string[]> = {}
 
@@ -42,7 +43,7 @@ export async function unsplashMetadataStore(env: Env): Promise<CollectionList> {
 			const ids = photos.map((photo) => photo.id)
 
 			collectionListPhotoIds[unsplash].push(...ids)
-			isLastPage = ids.length !== 30
+			isLastPage = isTest ? true : ids.length !== 30
 		}
 	}
 
@@ -52,9 +53,8 @@ export async function unsplashMetadataStore(env: Env): Promise<CollectionList> {
 		collectionList[bonjourr] = []
 
 		for (const id of collectionListPhotoIds[unsplash]) {
-			const image = await getUnsplashPhoto(id)
-			const generic = unsplashToGeneric(image)
-
+			const image: UnsplashImage = await getUnsplashPhoto(id)
+			const generic: Image = unsplashToGeneric(image)
 			collectionList[bonjourr].push(generic)
 		}
 	}
