@@ -1,6 +1,6 @@
 import { getCollection } from '../shared.ts'
 
-import type { Video } from '../../../../types/backgrounds.ts'
+import type { Video } from '../../types.ts'
 import type { Env } from '../../../index.ts'
 
 export async function getDaylightVideos(env: Env, headers: Headers): Promise<Response> {

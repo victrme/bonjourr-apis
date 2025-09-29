@@ -1,13 +1,7 @@
 import type { UnsplashImage } from '../unsplash/types.ts'
 import type { Image } from '../types.ts'
 
-export function unsplashToGeneric(image: UnsplashImage, w = '1920', h = '1080'): Image {
-	const width = Number.parseInt(w)
-	const height = Number.parseInt(h)
-	const paramsMedium = `&h=${Math.round(height / 2)}&w=${Math.round(width / 2)}&q=50`
-	const paramsSmall = `&h=${Math.round(height / 10)}&w=${Math.round(width / 10)}&q=60`
-	const paramsFull = `&h=${h}&w=${w}&q=80`
-
+export function unsplashToGeneric(image: UnsplashImage): Image {
 	return {
 		format: 'image',
 		page: image.links.html,
@@ -19,9 +13,9 @@ export function unsplashToGeneric(image: UnsplashImage, w = '1920', h = '1080'):
 		color: image.color,
 		exif: image.exif,
 		urls: {
-			full: `${image.urls.raw}&auto=format&fit=crop&crop=entropy${paramsFull}`,
-			medium: `${image.urls.raw}&auto=format&fit=crop&crop=entropy${paramsMedium}`,
-			small: `${image.urls.raw}&auto=format&fit=crop&crop=entropy${paramsSmall}`,
+			full: image.urls.raw,
+			medium: image.urls.raw,
+			small: image.urls.raw,
 		},
 	}
 }

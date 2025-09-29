@@ -2,6 +2,7 @@ import { getCollection } from '../shared.ts'
 
 import type { Image } from '../../types.ts'
 import type { Env } from '../../../index.ts'
+import { addUnsplashCropToImage } from '../../unsplash/shared.ts'
 
 export async function getDaylightImages(env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Image[]> = {
@@ -13,7 +14,14 @@ export async function getDaylightImages(env: Env, headers: Headers): Promise<Res
 
 	for (const collection of Object.keys(result)) {
 		const images = await getCollection<Image>(collection, env)
-		result[collection].push(...images)
+
+		for (let image of images) {
+			if (image.urls.full.includes('unsplash')) {
+				image = addUnsplashCropToImage(image)
+			}
+
+			result[collection].push(image)
+		}
 	}
 
 	return new Response(JSON.stringify(result), { headers })
