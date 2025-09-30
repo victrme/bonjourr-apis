@@ -8,7 +8,7 @@ import { getDaylightImages } from './bonjourr/images/get.ts'
 import { getDaylightVideos } from './bonjourr/videos/get.ts'
 import { getAllStoredMedia } from './bonjourr/all.ts'
 import { initUnsplashAuth } from './unsplash/shared.ts'
-import { backgroundsProxy } from '../proxy.ts'
+import { backgroundsProxy } from './proxy.ts'
 import { metMuseumSearch } from './metmuseum/images/search.ts'
 import { filterPaintings } from './metmuseum/filter.ts'
 
@@ -28,9 +28,6 @@ export async function backgrounds(url: URL, env: Env, headers: Headers): Promise
 
 	//	Store daylight
 
-	if (url.pathname.includes('/backgrounds/bonjourr/images/daylight/store/test')) {
-		return await storeDaylightImages(env, headers, 'test')
-	}
 	if (url.pathname.includes('/backgrounds/bonjourr/images/daylight/store')) {
 		return await storeDaylightImages(env, headers)
 	}
