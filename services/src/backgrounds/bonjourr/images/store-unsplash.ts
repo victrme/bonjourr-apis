@@ -20,7 +20,7 @@ export const UNSPLASH_COLLECTIONS = {
 	'bonjourr-images-seasons-winter': 'u0Kne8mFCQM',
 }
 
-export async function unsplashMetadataStore(env: Env, isTest?: 'test'): Promise<CollectionList> {
+export async function unsplashMetadataStore(env: Env): Promise<CollectionList> {
 	const collectionList: CollectionList = {}
 	const collectionListPhotoIds: Record<string, string[]> = {}
 
@@ -43,7 +43,7 @@ export async function unsplashMetadataStore(env: Env, isTest?: 'test'): Promise<
 			const ids = photos.map((photo) => photo.id)
 
 			collectionListPhotoIds[unsplash].push(...ids)
-			isLastPage = isTest ? true : ids.length !== 30
+			isLastPage = env.TESTING ? true : ids.length !== 30
 		}
 	}
 

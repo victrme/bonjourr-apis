@@ -24,7 +24,7 @@ Deno.test('can store daylight', async (test) => {
 	})
 
 	await test.step('images', async () => {
-		const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/images/daylight/store/test')
+		const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/images/daylight/store')
 		const collections: CollectionList = await response.json()
 		let areCorrectFormat = true
 
