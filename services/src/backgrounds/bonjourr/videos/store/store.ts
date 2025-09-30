@@ -1,10 +1,10 @@
 import { pixabayMetadataStore } from './store-pixabay.ts'
 import { pexelsMetadataStore } from './store-pexels.ts'
-import { storeCollection } from '../shared.ts'
+import { storeCollection } from '../../shared.ts'
 
-import type { CollectionList } from '../shared.ts'
-import type { Video } from '../../types.ts'
-import type { Env } from '../../../index.ts'
+import type { CollectionList } from '../../shared.ts'
+import type { Video } from '../../../types.ts'
+import type { Env } from '../../../../index.ts'
 
 export async function storeDaylightVideos(env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Video[]> = {

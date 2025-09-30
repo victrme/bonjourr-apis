@@ -1,10 +1,10 @@
-import { getUnsplashCollectionPhoto, getUnsplashPhoto, initUnsplashAuth } from '../../unsplash/shared.ts'
-import { unsplashToGeneric } from '../../unsplash/convert.ts'
+import { getUnsplashCollectionPhoto, getUnsplashPhoto, initUnsplashAuth } from '../../../unsplash/shared.ts'
+import { unsplashToGeneric } from '../../../unsplash/convert.ts'
 
-import type { CollectionList } from '../shared.ts'
-import type { UnsplashImage } from '../../unsplash/types.ts'
-import type { Image } from '../../types.ts'
-import type { Env } from '../../../index.ts'
+import type { CollectionList } from '../../shared.ts'
+import type { UnsplashImage } from '../../../unsplash/types.ts'
+import type { Image } from '../../../types.ts'
+import type { Env } from '../../../../index.ts'
 
 export const UNSPLASH_COLLECTIONS = {
 	// Daylight

@@ -1,4 +1,5 @@
-import { fetchSingleObject, type MetObject } from './shared.ts'
+import { fetchSingleObject } from './shared.ts'
+import type { MetObject } from './types.ts'
 
 export async function filterPaintings() {
 	const path = 'https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis@refs/heads/main/assets/metmuseum_paintings.txt'

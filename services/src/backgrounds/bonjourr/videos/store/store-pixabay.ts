@@ -1,8 +1,8 @@
-import { pixabayVideoToGeneric } from '../../pixabay/convert.ts'
+import { pixabayVideoToGeneric } from '../../../pixabay/convert.ts'
 
-import type { Pixabay, PixabayVideo } from '../../pixabay/types.ts'
-import type { CollectionList } from '../shared.ts'
-import type { Env } from '../../../index.ts'
+import type { Pixabay, PixabayVideo } from '../../../pixabay/types.ts'
+import type { CollectionList } from '../../shared.ts'
+import type { Env } from '../../../../index.ts'
 
 interface PixabayCollection {
 	name: string

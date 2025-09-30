@@ -1,9 +1,9 @@
 import { unsplashMetadataStore } from './store-unsplash.ts'
-import { storeCollection } from '../shared.ts'
+import { storeCollection } from '../../shared.ts'
 
-import type { CollectionList } from '../shared.ts'
-import type { Image } from '../../types.ts'
-import type { Env } from '../../../index.ts'
+import type { CollectionList } from '../../shared.ts'
+import type { Image } from '../../../types.ts'
+import type { Env } from '../../../../index.ts'
 
 export async function storeDaylightImages(env: Env, headers: Headers): Promise<Response> {
 	const result: Record<string, Image[]> = {

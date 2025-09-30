@@ -1,6 +1,6 @@
-import { getAllInCollection } from './shared.ts'
-import type { Media } from './shared.ts'
-import type { Env } from '../../index.ts'
+import { getAllInCollection } from '../shared.ts'
+import type { Media } from '../shared.ts'
+import type { Env } from '../../../index.ts'
 
 export async function getAllStoredMedia(env: Env, headers: Headers): Promise<Response> {
 	const medias: Media[] = []
