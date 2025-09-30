@@ -1,5 +1,5 @@
-import type { Video } from '../../../types/backgrounds.ts'
 import type { PexelsVideo, PexelsVideoFile } from './types.ts'
+import type { Video } from '../types.ts'
 
 export function pexelsToGeneric(video: PexelsVideo): Video {
 	const files = video.video_files.sort((a, b) => a.width - b.width)

@@ -1,5 +1,7 @@
-import type { Image, PixabayImage, PixabayVideo, Video } from '../../../types/backgrounds.ts'
 import { resolutionBasedUrls } from './shared.ts'
+
+import type { PixabayImage, PixabayVideo } from './types.ts'
+import type { Image, Video } from '../types.ts'
 
 export function pixabayVideoToGeneric(video: PixabayVideo): Video {
 	const urls = resolutionBasedUrls(video)

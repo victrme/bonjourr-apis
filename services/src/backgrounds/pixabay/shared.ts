@@ -1,4 +1,4 @@
-import type { PixabayVideo } from '../../../types/backgrounds.ts'
+import type { PixabayVideo } from './types.ts'
 
 export function resolutionBasedUrls(video: PixabayVideo) {
 	const { large, medium, small, tiny } = video.videos

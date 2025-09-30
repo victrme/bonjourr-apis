@@ -1,6 +1,7 @@
 import { pixabayImageToGeneric } from '../convert.ts'
 
-import type { Image, Pixabay, PixabayImage } from '../../../../types/backgrounds.ts'
+import type { Pixabay, PixabayImage } from '../types.ts'
+import type { Image } from '../../types.ts'
 import type { Env } from '../../../index.ts'
 
 export async function pixabayImagesSearch(url: URL, env: Env, headers: Headers): Promise<Response> {
