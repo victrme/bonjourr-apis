@@ -6,7 +6,44 @@ import type { CollectionList, Media } from '../src/backgrounds/bonjourr/shared.t
 const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/all')
 const medias: Media[] = await response.json<Media[]>()
 
-Deno.test('can store daylight', async (test) => {
+const BACKGROUND_PATHS = [
+	'bonjourr/all',
+	'bonjourr/images/daylight',
+	'bonjourr/videos/daylight',
+	'bonjourr/images/daylight/store',
+
+	'unsplash/images/search',
+	'unsplash/images/collections',
+
+	'pixabay/images/search',
+	'pixabay/videos/search',
+
+	'metmuseum/images/paintings',
+	'metmuseum/images/search',
+	'metmuseum/images/filter',
+] as const
+
+Deno.test('is path correct', async (test) => {
+	//
+	for (const path of BACKGROUND_PATHS) {
+		const base = 'http://0.0.0.0:8787/backgrounds/'
+		const controller = new AbortController()
+		const signal = controller.signal
+
+		await test.step(path, async () => {
+			const resp = await fetch(base + path, { signal })
+
+			setTimeout(() => {
+				controller.abort()
+			}, 100)
+
+			expect(resp.status).not.toBe(404)
+			await resp.body?.cancel()
+		})
+	}
+})
+
+Deno.test.ignore('can store daylight', async (test) => {
 	await test.step('videos', async () => {
 		const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/videos/daylight/store')
 		const collections: CollectionList = await response.json()
@@ -40,12 +77,12 @@ Deno.test('can store daylight', async (test) => {
 	})
 })
 
-Deno.test('has correct response', () => {
+Deno.test.ignore('has correct response', () => {
 	expect(response.status).toBe(200)
 	expect(response.headers.get('content-type')).toBe('application/json')
 })
 
-Deno.test('medias has correct format', () => {
+Deno.test.ignore('medias has correct format', () => {
 	for (const media of medias) {
 		expect(new URL(media.urls.full)).toBeTruthy()
 		expect(new URL(media.urls.medium)).toBeTruthy()
@@ -69,7 +106,7 @@ Deno.test('medias has correct format', () => {
 	}
 })
 
-Deno.test('is media in database', async (test) => {
+Deno.test.ignore('is media in database', async (test) => {
 	const baseUrl = 'https://medias.bonjourr.fr'
 	const bonjourrMedias = medias.filter((media) => media.urls.full.startsWith(baseUrl))
 

@@ -1,4 +1,5 @@
-import { unsplashImagesCollections, unsplashImagesSearch } from './unsplash/images/user.ts'
+import { unsplashImagesCollections } from './unsplash/images/collections.ts'
+import { unsplashImagesSearch } from './unsplash/images/search.ts'
 import { storeDaylightImages } from './bonjourr/images/store/store.ts'
 import { storeDaylightVideos } from './bonjourr/videos/store/store.ts'
 import { pixabayVideosSearch } from './pixabay/videos/search.ts'
