@@ -30,20 +30,23 @@ export async function unsplashMetadataStore(env: Env): Promise<CollectionList> {
 	//  ( this loops all pages )
 
 	for (const [_, unsplash] of Object.entries(UNSPLASH_COLLECTIONS)) {
-		let isLastPage = false
-
 		collectionListPhotoIds[unsplash] = []
 
-		for (let page = 1; page < 100; page++) {
-			if (isLastPage) {
-				break
-			}
+		if (env.TESTING) {
+			const photos: UnsplashImage[] = await getUnsplashCollectionPhoto(unsplash, 1)
+			collectionListPhotoIds[unsplash] = [photos[0].id]
+			break
+		}
 
+		for (let page = 1; page < 100; page++) {
 			const photos: UnsplashImage[] = await getUnsplashCollectionPhoto(unsplash, page)
 			const ids = photos.map((photo) => photo.id)
 
 			collectionListPhotoIds[unsplash].push(...ids)
-			isLastPage = env.TESTING ? true : ids.length !== 30
+
+			if (ids.length !== 30) {
+				break
+			}
 		}
 	}
 
