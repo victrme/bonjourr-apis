@@ -27,16 +27,9 @@ Deno.test('is path correct', async (test) => {
 	//
 	for (const path of BACKGROUND_PATHS) {
 		const base = 'http://0.0.0.0:8787/backgrounds/'
-		const controller = new AbortController()
-		const signal = controller.signal
 
 		await test.step(path, async () => {
-			const resp = await fetch(base + path, { signal })
-
-			setTimeout(() => {
-				controller.abort()
-			}, 100)
-
+			const resp = await fetch(base + path)
 			expect(resp.status).not.toBe(404)
 			await resp.body?.cancel()
 		})
