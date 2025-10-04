@@ -5,12 +5,8 @@ This is Bonjourr API system.
 ## Development
 
 Bonjourr APIs needs both Node and Deno runtimes to work. Node for Cloudflare's wrangler, Deno for everything else.
-- Install [Nodejs](https://nodejs.org/en):
-	- MacOS/Linux: `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash`
-	- Windows: `https://nodejs.org/en/download`
-- Then install [Deno runtime](https://deno.com/):
-	- MacOS/Linux: `curl -fsSL https://deno.land/install.sh | sh`
-	- Windows: `irm https://deno.land/install.ps1 | iex`
+- Install [Nodejs](https://nodejs.org/en)
+- Then install [Deno runtime](https://deno.com/)
 - Clone this repository
 - Add a `.dev.vars` file to `/services/` with Unsplash and Pixabay API keys
 - Install development dependencies using Deno with `deno install`
