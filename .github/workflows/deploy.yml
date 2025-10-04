@@ -24,7 +24,7 @@ jobs:
 
             - run: npx wrangler
             - run: nohup npx wrangler dev --cwd services --env test & sleep 3 && deno task test:services
-            - run: nohup npx wrangler dev --cwd weather --env test & sleep 3 && deno task test:weather
+            - run: nohup npx wrangler dev --cwd weather & sleep 3 && deno task test:weather
 
     deploy:
         needs: test
