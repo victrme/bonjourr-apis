@@ -12,12 +12,11 @@ export const UNSPLASH_COLLECTIONS = {
 	'bonjourr-images-daylight-noon': 'GD4aOSg4yQE',
 	'bonjourr-images-daylight-day': 'o8uX55RbBPs',
 	'bonjourr-images-daylight-evening': '3M2rKTckZaQ',
-
 	// Seasons
 	// 'bonjourr-images-seasons-spring': '...',
 	// 'bonjourr-images-seasons-summer': '...',
 	// 'bonjourr-images-seasons-autumn': '...',
-	'bonjourr-images-seasons-winter': 'u0Kne8mFCQM',
+	// 'bonjourr-images-seasons-winter': 'u0Kne8mFCQM',
 }
 
 export async function unsplashMetadataStore(env: Env): Promise<CollectionList> {
@@ -29,23 +28,28 @@ export async function unsplashMetadataStore(env: Env): Promise<CollectionList> {
 	// 1. Find all photo ids in wanted collections
 	//  ( this loops all pages )
 
-	for (const [_, unsplash] of Object.entries(UNSPLASH_COLLECTIONS)) {
-		collectionListPhotoIds[unsplash] = []
-
-		if (env.TESTING) {
-			const photos: UnsplashImage[] = await getUnsplashCollectionPhoto(unsplash, 1)
-			collectionListPhotoIds[unsplash] = [photos[0].id]
-			break
+	if (env.TESTING) {
+		for (const name of Object.values(UNSPLASH_COLLECTIONS)) {
+			const randomIndex = Math.round(Math.random() * 20)
+			const photos = await getUnsplashCollectionPhoto(name)
+			const photo = photos[randomIndex]
+			collectionListPhotoIds[name] = [photo.id]
 		}
+	}
 
-		for (let page = 1; page < 100; page++) {
-			const photos: UnsplashImage[] = await getUnsplashCollectionPhoto(unsplash, page)
-			const ids = photos.map((photo) => photo.id)
+	if (env.TESTING !== true) {
+		for (const name of Object.values(UNSPLASH_COLLECTIONS)) {
+			collectionListPhotoIds[name] = []
 
-			collectionListPhotoIds[unsplash].push(...ids)
+			for (let page = 1; page < 100; page++) {
+				const photos: UnsplashImage[] = await getUnsplashCollectionPhoto(name, page)
+				const ids = photos.map((photo) => photo.id)
 
-			if (ids.length !== 30) {
-				break
+				collectionListPhotoIds[name].push(...ids)
+
+				if (ids.length !== 30) {
+					break
+				}
 			}
 		}
 	}

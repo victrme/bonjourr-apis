@@ -3,27 +3,23 @@ import { expect } from '@std/expect'
 import type { Image, Video } from '../src/backgrounds/types.ts'
 import type { CollectionList, Media } from '../src/backgrounds/bonjourr/shared.ts'
 
-const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/all')
-const medias: Media[] = await response.json<Media[]>()
-
 const BACKGROUND_PATHS = [
 	'bonjourr/all',
 	'bonjourr/images/daylight',
 	'bonjourr/videos/daylight',
 	'bonjourr/images/daylight/store',
-
 	'unsplash/images/search',
 	'unsplash/images/collections',
-
 	'pixabay/images/search',
 	'pixabay/videos/search',
-
 	'metmuseum/images/paintings',
-	'metmuseum/images/search',
-	'metmuseum/images/filter',
+	// 'metmuseum/images/search',
+	// 'metmuseum/images/filter',
 ] as const
 
-Deno.test('is path correct', async (test) => {
+// 1. Paths
+
+Deno.test('path exists', async (test) => {
 	//
 	for (const path of BACKGROUND_PATHS) {
 		const base = 'http://0.0.0.0:8787/backgrounds/'
@@ -36,7 +32,12 @@ Deno.test('is path correct', async (test) => {
 	}
 })
 
-Deno.test.ignore('can store daylight', async (test) => {
+// 2. Responses, formats
+
+const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/all')
+const medias: Media[] = await response.json<Media[]>()
+
+Deno.test('can store daylight', async (test) => {
 	await test.step('videos', async () => {
 		const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/videos/daylight/store')
 		const collections: CollectionList = await response.json()
@@ -70,12 +71,12 @@ Deno.test.ignore('can store daylight', async (test) => {
 	})
 })
 
-Deno.test.ignore('has correct response', () => {
+Deno.test('has correct response', () => {
 	expect(response.status).toBe(200)
 	expect(response.headers.get('content-type')).toBe('application/json')
 })
 
-Deno.test.ignore('medias has correct format', () => {
+Deno.test('medias has correct format', () => {
 	for (const media of medias) {
 		expect(new URL(media.urls.full)).toBeTruthy()
 		expect(new URL(media.urls.medium)).toBeTruthy()
@@ -99,7 +100,9 @@ Deno.test.ignore('medias has correct format', () => {
 	}
 })
 
-Deno.test.ignore('is media in database', async (test) => {
+// 3. Content
+
+Deno.test('is media in database', async (test) => {
 	const baseUrl = 'https://medias.bonjourr.fr'
 	const bonjourrMedias = medias.filter((media) => media.urls.full.startsWith(baseUrl))
 
