@@ -1,0 +1,28 @@
+name: Deploy
+
+on:
+    push:
+        branches:
+            - "*"
+            - "!main"
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        env:
+            UNSPLASH: ${{ secrets.UNSPLASH }}
+
+        steps:
+            - uses: actions/checkout@v3
+            - uses: denoland/setup-deno@v2
+
+            - name: Init submodules
+              run: git submodule update --init
+
+            - name: Create .dev.vars file
+              run: echo "UNSPLASH=${UNSPLASH}" > ./services/.dev.vars
+
+            - run: npx wrangler
+            - run: nohup npx wrangler dev --cwd services --env test & sleep 3 && deno task test:services
+            - run: nohup npx wrangler dev --cwd weather & sleep 3 && deno task test:weather
