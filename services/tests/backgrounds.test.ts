@@ -3,11 +3,9 @@ import { expect } from '@std/expect'
 import type { Image, Video } from '../src/backgrounds/types.ts'
 import type { CollectionList, Media } from '../src/backgrounds/bonjourr/shared.ts'
 
-const BACKGROUND_PATHS = [
-	'bonjourr/all',
+const PUBLIC_PATHS = [
 	'bonjourr/images/daylight',
 	'bonjourr/videos/daylight',
-	'bonjourr/images/daylight/store',
 	'unsplash/images/search',
 	'unsplash/images/collections',
 	'pixabay/images/search',
@@ -17,55 +15,38 @@ const BACKGROUND_PATHS = [
 	// 'metmuseum/images/filter',
 ] as const
 
-// 1. Paths
+// Responses, formats
 
-Deno.test('path exists', async (test) => {
-	//
-	for (const path of BACKGROUND_PATHS) {
-		const base = 'http://0.0.0.0:8787/backgrounds/'
+Deno.test('can store daylight videos', async () => {
+	const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/videos/daylight/store')
+	const collections: CollectionList = await response.json()
+	let areCorrectFormat = true
 
-		await test.step(path, async () => {
-			const resp = await fetch(base + path)
-			expect(resp.status).not.toBe(404)
-			await resp.body?.cancel()
-		})
+	for (const medias of Object.values(collections)) {
+		for (const media of medias) {
+			if (media.format !== 'video') {
+				areCorrectFormat = false
+			}
+		}
 	}
+
+	expect(areCorrectFormat).toBe(true)
 })
 
-// 2. Responses, formats
+Deno.test('can store daylight images', async () => {
+	const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/images/daylight/store')
+	const collections: CollectionList = await response.json()
+	let areCorrectFormat = true
 
-Deno.test('can store daylight', async (test) => {
-	await test.step('videos', async () => {
-		const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/videos/daylight/store')
-		const collections: CollectionList = await response.json()
-		let areCorrectFormat = true
-
-		for (const medias of Object.values(collections)) {
-			for (const media of medias) {
-				if (media.format !== 'video') {
-					areCorrectFormat = false
-				}
+	for (const medias of Object.values(collections)) {
+		for (const media of medias) {
+			if (media.format !== 'image') {
+				areCorrectFormat = false
 			}
 		}
+	}
 
-		expect(areCorrectFormat).toBe(true)
-	})
-
-	await test.step('images', async () => {
-		const response = await fetch('http://0.0.0.0:8787/backgrounds/bonjourr/images/daylight/store')
-		const collections: CollectionList = await response.json()
-		let areCorrectFormat = true
-
-		for (const medias of Object.values(collections)) {
-			for (const media of medias) {
-				if (media.format !== 'image') {
-					areCorrectFormat = false
-				}
-			}
-		}
-
-		expect(areCorrectFormat).toBe(true)
-	})
+	expect(areCorrectFormat).toBe(true)
 })
 
 Deno.test('is response', async (test) => {
@@ -123,4 +104,19 @@ Deno.test('is response', async (test) => {
 			})
 		}
 	})
+})
+
+// Paths
+
+Deno.test('public path exists', async (test) => {
+	//
+	for (const path of PUBLIC_PATHS) {
+		const base = 'http://0.0.0.0:8787/backgrounds/'
+
+		await test.step(path, async () => {
+			const resp = await fetch(base + path)
+			expect(resp.status).not.toBe(404)
+			await resp.body?.cancel()
+		})
+	}
 })
