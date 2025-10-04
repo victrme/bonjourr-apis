@@ -1,0 +1,32 @@
+name: Test
+
+on:
+    push:
+        branches:
+            - "*"
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        env:
+            UNSPLASH: ${{ secrets.UNSPLASH }}
+            PIXABAY: ${{ secrets.PIXABAY }}
+            PEXELS: ${{ secrets.PEXELS }}
+
+        steps:
+            - uses: actions/checkout@v3
+            - uses: denoland/setup-deno@v2
+
+            - name: Init submodules
+              run: git submodule update --init
+
+            - name: Create .dev.vars file
+              run: |
+                  echo "UNSPLASH=${UNSPLASH}\n" >> ./services/.dev.vars
+                  echo "PIXABAY=${PIXABAY}" >> ./services/.dev.vars
+                  echo "PEXELS=${PEXELS}" >> ./services/.dev.vars
+
+            - run: npx wrangler -v
+            - run: nohup npx wrangler dev --cwd services --env test & sleep 3 && deno task test:services
+            - run: nohup npx wrangler dev --cwd weather & sleep 3 && deno task test:weather

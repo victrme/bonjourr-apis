@@ -20,7 +20,7 @@ export async function storeCollection(env: Env, name: string, collection: Media[
 		const insertStatement = `INSERT INTO "${name}" (id, data) VALUES (?, ?)`
 		await env.DB.prepare(insertStatement).bind(key, data).run()
 
-		console.info(`Stored ${key} on ${name}`)
+		// console.info(`Stored ${key} on ${name}`)
 	})
 
 	try {
