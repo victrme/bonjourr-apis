@@ -5,6 +5,8 @@ export type Media = Image | Video
 export type CollectionList = Record<string, Media[]>
 
 export async function storeCollection(env: Env, name: string, collection: Media[]): Promise<void> {
+	const dropStatement = `DROP TABLE IF EXISTS "${name}";`
+
 	const createStatement = `
 		CREATE TABLE IF NOT EXISTS "${name}" (
 			id TEXT PRIMARY KEY,
@@ -12,6 +14,7 @@ export async function storeCollection(env: Env, name: string, collection: Media[
 		);
 	`
 
+	await env.DB.prepare(dropStatement).run()
 	await env.DB.prepare(createStatement).run()
 
 	const promises = collection.map(async (json) => {
