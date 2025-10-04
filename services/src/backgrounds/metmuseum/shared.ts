@@ -1,29 +1,7 @@
-import type { Image } from '../../../types/backgrounds.ts'
+import type { MetObject, MetObjectsIds } from './types.ts'
+import type { Image } from '../types.ts'
 
 // https://metmuseum.github.io/#object
-
-export interface MetObjectsIds {
-	total: number
-	objectIDs: number[]
-}
-
-export interface MetObject {
-	objectID: number
-	primaryImage?: string
-	primaryImageSmall?: string
-	additionalImages?: string[]
-	constituents?: { name: string }[]
-	title: string
-	artistDisplayName: string
-	objectDate: string
-	city?: string
-	state?: string
-	county?: string
-	country?: string
-	region?: string
-	subregion?: string
-	objectURL: string
-}
 
 export function metObjectToBonjourr(item: MetObject): Image {
 	if (!(item.primaryImage && item.primaryImageSmall)) {

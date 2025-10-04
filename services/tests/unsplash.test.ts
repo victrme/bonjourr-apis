@@ -1,5 +1,5 @@
 import { expect } from '@std/expect'
-import type { UnsplashPhoto } from '../types/unsplash.ts'
+import type { UnsplashPhoto } from '../src/backgrounds/unsplash/types.ts'
 
 const url = 'http://0.0.0.0:8787/unsplash/photos/random?collections=GD4aOSg4yQE&count=8'
 const response = await fetch(url)

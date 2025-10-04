@@ -1,4 +1,7 @@
-import type { Image, Pixabay, PixabayImage } from '../../../../types/backgrounds.ts'
+import { pixabayImageToGeneric } from '../convert.ts'
+
+import type { Pixabay, PixabayImage } from '../types.ts'
+import type { Image } from '../../types.ts'
 import type { Env } from '../../../index.ts'
 
 export async function pixabayImagesSearch(url: URL, env: Env, headers: Headers): Promise<Response> {
@@ -12,16 +15,7 @@ export async function pixabayImagesSearch(url: URL, env: Env, headers: Headers):
 	const json = await resp.json<Pixabay>()
 
 	const arr = json.hits as PixabayImage[]
-	const result: Image[] = arr.map((item) => ({
-		format: 'image',
-		urls: {
-			full: item.largeImageURL,
-			medium: item.webformatURL,
-			small: item.previewURL,
-		},
-		page: item.pageURL,
-		username: item.user,
-	}))
+	const result: Image[] = arr.map((item) => pixabayImageToGeneric(item))
 
 	return new Response(JSON.stringify({ 'pixabay-images-search': result }), {
 		headers,

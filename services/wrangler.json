@@ -11,7 +11,23 @@
 	],
 	"vars": {
 		"FONT_LIST": "https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis/services/assets/font_popularity.txt",
-		"PIXABAY_COLLECTIONS": "https://raw.githubusercontent.com/victrme/bonjourr-apis/refs/heads/main/assets/pixabay_collections.json"
+		"PIXABAY_COLLECTIONS": "https://raw.githubusercontent.com/victrme/bonjourr-apis/refs/heads/main/services/assets/pixabay_collections.json"
+	},
+	"env": {
+		"test": {
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "bonjourr_collections",
+					"database_id": "3a8dccd9-7f53-480b-bc7d-701cbb97b014"
+				}
+			],
+			"vars": {
+				"TESTING": true,
+				"FONT_LIST": "https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis/services/assets/font_popularity.txt",
+				"PIXABAY_COLLECTIONS": "https://raw.githubusercontent.com/victrme/bonjourr-apis/refs/heads/main/services/assets/pixabay_collections.json"
+			},
+		}
 	},
 	"limits": {
 		"cpu_ms": 30
@@ -23,5 +39,6 @@
 	"observability": {
 		"enabled": true,
 		"head_sampling_rate": 0.1
-	}
+	},
+	"$schema": "https://unpkg.com/wrangler@latest/config-schema.json",
 }
