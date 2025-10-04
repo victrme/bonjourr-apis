@@ -12,6 +12,8 @@ jobs:
 
         env:
             UNSPLASH: ${{ secrets.UNSPLASH }}
+            PIXABAY: ${{ secrets.PIXABAY }}
+            PEXELS: ${{ secrets.PEXELS }}
 
         steps:
             - uses: actions/checkout@v3
@@ -21,8 +23,11 @@ jobs:
               run: git submodule update --init
 
             - name: Create .dev.vars file
-              run: echo "UNSPLASH=${UNSPLASH}" > ./services/.dev.vars
+              run: |
+                  echo "UNSPLASH=${UNSPLASH}\n" >> ./services/.dev.vars
+                  echo "PIXABAY=${PIXABAY}" >> ./services/.dev.vars
+                  echo "PEXELS=${PEXELS}" >> ./services/.dev.vars
 
-            - run: npx wrangler
-            - run: nohup npx wrangler dev --cwd services --env test & sleep 3 && deno task test:services
-            - run: nohup npx wrangler dev --cwd weather & sleep 3 && deno task test:weather
+            - run: npx wrangler -v
+            - run: nohup npx wrangler dev --cwd services --env test & sleep 2 && deno task test:services
+            - run: nohup npx wrangler dev --cwd weather & sleep 2 && deno task test:weather
