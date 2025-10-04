@@ -102,3 +102,34 @@ Add repository secrets for Github Action in
 - `CF_MAIN_ACCOUNT_ID`
 - `UNSPLASH`
 - `PIXABAY`
+
+## Services
+
+### Backgrounds
+
+#### Current providers & endpoints
+
+|  Provider | Format |     name    | Query? | Public? |
+|:---------:|:------:|:-----------:|:------:|:-------:|
+|  Bonjourr | images |    store    |        |         |
+|  Bonjourr | videos |    store    |        |         |
+|  Bonjourr |  both  |     all     |        |         |
+|  Bonjourr | images |   daylight  |        |    x    |
+|  Bonjourr | videos |   daylight  |        |    x    |
+|           |        |             |        |         |
+|  Unsplash | images |    search   |    x   |    x    |
+|  Unsplash | images | collections |    x   |    x    |
+|           |        |             |        |         |
+|  Pixabay  | images |    search   |    x   |    x    |
+|  Pixabay  | videos |    search   |    x   |    x    |
+|           |        |             |        |         |
+| METMuseum | images |    filter   |        |         |
+| METMuseum | images |    search   |    x   |    x    |
+| METMuseum | images |  paintings  |        |    x    |
+
+#### Add another endpoint
+
+1. Go to backgrounds base directory: [bonjourr-apis/services/src/backgrounds](https://github.com/victrme/bonjourr-apis/tree/main/services/src/backgrounds)
+2. Keep file structure: `<provider>/<format>/<name>.ts`
+3. Keep function names like: `providerFormatCategory()`
+4. Finally Add endpoint in `services/src/backgrounds/backgrounds.ts`
