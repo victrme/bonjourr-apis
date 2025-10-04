@@ -29,5 +29,5 @@ jobs:
                   echo "PEXELS=${PEXELS}" >> ./services/.dev.vars
 
             - run: npx wrangler -v
-            - run: nohup npx wrangler dev --cwd services --env test & sleep 2 && deno task test:services
-            - run: nohup npx wrangler dev --cwd weather & sleep 2 && deno task test:weather
+            - run: nohup npx wrangler dev --cwd services --env test & sleep 3 && deno task test:services
+            - run: nohup npx wrangler dev --cwd weather & sleep 3 && deno task test:weather
