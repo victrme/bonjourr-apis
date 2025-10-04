@@ -98,6 +98,7 @@ Add repository secrets for Github Action in
 - `CF_MAIN_ACCOUNT_ID`
 - `UNSPLASH`
 - `PIXABAY`
+- `PEXELS`
 
 ## Services
 
