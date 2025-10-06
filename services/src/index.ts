@@ -1,5 +1,6 @@
 import { backgrounds } from './backgrounds/backgrounds.ts'
 import { unsplash } from './backgrounds/unsplash/old.ts'
+import { translate } from './translate.ts'
 import { fonts } from './fonts.ts'
 import { proxy } from './proxy.ts'
 
@@ -17,6 +18,8 @@ const headers = new Headers({
 })
 
 export interface Env {
+	ANTHROPIC_SYSTEM_PROMPT?: string
+	ANTHROPIC_API_KEY?: string
 	PIXABAY_COLLECTIONS?: string
 	FONT_LIST?: string
 	UNSPLASH?: string
@@ -52,6 +55,9 @@ export default {
 
 			case 'backgrounds':
 				return await backgrounds(url, env, headers)
+
+			case 'translate':
+				return await translate(req, env, headers)
 
 			case '': {
 				headers.set('Content-Type', 'text/html')
