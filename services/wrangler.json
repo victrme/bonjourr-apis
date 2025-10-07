@@ -22,7 +22,7 @@
 		"test": {
 			"d1_databases": [
 				{
-					"binding": "DB",
+					"binding": "COLLECTIONS_DB",
 					"database_name": "bonjourr_collections",
 					"database_id": "3a8dccd9-7f53-480b-bc7d-701cbb97b014"
 				}
