@@ -61,6 +61,7 @@ export default {
 			case 'translate':
 				return await translate(req, env, headers)
 
+			case 'list':
 			case 'kofi':
 				return await kofi(req, env)
 
