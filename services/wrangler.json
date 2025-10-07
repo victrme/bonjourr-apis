@@ -4,9 +4,14 @@
 	"compatibility_date": "2023-05-18",
 	"d1_databases": [
 		{
-			"binding": "DB",
+			"binding": "COLLECTIONS_DB",
 			"database_name": "bonjourr_collections",
 			"database_id": "3a8dccd9-7f53-480b-bc7d-701cbb97b014"
+		},
+		{
+			"binding": "BONJOURR_DB",
+			"database_name": "bonjourr_db",
+			"database_id": "b5b6ecbe-fd0c-4095-b74a-cb9a9c56c10d"
 		}
 	],
 	"vars": {

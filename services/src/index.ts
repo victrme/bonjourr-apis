@@ -9,6 +9,7 @@ import favicon from './favicon/package/src/index.ts'
 import quotes from './quotes/src/index.ts'
 
 import type { D1Database } from '@cloudflare/workers-types'
+import { kofi } from './kofi.ts'
 
 const headers = new Headers({
 	'Access-Control-Allow-Origin': '*',
@@ -26,7 +27,8 @@ export interface Env {
 	PIXABAY?: string
 	TESTING?: true
 	PEXELS?: string
-	DB: D1Database
+	BONJOURR_DB: D1Database
+	COLLECTIONS_DB: D1Database
 }
 
 export default {
@@ -58,6 +60,9 @@ export default {
 
 			case 'translate':
 				return await translate(req, env, headers)
+
+			case 'kofi':
+				return await kofi(req, env)
 
 			case '': {
 				headers.set('Content-Type', 'text/html')

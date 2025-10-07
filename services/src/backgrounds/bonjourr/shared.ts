@@ -5,6 +5,7 @@ export type Media = Image | Video
 export type CollectionList = Record<string, Media[]>
 
 export async function storeCollection(env: Env, name: string, collection: Media[]): Promise<void> {
+	const db = env.COLLECTIONS_DB
 	const dropStatement = `DROP TABLE IF EXISTS "${name}";`
 
 	const createStatement = `
@@ -14,14 +15,14 @@ export async function storeCollection(env: Env, name: string, collection: Media[
 		);
 	`
 
-	await env.DB.prepare(dropStatement).run()
-	await env.DB.prepare(createStatement).run()
+	await db.prepare(dropStatement).run()
+	await db.prepare(createStatement).run()
 
 	const promises = collection.map(async (json) => {
 		const key = json.urls.full
 		const data = JSON.stringify(json)
 		const insertStatement = `INSERT INTO "${name}" (id, data) VALUES (?, ?)`
-		await env.DB.prepare(insertStatement).bind(key, data).run()
+		await db.prepare(insertStatement).bind(key, data).run()
 
 		// console.info(`Stored ${key} on ${name}`)
 	})
@@ -35,7 +36,7 @@ export async function storeCollection(env: Env, name: string, collection: Media[
 
 export async function getCollection<Media extends Image | Video>(name: string, env: Env): Promise<Media[]> {
 	const randomStatement = `SELECT data FROM "${name}" ORDER BY RANDOM() LIMIT 10`
-	const { results } = await env.DB.prepare(randomStatement).all()
+	const { results } = await env.COLLECTIONS_DB.prepare(randomStatement).all()
 	const list: Media[] = []
 
 	if (results.length === 0) {
@@ -51,7 +52,7 @@ export async function getCollection<Media extends Image | Video>(name: string, e
 
 export async function getAllInCollection(name: string, env: Env): Promise<Media[]> {
 	const randomStatement = `SELECT data FROM "${name}"`
-	const { results } = await env.DB.prepare(randomStatement).all()
+	const { results } = await env.COLLECTIONS_DB.prepare(randomStatement).all()
 	const list: Media[] = []
 
 	if (results.length === 0) {
