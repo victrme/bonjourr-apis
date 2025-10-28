@@ -19,9 +19,8 @@ const headers = new Headers({
 })
 
 export interface Env {
-	ANTHROPIC_SYSTEM_PROMPT?: string
-	ANTHROPIC_API_KEY?: string
 	PIXABAY_COLLECTIONS?: string
+	GEMINI_API_KEY?: string
 	FONT_LIST?: string
 	UNSPLASH?: string
 	PIXABAY?: string
