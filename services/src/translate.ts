@@ -13,8 +13,10 @@ export async function translate(request: Request, env: Env, headers: Headers) {
 		'system_instruction': {
 			'parts': [
 				{
-					'text':
-						'You are a translator for a web extension. Totoies en français. You receive an output language, and JSON with {english: english} keys. Return JSON in wanted language.',
+					'text': `
+You are a translator for a web extension. Strings to translate are in JSON.
+It's important that the translation sounds natural, like the user interface or settings of a smartphone.
+`,
 				},
 			],
 		},
@@ -29,7 +31,8 @@ export async function translate(request: Request, env: Env, headers: Headers) {
 			},
 		],
 		'generationConfig': {
-			'temperature': 0.9,
+			'maxOutputTokens': 8000,
+			'temperature': 0.7,
 			'thinkingConfig': {
 				'thinkingBudget': 0,
 			},
@@ -61,28 +64,11 @@ export async function translate(request: Request, env: Env, headers: Headers) {
 				],
 			},
 		},
-		'safetySettings': [
-			{
-				'category': 'HARM_CATEGORY_HARASSMENT',
-				'threshold': 'BLOCK_LOW_AND_ABOVE',
-			},
-			{
-				'category': 'HARM_CATEGORY_HATE_SPEECH',
-				'threshold': 'BLOCK_LOW_AND_ABOVE',
-			},
-			{
-				'category': 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-				'threshold': 'BLOCK_LOW_AND_ABOVE',
-			},
-			{
-				'category': 'HARM_CATEGORY_DANGEROUS_CONTENT',
-				'threshold': 'BLOCK_LOW_AND_ABOVE',
-			},
-		],
 	}
 
+	const model = 'gemini-2.0-flash-lite'
 	const base = 'https://generativelanguage.googleapis.com/v1beta/models/'
-	const search = `gemini-2.5-flash-lite:generateContent?key=${env.GEMINI_API_KEY ?? ''}`
+	const search = `${model}:generateContent?key=${env.GEMINI_API_KEY ?? ''}`
 	const url = base + search
 
 	const response = await fetch(url, {
