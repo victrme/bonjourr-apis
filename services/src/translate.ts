@@ -66,7 +66,7 @@ It's important that the translation sounds natural, like the user interface or s
 		},
 	}
 
-	const model = 'gemini-2.0-flash-lite'
+	const model = 'gemini-2.5-flash-lite'
 	const base = 'https://generativelanguage.googleapis.com/v1beta/models/'
 	const search = `${model}:generateContent?key=${env.GEMINI_API_KEY ?? ''}`
 	const url = base + search
