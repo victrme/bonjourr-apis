@@ -130,3 +130,25 @@ Add repository secrets for Github Action in
 2. Keep file structure: `<provider>/<format>/<name>.ts`
 3. Keep function names like: `providerFormatCategory()`
 4. Finally Add endpoint in `services/src/backgrounds/backgrounds.ts`
+
+
+## Translation
+
+Send instructions like so:
+
+```plaintext
+translate in finnish: ['Good morning']
+```
+
+Get a response like so:
+
+```json
+{
+  "data": [
+    {
+      "in": "Good morning",
+      "out": "Huomenta"
+    }
+  ]
+}
+```
