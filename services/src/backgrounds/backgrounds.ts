@@ -42,7 +42,7 @@ export async function backgrounds(url: URL, env: Env, headers: Headers): Promise
 		return await getAllStoredMedia(env, headers)
 	}
 	if (url.pathname.includes('/backgrounds/bonjourr/images/daylight')) {
-		return await getDaylightImages(env, headers)
+		return await getDaylightImages(env, headers, url)
 	}
 	if (url.pathname.includes('/backgrounds/bonjourr/videos/daylight')) {
 		return await getDaylightVideos(env, headers)
