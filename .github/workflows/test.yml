@@ -15,7 +15,7 @@ jobs:
             PEXELS: ${{ secrets.PEXELS }}
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v6
             - uses: denoland/setup-deno@v2
 
             - name: Init submodules

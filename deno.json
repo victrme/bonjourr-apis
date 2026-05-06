@@ -8,6 +8,10 @@
 		"test:weather": "deno test --allow-net weather/index.test.ts --fail-fast",
 		"test:services": "deno test --allow-net services/tests/backgrounds.test.ts --fail-fast --no-check"
 	},
+	"imports": {
+		"@cloudflare/workers-types": "npm:@cloudflare/workers-types@^4.20250712.0",
+		"@std/expect": "jsr:@std/expect@^1.0.16"
+	},
 	"lint": {
 		"rules": {
 			"tags": [
@@ -49,9 +53,5 @@
 			"services/src/quotes",
 			"weather/meteo"
 		]
-	},
-	"imports": {
-		"@cloudflare/workers-types": "npm:@cloudflare/workers-types@^4.20250712.0",
-		"@std/expect": "jsr:@std/expect@^1.0.16"
 	}
 }
