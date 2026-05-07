@@ -1,6 +1,5 @@
 import { backgrounds } from './backgrounds/backgrounds.ts'
 import { unsplash } from './backgrounds/unsplash/old.ts'
-import { translate } from './translate.ts'
 import { fonts } from './fonts.ts'
 import { proxy } from './proxy.ts'
 
@@ -56,9 +55,6 @@ export default {
 
 			case 'backgrounds':
 				return await backgrounds(url, env, headers)
-
-			case 'translate':
-				return await translate(req, env, headers)
 
 			case 'list':
 			case 'kofi':

@@ -9,7 +9,6 @@ Suceptible to change, documentation purposes only:
 - /
 - /fonts
 - /proxy
-- /translate
 - /suggestions
 - /list
 - /kofi
