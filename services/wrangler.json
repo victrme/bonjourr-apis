@@ -1,7 +1,7 @@
 {
 	"name": "bonjourr-services",
 	"main": "src/index.ts",
-	"compatibility_date": "2023-05-18",
+	"compatibility_date": "2026-05-03",
 	"d1_databases": [
 		{
 			"binding": "COLLECTIONS_DB",

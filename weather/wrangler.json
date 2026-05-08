@@ -1,7 +1,7 @@
 {
 	"name": "bonjourr-weather",
 	"main": "index.ts",
-	"compatibility_date": "2023-05-18",
+	"compatibility_date": "2026-05-03",
 	"limits": {
 		"cpu_ms": 30
 	},
