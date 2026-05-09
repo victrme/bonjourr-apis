@@ -4,6 +4,10 @@ on:
     push:
         branches:
             - "*"
+        paths:
+            - ".gitmodules"
+            - "services/**"
+            - "weather/**"
 
 jobs:
     test:
