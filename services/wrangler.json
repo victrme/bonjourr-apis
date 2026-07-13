@@ -31,7 +31,7 @@
 				"TESTING": true,
 				"FONT_LIST": "https://cdn.jsdelivr.net/gh/victrme/bonjourr-apis/services/assets/font_popularity.txt",
 				"PIXABAY_COLLECTIONS": "https://raw.githubusercontent.com/victrme/bonjourr-apis/refs/heads/main/services/assets/pixabay_collections.json"
-			},
+			}
 		}
 	},
 	"limits": {
@@ -45,5 +45,5 @@
 		"enabled": true,
 		"head_sampling_rate": 0.1
 	},
-	"$schema": "https://unpkg.com/wrangler@latest/config-schema.json",
+	"$schema": "https://unpkg.com/wrangler@latest/config-schema.json"
 }
