@@ -2,6 +2,8 @@ export interface UnsplashPhoto {
 	color: string
 	blur_hash: string
 	description: string
+	height: number
+	width: number
 	exif: {
 		make: string
 		model: string
@@ -39,6 +41,8 @@ export interface UnsplashImage {
 	color: string
 	blur_hash: string
 	description: string
+	height: number
+	width: number
 	exif: {
 		make: string
 		model: string

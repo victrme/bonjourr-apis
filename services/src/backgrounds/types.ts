@@ -14,6 +14,10 @@ export interface Image {
 		small: string
 	}
 
+	// original width and height before cropping
+	width?: number;
+	height?: number;
+
 	/* Unsplash only */
 	color?: string
 	name?: string

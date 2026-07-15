@@ -10,6 +10,8 @@ export function unsplashToGeneric(image: UnsplashImage): Image {
 		name: image.user.name,
 		city: image?.location?.city || undefined,
 		country: image?.location?.country || undefined,
+		width: image.width,
+		height: image.height,
 		color: image.color,
 		exif: image.exif,
 		urls: {
