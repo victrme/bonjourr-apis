@@ -6,7 +6,8 @@
 		"weather": "npx wrangler dev --cwd weather",
 		"services": "npx wrangler dev --cwd services",
 		"test:weather": "deno test --allow-net weather/index.test.ts --fail-fast",
-		"test:services": "deno test --allow-net services/tests/backgrounds.test.ts --fail-fast --no-check"
+		"test:services": "deno test --allow-net services/tests/backgrounds.test.ts --fail-fast --no-check",
+		"fonts": "deno run --allow-net --allow-write ./services/scripts/update-popular-fonts.ts"
 	},
 	"imports": {
 		"@cloudflare/workers-types": "npm:@cloudflare/workers-types@^4.20250712.0",
@@ -43,5 +44,11 @@
 			"services/src/quotes",
 			"weather/meteo"
 		]
+	},
+	"compilerOptions": {
+   "lib": [
+      "dom",
+      "esnext"
+  	]
 	}
 }
