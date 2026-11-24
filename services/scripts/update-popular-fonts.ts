@@ -1,17 +1,16 @@
-interface GoogleFonts {
-  axisRegistry: unknown[],
-  familyMetadataList: {
+interface FontSourceList {
+  {
     family: string,
-    popularity: number
+    lastModified: number
   }[]
 }
 
 using file = Deno.openSync("services/assets/font_popularity.txt", { write: true });
-const response = await fetch('https://fonts.google.com/metadata/fonts')
-const googleFonts = await response.json() as GoogleFonts;
+const response = await fetch('https://api.fontsource.org/v1/fonts')
+const fontSourceList = await response.json() as FontSourceList;
 
-const fonts = googleFonts.familyMetadataList
-.sort((a, b) => a.popularity - b.popularity)
+const fonts = fontSourceList
+.sort((a, b) => a.lastModified - b.lastModified)
 .map(font => font.family)
 .join(',')
 
