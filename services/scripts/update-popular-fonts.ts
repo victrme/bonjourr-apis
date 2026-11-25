@@ -1,5 +1,5 @@
 interface FontSourceList {
-    id: string,
+    /*id: string,*/
     family: string,
     /*lastModified: number*/
 }
